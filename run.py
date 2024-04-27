@@ -25,6 +25,22 @@ emergency_data = []
 
 favorites_data = []
 
+def use_program():
+    """
+    The function to basically ask the user if he wants to use
+    the program or not
+    Y - Yes  / N - No
+    and then proceed accordingly
+    """
+    while True:
+        user_input = input("Do you want to use the contact manager? (yes/no):\n").strip().lower()
+        if user_input in ("yes", "y"):
+            return True
+        elif user_input in ("no", "n"):
+            return False
+        else:
+            print("I can do this all day. Either enter 'y' or 'n'.")
+
 def add_data_with_name_column(sheet, data):
     """
     Adds new data to the sheets with a predefined header
@@ -130,6 +146,12 @@ def print_sheet_data(sheet):
    
     
 def main():
+    if not use_program():
+        print("Exiting the program.")
+        return
+    
+    print("Great! Let's proceed with the program.\n")
+    
     add_contacts()
     
     # Add data for all sheets
@@ -138,7 +160,7 @@ def main():
     add_data_with_name_column(emergency_sheet, emergency_data)
     add_data_with_name_column(favorites_sheet, favorites_data)
     
-  # Protect header for all sheets
+    # Protect header for all sheets
     protect_header(personal_sheet)
     protect_header(professional_sheet)
     protect_header(emergency_sheet)
@@ -149,6 +171,7 @@ def main():
     print_sheet_data(professional_sheet)
     print_sheet_data(emergency_sheet)
     print_sheet_data(favorites_sheet)
+
 
 if __name__ == "__main__":
     main()
