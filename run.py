@@ -32,14 +32,16 @@ def use_program():
     Y - Yes  / N - No
     and then proceed accordingly
     """
+    counter = 0
     while True:
         user_input = input("Do you want to use the contact manager? (yes/no):\n").strip().lower()
-        if user_input in ("yes", "y"):
+        if user_input in ("yes", "y", "yeah", "yeap", "yup", "yea", "yap"):
             return True
-        elif user_input in ("no", "n"):
+        elif user_input in ("no", "n", "nah", "nope"):
             return False
         else:
-            print("I can do this all day. Either enter 'y' or 'n'.")
+            counter +=1
+            print(f"\nI can do this all day. You've failed to give a correct answer {counter} times.")
 
 def add_data_with_name_column(sheet, data):
     """
@@ -81,6 +83,41 @@ def protect_header(sheet):
         }
     }]
     SHEET.batch_update({"requests": requests})
+
+
+def want_to_view_existing_contacts():
+    """
+    Asks the user if he wants to view existing contacts
+    Returns True if he does, False otherwise
+    """
+    view_contacts = input("Do you want to view existing contacts? (Yes/No): ").strip().lower()
+    return view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]
+
+
+def view_existing_contacts():
+    """
+    Prompts the user if he wants to view existing contacts
+    if its a yes
+    """
+    view_contacts = input("Do you want to view existing contacts? (Yes/No): ").strip().lower()
+    if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]:
+        print("Choose a category:")
+        print("1. Personal")
+        print("2. Professional")
+        print("3. Emergency")
+        print("4. Favorites")
+
+        category_choice = input("Enter the number of the category you want to view: ")
+        if category_choice == '1':
+            print_sheet_data(personal_sheet)
+        elif category_choice == '2':
+            print_sheet_data(professional_sheet)
+        elif category_choice == '3':
+            print_sheet_data(emergency_sheet)
+        elif category_choice == '4':
+            print_sheet_data(favorites_sheet)
+        else:
+            print("Invalid choice. Please enter a number between 1 and 4.")
 
             
 def add_contacts():
@@ -151,6 +188,9 @@ def main():
         return
     
     print("Great! Let's proceed with the program.\n")
+    
+    if want_to_view_existing_contacts():
+        view_existing_contacts()
     
     add_contacts()
     
