@@ -46,6 +46,29 @@ def add_data_with_name_column(sheet, data):
     else:
         for row in data:
             sheet.append_row(row)
+
+def protect_header(sheet):
+    """
+    Basically this function will pop an "alert" to the user if he tries to 
+    delete the header row (Name, Telephone Number) - A1:B1
+    """
+    sheet_id = sheet.id  
+    requests = [{
+        "addProtectedRange": {
+            "protectedRange": {
+                "range": {
+                    "sheetId": sheet_id,
+                    "startRowIndex": 0,
+                    "endRowIndex": 1,
+                    "startColumnIndex": 0,
+                    "endColumnIndex": 2
+                },
+                "warningOnly": True
+            }
+        }
+    }]
+    SHEET.batch_update({"requests": requests})
+
             
 def add_contacts():
     """
@@ -110,6 +133,12 @@ def main():
     add_data_with_name_column(professional_sheet, professional_data)
     add_data_with_name_column(emergency_sheet, emergency_data)
     add_data_with_name_column(favorites_sheet, favorites_data)
+    
+    # Protect header for all sheets
+    protect_header(personal_sheet)
+    protect_header(professional_sheet)
+    protect_header(emergency_sheet)
+    protect_header(favorites_sheet)
     
     # Prints data from each sheet
     print_sheet_data(personal_sheet)
