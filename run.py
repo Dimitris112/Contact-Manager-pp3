@@ -34,19 +34,15 @@ def add_data_with_name_column(sheet, data):
     Then it appends the data provided by the user to the sheet
     """
     existing_data = sheet.get_all_values()
-    print("Existing data:", existing_data)
+    print(f"\nExisting data in {sheet.title} sheet:", existing_data)
 
     if not existing_data or not existing_data[0]:
         header_row = ["Name", "Telephone Number"]
         sheet.insert_row(header_row, index=1)
-        header_range = sheet.range("A1:B1")
-        for cell in header_range:
-            cell.textFormat['bold'] = True
-        sheet.update_cells(header_range)
+        sheet.format("A1:B1", {"textFormat": {"bold": True}})
     else:
         for row in data:
             sheet.append_row(row)
-
 
 def protect_header(sheet):
     """
@@ -118,7 +114,7 @@ def add_contacts():
         new_contacts.append([name, str(number)])
     
     add_data_with_name_column(sheet, new_contacts)
-    print("Contacts added successfully.")
+    print("Contacts added successfully.\n")
 
    
   
@@ -127,11 +123,12 @@ def print_sheet_data(sheet):
     Prints the data from a specified sheet.
     """
     sheet_data = sheet.get_all_values()
-    print(sheet.title + " Contacts:")
+    print(f"\n{sheet.title} Contacts:")
     for row in sheet_data:
         print(row)
  
-
+   
+    
 def main():
     add_contacts()
     
@@ -141,7 +138,7 @@ def main():
     add_data_with_name_column(emergency_sheet, emergency_data)
     add_data_with_name_column(favorites_sheet, favorites_data)
     
-    # Protect header for all sheets
+  # Protect header for all sheets
     protect_header(personal_sheet)
     protect_header(professional_sheet)
     protect_header(emergency_sheet)
@@ -152,7 +149,6 @@ def main():
     print_sheet_data(professional_sheet)
     print_sheet_data(emergency_sheet)
     print_sheet_data(favorites_sheet)
-
 
 if __name__ == "__main__":
     main()
