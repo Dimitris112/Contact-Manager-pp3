@@ -46,3 +46,76 @@ def add_data_with_name_column(sheet, data):
     else:
         for row in data:
             sheet.append_row(row)
+            
+def add_contacts():
+    """
+    Prompts the user to choose a category of contacts and adds new contacts
+    to the selected category
+    
+    Displays options to the user to choose from one of each four from
+    Personal - Professional - Emergency - Favorites
+    And then the user has to enter the amount - number of contacts he wants to add
+    including their names and tel. numbers
+    
+    Then adds the entered contacts to the correct sheet
+    """
+    print("Which sheet would you like to add contacts to?")
+    print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites:\n")
+    
+    while True:
+        sheet_choice = input("Enter your choice: \n").capitalize()
+        
+        if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
+            break
+        else:
+            print("Invalid choice. Please enter 'Per', 'Pro', 'Eme', or 'Fav'.")
+
+    if sheet_choice == 'Per':
+        sheet = personal_sheet
+    elif sheet_choice == 'Pro':
+        sheet = professional_sheet
+    elif sheet_choice == 'Eme':
+        sheet = emergency_sheet
+    elif sheet_choice == 'Fav':
+        sheet = favorites_sheet
+    
+    num_contacts = int(input("How many contacts would you like to add? "))
+    
+    new_contacts = []
+    for _ in range(num_contacts):
+        name = input("Enter contact name: ")
+        number = input("Enter contact number: ")
+        new_contacts.append([name, number])
+    
+    add_data_with_name_column(sheet, new_contacts)
+    print("Contacts added successfully.")
+    
+   
+  
+def print_sheet_data(sheet):
+    """
+    Prints the data from a specified sheet.
+    """
+    sheet_data = sheet.get_all_values()
+    print(sheet.title + " Contacts:")
+    for row in sheet_data:
+        print(row)  
+ 
+
+def main():
+    add_contacts()
+    
+      # Add data for all sheets
+    add_data_with_name_column(personal_sheet, personal_data)
+    add_data_with_name_column(professional_sheet, professional_data)
+    add_data_with_name_column(emergency_sheet, emergency_data)
+    add_data_with_name_column(favorites_sheet, favorites_data)
+    
+    # Prints data from each sheet
+    print_sheet_data(personal_sheet)
+    print_sheet_data(professional_sheet)
+    print_sheet_data(emergency_sheet)
+    print_sheet_data(favorites_sheet)
+
+if __name__ == "__main__":
+    main()
