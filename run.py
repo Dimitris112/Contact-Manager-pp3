@@ -47,6 +47,7 @@ def add_data_with_name_column(sheet, data):
         for row in data:
             sheet.append_row(row)
 
+
 def protect_header(sheet):
     """
     Basically this function will pop an "alert" to the user if he tries to 
@@ -107,12 +108,18 @@ def add_contacts():
     new_contacts = []
     for _ in range(num_contacts):
         name = input("Enter contact name: ")
-        number = input("Enter contact number: ")
-        new_contacts.append([name, number])
+        while True:
+            try:
+                number = int(input("Enter contact number (only numbers): "))
+                break
+            except ValueError:
+                print("Invalid input. Please enter only numbers.")
+        
+        new_contacts.append([name, str(number)])
     
     add_data_with_name_column(sheet, new_contacts)
     print("Contacts added successfully.")
-    
+
    
   
 def print_sheet_data(sheet):
@@ -122,13 +129,13 @@ def print_sheet_data(sheet):
     sheet_data = sheet.get_all_values()
     print(sheet.title + " Contacts:")
     for row in sheet_data:
-        print(row)  
+        print(row)
  
 
 def main():
     add_contacts()
     
-      # Add data for all sheets
+    # Add data for all sheets
     add_data_with_name_column(personal_sheet, personal_data)
     add_data_with_name_column(professional_sheet, professional_data)
     add_data_with_name_column(emergency_sheet, emergency_data)
@@ -145,6 +152,7 @@ def main():
     print_sheet_data(professional_sheet)
     print_sheet_data(emergency_sheet)
     print_sheet_data(favorites_sheet)
+
 
 if __name__ == "__main__":
     main()
