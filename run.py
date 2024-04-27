@@ -67,7 +67,7 @@ def protect_header(sheet):
     Basically this function will pop an "alert" to the user if he tries to 
     delete the header row (Name, Telephone Number) - A1:B1
     """
-    sheet_id = sheet.id  
+    sheet_id = sheet.id
     requests = [{
         "addProtectedRange": {
             "protectedRange": {
@@ -91,7 +91,11 @@ def want_to_view_existing_contacts():
     Returns True if he does, False otherwise
     """
     view_contacts = input("Do you want to view existing contacts? (Yes/No): ").strip().lower()
-    return view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]
+    if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]:
+        return True
+    else:
+        return False
+
 
 
 def view_existing_contacts():
@@ -119,6 +123,13 @@ def view_existing_contacts():
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")
 
+def want_to_add_contacts():
+    """
+    Asks the user if he wants to add new contacts
+    Returns True if he does, False otherwise
+    """
+    add_contacts_input = input("\nDo you want to add new contacts? (Yes/No): ").strip().lower()
+    return add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]
             
 def add_contacts():
     """
@@ -189,10 +200,10 @@ def main():
     
     print("Great! Let's proceed with the program.\n")
     
-    if want_to_view_existing_contacts():
-        view_existing_contacts()
+    view_existing_contacts()
     
-    add_contacts()
+    if want_to_add_contacts():
+        add_contacts()
     
     # Add data for all sheets
     add_data_with_name_column(personal_sheet, personal_data)
@@ -215,3 +226,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
