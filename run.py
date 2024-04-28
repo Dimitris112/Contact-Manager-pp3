@@ -35,9 +35,9 @@ def use_program():
     counter = 0
     while True:
         user_input = input("Do you want to use the contact manager? (yes/no):\n").strip().lower()
-        if user_input in ("yes", "y", "yeah", "yeap", "yup", "yea", "yap"):
+        if user_input in ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly"):
             return True
-        elif user_input in ("no", "n", "nah", "nope"):
+        elif user_input in ("no", "n", "nah", "nope", "negative"):
             return False
         else:
             counter +=1
@@ -85,6 +85,19 @@ def protect_header(sheet):
     SHEET.batch_update({"requests": requests})
 
 
+def check_duplicate_contact(name, number):
+    """
+    Checks if a contact already exists (name or tel number)
+    in any of the sheets
+    """
+    for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
+        contacts = sheet.get_all_records()
+        for contact in contacts:
+            if contact["Name"] == name or contact["Telephone Number"] == number:
+                return True
+    return False
+
+
 def want_to_view_existing_contacts():
     """
     Asks the user if he wants to view existing contacts
@@ -101,27 +114,48 @@ def want_to_view_existing_contacts():
 def view_existing_contacts():
     """
     Prompts the user if he wants to view existing contacts
-    if its a yes
     """
-    view_contacts = input("Do you want to view existing contacts? (Yes/No): ").strip().lower()
-    if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]:
-        print("Choose a category:")
-        print("1. Personal")
-        print("2. Professional")
-        print("3. Emergency")
-        print("4. Favorites")
+    while True:
+        view_contacts = input("Do you want to view existing contacts? (Yes/No): ").strip().lower()
+        if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly"]:
+            print("Choose a category:")
+            print("1. Personal")
+            print("2. Professional")
+            print("3. Emergency")
+            print("4. Favorites")
+            print("5. All")
+            print("6. I don't want to")
 
-        category_choice = input("Enter the number of the category you want to view: ")
-        if category_choice == '1':
-            print_sheet_data(personal_sheet)
-        elif category_choice == '2':
-            print_sheet_data(professional_sheet)
-        elif category_choice == '3':
-            print_sheet_data(emergency_sheet)
-        elif category_choice == '4':
-            print_sheet_data(favorites_sheet)
+            category_choice = input("Enter the number of the category you want to view: ")
+            if category_choice == '1':
+                print_sheet_data(personal_sheet)
+                break
+            elif category_choice == '2':
+                print_sheet_data(professional_sheet)
+                break
+            elif category_choice == '3':
+                print_sheet_data(emergency_sheet)
+                break
+            elif category_choice == '4':
+                print_sheet_data(favorites_sheet)
+                break
+            elif category_choice == '5':
+                print_sheet_data(personal_sheet)
+                print_sheet_data(professional_sheet)
+                print_sheet_data(emergency_sheet)
+                print_sheet_data(favorites_sheet)
+                break
+            elif category_choice == '6':
+                print("No problem. You can view contacts later.")
+                break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 6.")
+        elif view_contacts in ["no", "n", "nah", "nope", "negative"]:
+            print("No problem. You can view contacts later.")
+            break
         else:
-            print("Invalid choice. Please enter a number between 1 and 4.")
+            print("Invalid choice. Please enter 'Yes' or 'No'.")
+
 
 def want_to_add_contacts():
     """
@@ -129,7 +163,8 @@ def want_to_add_contacts():
     Returns True if he does, False otherwise
     """
     add_contacts_input = input("\nDo you want to add new contacts? (Yes/No): ").strip().lower()
-    return add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]
+    return add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly"]
+            
             
 def add_contacts():
     """
@@ -141,9 +176,9 @@ def add_contacts():
     And then the user has to enter the amount - number of contacts he wants to add
     including their names and tel. numbers
     
-    Then adds the entered contacts to the correct sheet
+    Then adds the entered contacts to the correct sheet after checking for duplicates.
     """
-    print("Which sheet would you like to add contacts to?")
+    print("Which category would you like to add contacts to?")
     print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites:\n")
     
     while True:
@@ -165,20 +200,17 @@ def add_contacts():
     
     num_contacts = int(input("How many contacts would you like to add? "))
     
-    new_contacts = []
+    # _ acts as draft / placeholder variable (non main focus)
     for _ in range(num_contacts):
         name = input("Enter contact name: ")
-        while True:
-            try:
-                number = int(input("Enter contact number (only numbers): "))
-                break
-            except ValueError:
-                print("Invalid input. Please enter only numbers.")
+        number = int(input("Enter contact number (only numbers): "))
         
-        new_contacts.append([name, str(number)])
-    
-    add_data_with_name_column(sheet, new_contacts)
-    print("Contacts added successfully.\n")
+        if check_duplicate_contact(name, number):
+            print("Warning: This contact already exists.")
+        else:
+            add_data_with_name_column(sheet, [[name, number]])
+            print("Contact added successfully.")
+
 
    
   
