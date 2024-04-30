@@ -1,6 +1,8 @@
 import gspread
 import re
+import csv
 from google.oauth2.service_account import Credentials
+# Not sure if I keep the CSV coz it's going to be updated along the way / after submission (possible) - bad
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -225,8 +227,78 @@ def add_contacts():
 
 
 
+def read_existing_contacts():
+    """
+    Reads existing contacts data from the 'contacts.csv' file.
+    """
+    file_name = "contacts.csv"
+    try:
+        with open(file_name, mode='r', newline='') as file:
+            reader = csv.reader(file)
+            existing_contacts = list(reader)
+    except FileNotFoundError:
+        existing_contacts = []
+    return existing_contacts
 
-  
+
+def export_all_contacts():
+    """
+    Exports contacts from all categories to the 'contacts.csv' file.
+    """
+    all_contacts = []
+    for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
+        all_contacts += sheet.get_all_values()
+    existing_contacts = read_existing_contacts()
+    all_contacts += existing_contacts
+    export_to_csv(all_contacts)
+
+
+def export_to_csv(data):
+    """
+    Writes the contacts data to a CSV file named 'contacts.csv'.
+    """
+    file_name = "contacts.csv"
+    with open(file_name, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(data)
+    print(f"\nContacts exported to '{file_name}' successfully.\n")
+
+
+def export_contacts():
+    """
+    Exports contacts to the 'contacts.csv' file.
+    """
+    print("Which category would you like to export contacts from?\n")
+    print("1. Personal")
+    print("2. Professional")
+    print("3. Emergency")
+    print("4. Favorites")
+    print("5. All")
+    
+    category_choice = input("\nEnter the number of the category you want to export:\n")
+    if category_choice == '1':
+        sheet = personal_sheet
+    elif category_choice == '2':
+        sheet = professional_sheet
+    elif category_choice == '3':
+        sheet = emergency_sheet
+    elif category_choice == '4':
+        sheet = favorites_sheet
+    elif category_choice == '5':
+        export_all_contacts()
+        return
+    else:
+        print("Invalid choice. Please enter a number between 1 and 5.\n")
+        return
+
+    contacts = sheet.get_all_values()
+    existing_contacts = read_existing_contacts()
+    contacts += existing_contacts
+    export_to_csv(contacts)
+    
+
+
+
 def print_sheet_data(sheet):
     """
     Prints the data from a specified sheet.
@@ -267,7 +339,10 @@ def main():
     print_sheet_data(emergency_sheet)
     print_sheet_data(favorites_sheet)
 
+    export_contacts()
+
 
 if __name__ == "__main__":
     main()
+
 
