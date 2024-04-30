@@ -1,4 +1,5 @@
 import gspread
+import re
 from google.oauth2.service_account import Credentials
 
 SCOPE = [
@@ -25,6 +26,9 @@ emergency_data = []
 
 favorites_data = []
 
+telephone_pattern =  r'^[\d+\-]+$'
+
+
 def use_program():
     """
     The function to basically ask the user if he wants to use
@@ -35,13 +39,14 @@ def use_program():
     counter = 0
     while True:
         user_input = input("Do you want to use the contact manager? (yes/no):\n").strip().lower()
-        if user_input in ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly"):
+        if user_input in ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"):
             return True
         elif user_input in ("no", "n", "nah", "nope", "negative"):
             return False
         else:
             counter +=1
             print(f"\nI can do this all day. You've failed to give a correct answer {counter} times.")
+
 
 def add_data_with_name_column(sheet, data):
     """
@@ -61,6 +66,7 @@ def add_data_with_name_column(sheet, data):
     else:
         for row in data:
             sheet.append_row(row)
+
 
 def protect_header(sheet):
     """
@@ -98,26 +104,14 @@ def check_duplicate_contact(name, number):
     return False
 
 
-def want_to_view_existing_contacts():
-    """
-    Asks the user if he wants to view existing contacts
-    Returns True if he does, False otherwise
-    """
-    view_contacts = input("Do you want to view existing contacts? (Yes/No): ").strip().lower()
-    if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]:
-        return True
-    else:
-        return False
-
-
-
 def view_existing_contacts():
     """
     Prompts the user if he wants to view existing contacts
     """
+    counter = 0
     while True:
-        view_contacts = input("Do you want to view existing contacts? (Yes/No): ").strip().lower()
-        if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly"]:
+        view_contacts = input("Do you want to view existing contacts? (Yes/No):\n").strip().lower()
+        if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
             print("Choose a category:")
             print("1. Personal")
             print("2. Professional")
@@ -126,7 +120,7 @@ def view_existing_contacts():
             print("5. All")
             print("6. I don't want to")
 
-            category_choice = input("Enter the number of the category you want to view: ")
+            category_choice = input("\nEnter the number of the category you want to view: ")
             if category_choice == '1':
                 print_sheet_data(personal_sheet)
                 break
@@ -146,73 +140,92 @@ def view_existing_contacts():
                 print_sheet_data(favorites_sheet)
                 break
             elif category_choice == '6':
-                print("No problem. You can view contacts later.")
+                print("\nNo problem. You can view contacts later.")
                 break
             else:
+                counter += 1
                 print("Invalid choice. Please enter a number between 1 and 6.")
         elif view_contacts in ["no", "n", "nah", "nope", "negative"]:
-            print("No problem. You can view contacts later.")
+            print("\nNo problem. You can view contacts later.")
             break
         else:
-            print("Invalid choice. Please enter 'Yes' or 'No'.")
+            counter += 1
+            print(f"\nI can do this all day. You've failed to give a correct answer {counter} times.")
 
 
-def want_to_add_contacts():
-    """
-    Asks the user if he wants to add new contacts
-    Returns True if he does, False otherwise
-    """
-    add_contacts_input = input("\nDo you want to add new contacts? (Yes/No): ").strip().lower()
-    return add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly"]
-            
-            
+
+
 def add_contacts():
     """
-    Prompts the user to choose a category of contacts and adds new contacts
-    to the selected category
-    
-    Displays options to the user to choose from one of each four from
-    Personal - Professional - Emergency - Favorites
-    And then the user has to enter the amount - number of contacts he wants to add
-    including their names and tel. numbers
-    
-    Then adds the entered contacts to the correct sheet after checking for duplicates.
+    Prompts the user if he wants to add new contacts and adds them to the selected category.
     """
-    print("Which category would you like to add contacts to?")
-    print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites:\n")
-    
     while True:
-        sheet_choice = input("Enter your choice: \n").capitalize()
-        
-        if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
+        add_contacts_input = input("\nDo you want to add new contacts? (Yes/No): ").strip().lower()
+        if add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+            print("Which category would you like to add contacts to?")
+            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites:\n")
+            
+            while True:
+                sheet_choice = input("Enter your choice: \n").capitalize()
+                
+                if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
+                    break
+                else:
+                    print("Invalid choice. Please enter 'Per', 'Pro', 'Eme', or 'Fav'.")
+
+            if sheet_choice == 'Per':
+                sheet = personal_sheet
+            elif sheet_choice == 'Pro':
+                sheet = professional_sheet
+            elif sheet_choice == 'Eme':
+                sheet = emergency_sheet
+            elif sheet_choice == 'Fav':
+                sheet = favorites_sheet
+            
+            while True:
+                num_contacts_input = input("How many contacts would you like to add? (only numbers) ")
+                if num_contacts_input.isdigit():
+                    num_contacts = int(num_contacts_input)
+                    break
+                elif num_contacts_input.lower() == "esc":
+                    print("Exiting the program.")
+                    return
+                else:
+                    print("\nInvalid input. Please enter a number or type 'esc' to exit the program.")
+            
+            # _ acts as draft / placeholder variable (non main focus)
+            for _ in range(num_contacts):
+                name = input("Enter contact name: ")
+                while True:
+                    number = input("Enter contact number (only numbers, +, or -): ")
+                    # Added regular expression for the telephone number - might just delete it later on and keep it to only to numbers
+                    if re.match(r'^[\d\+\-]+$', number):
+                        break
+                    elif number.lower() == "esc":
+                        print("Exiting the program.")
+                        return
+                    else:
+                        print("Invalid telephone number. Please enter only numbers, +, or -.")
+                
+                if check_duplicate_contact(name, number):
+                    print("Warning: This contact already exists.")
+                else:
+                    add_data_with_name_column(sheet, [[name, number]])
+                    print("Contact added successfully.")
+            
             break
+        elif add_contacts_input in ["no", "n", "nah", "nope", "negative"]:
+            print("No contacts added.")
+            break
+        elif add_contacts_input == "esc":
+            print("Exiting the program.")
+            return
         else:
-            print("Invalid choice. Please enter 'Per', 'Pro', 'Eme', or 'Fav'.")
-
-    if sheet_choice == 'Per':
-        sheet = personal_sheet
-    elif sheet_choice == 'Pro':
-        sheet = professional_sheet
-    elif sheet_choice == 'Eme':
-        sheet = emergency_sheet
-    elif sheet_choice == 'Fav':
-        sheet = favorites_sheet
-    
-    num_contacts = int(input("How many contacts would you like to add? "))
-    
-    # _ acts as draft / placeholder variable (non main focus)
-    for _ in range(num_contacts):
-        name = input("Enter contact name: ")
-        number = int(input("Enter contact number (only numbers): "))
-        
-        if check_duplicate_contact(name, number):
-            print("Warning: This contact already exists.")
-        else:
-            add_data_with_name_column(sheet, [[name, number]])
-            print("Contact added successfully.")
+            print("Invalid input. Please enter 'Yes' or 'No', or type 'esc' to exit the program.")
 
 
-   
+
+
   
 def print_sheet_data(sheet):
     """
@@ -234,8 +247,7 @@ def main():
     
     view_existing_contacts()
     
-    if want_to_add_contacts():
-        add_contacts()
+    add_contacts()
     
     # Add data for all sheets
     add_data_with_name_column(personal_sheet, personal_data)
