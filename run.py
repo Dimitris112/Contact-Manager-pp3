@@ -3,6 +3,7 @@ import re
 import csv
 import time
 import ascii_py
+import sys
 from google.oauth2.service_account import Credentials
 # Not sure if I keep the CSV coz it's going to be updated along the way / after submission (possible) - bad
 
@@ -41,6 +42,7 @@ X8888 X8888  88888   "*8%-    us888u.  ^"8888""8888"    us888u.   .ue888Nc..   u
 
 '''
 
+
 print(ascii_art)
 #Font Name: Fraktur - Contact Manager 
 #https://patorjk.com/software/taag/#p=display&f=Fraktur&t=Contact%0AManager
@@ -56,6 +58,19 @@ CREDS = Credentials.from_service_account_file("creds.json")
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open("contact_manager")
+
+#ANSI escape coloring codes
+COLORS = {
+    'red': '\033[91m',
+    'green': '\033[92m',
+    'yellow': '\033[93m',
+    'blue': '\033[94m',
+    'magenta': '\033[95m',
+    'cyan': '\033[96m'
+}
+
+RESET = '\033[0m'
+
 
 personal_sheet = SHEET.worksheet("Personal")
 professional_sheet = SHEET.worksheet("Professional")
@@ -90,6 +105,54 @@ def use_program():
         else:
             counter +=1
             print(f"\nI can do this all day. You've failed to give a correct answer {counter} times.")
+
+
+def choose_color():
+    """
+    Allows the user to change the input color with confirmation.
+    """
+    while True:
+        print("\nDo you want to change the color for your input? (yes/no)")
+        choice = input().strip().lower()
+
+        if choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+            print("Which color do you want?")
+            print("1. Red")
+            print("2. Green")
+            print("3. Yellow")
+            print("4. Blue")
+            print("5. Magenta")
+            print("6. Cyan")
+            color_choice = input("\nEnter the number of the color you want:\n").strip()
+
+            if color_choice == "1":
+                chosen_color = COLORS['red']
+            elif color_choice == "2":
+                chosen_color = COLORS['green']
+            elif color_choice == "3":
+                chosen_color = COLORS['yellow']
+            elif color_choice == "4":
+                chosen_color = COLORS['blue']
+            elif color_choice == "5":
+                chosen_color = COLORS['magenta']
+            elif color_choice == "6":
+                chosen_color = COLORS['cyan']
+            else:
+                print("Invalid color choice. Please enter a number between 1 and 6.\n")
+                continue
+
+            confirm_choice = input(f"You've chosen {chosen_color} as the input color. Proceed? (yes/no)\n").strip().lower()
+            if confirm_choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+                return chosen_color
+            else:
+                print("Color selection canceled. Please choose again.")
+        elif choice.lower() == "esc":
+            print(exit_program_with_countdown())
+            return ""
+        else:
+            print("Invalid input. Please enter 'yes', 'no' or 'esc' to exit the program.\n")
+
+
 
 
 def add_data_with_name_column(sheet, data):
@@ -156,7 +219,7 @@ def view_existing_contacts():
     while True:
         view_contacts = input("Do you want to view existing contacts? (Yes/No):\n").strip().lower()
         if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
-            print("Choose a category:")
+            print("\nChoose a category:")
             print("1. Personal")
             print("2. Professional")
             print("3. Emergency")
@@ -204,9 +267,9 @@ def add_contacts():
     Prompts the user if he wants to add new contacts and adds them to the selected category.
     """
     while True:
-        add_contacts_input = input("\nDo you want to add new contacts? (Yes/No): ").strip().lower()
+        add_contacts_input = input("\nDo you want to add new contacts? (Yes/No):\n").strip().lower()
         if add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
-            print("Which category would you like to add contacts to?")
+            print("\nWhich category would you like to add contacts to?")
             print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites or enter 'esc' to exit.\n")
             
             while True:
@@ -230,7 +293,7 @@ def add_contacts():
                 sheet = favorites_sheet
             
             while True:
-                num_contacts_input = input("How many contacts would you like to add? (only numbers) ")
+                num_contacts_input = input("\nHow many contacts would you like to add? (only numbers)\n")
                 try:
                     num_contacts = int(num_contacts_input)
                     break
@@ -261,7 +324,7 @@ def add_contacts():
                     print("Contact added successfully.")
             
             break
-        elif add_contacts_input in ["no", "n"]:
+        elif add_contacts_input in ["no", "n", "nah", "nope", "negative"]:
             print("No contacts added.")
             break
         elif add_contacts_input == "esc":
@@ -315,55 +378,87 @@ def export_contacts():
     """
     Exports contacts to the 'contacts.csv' file.
     """
-    print("Which category would you like to export contacts from?\n")
-    print("1. Personal")
-    print("2. Professional")
-    print("3. Emergency")
-    print("4. Favorites")
-    print("5. All")
-    
-    category_choice = input("\nEnter the number of the category you want to export:\n")
-    if category_choice == '1':
-        sheet = personal_sheet
-    elif category_choice == '2':
-        sheet = professional_sheet
-    elif category_choice == '3':
-        sheet = emergency_sheet
-    elif category_choice == '4':
-        sheet = favorites_sheet
-    elif category_choice == '5':
-        export_all_contacts()
-        return
-    else:
-        print("Invalid choice. Please enter a number between 1 and 5.\n")
-        return
+    while True:
+        export_choice = input("\nDo you want to export contacts? (Yes/No):\n").strip().lower()
+        if export_choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+            print("\nWhich category would you like to export contacts from?\n")
+            print("1. Personal")
+            print("2. Professional")
+            print("3. Emergency")
+            print("4. Favorites")
+            print("5. All")
+            
+            category_choice = input("\nEnter the number of the category you want to export:\n")
+            if category_choice == '1':
+                sheet = personal_sheet
+            elif category_choice == '2':
+                sheet = professional_sheet
+            elif category_choice == '3':
+                sheet = emergency_sheet
+            elif category_choice == '4':
+                sheet = favorites_sheet
+            elif category_choice == '5':
+                export_all_contacts()
+                return
+            elif category_choice.lower() == 'esc':
+                print(exit_program_with_countdown())
+                return ""
+            else:
+                print("Invalid choice. Please enter a number between 1 and 5 or 'esc' to exit.\n")
+                return
 
-    contacts = sheet.get_all_values()
-    existing_contacts = read_existing_contacts()
-    contacts += existing_contacts
-    export_to_csv(contacts)
+            contacts = sheet.get_all_values()
+            existing_contacts = read_existing_contacts()
+            contacts += existing_contacts
+            export_to_csv(contacts)
+            break
+        elif export_choice in ["no", "n", "nah", "nope", "negative"]:
+            print("No problem. You can export contacts later.")
+            break
+        elif export_choice == "esc":
+            print(exit_program_with_countdown())
+            return ""
+        else:
+            print("Invalid input. Please enter 'Yes' or 'No', or type 'esc' to exit the program.")
+
+
+
     
 def search_contacts():
     """
-    Searches for a contact by name or tel number
+    Searches for a contact by name or telephone number.
     """
-    search_query = input("Enter the name or telephone number of the contact you want to search for:\n").strip().lower()
-    search_results = []
-    
-    for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
-        contacts = sheet.get_all_records()
-        for contact in contacts:
-            if search_query in contact["Name"].lower() or search_query in contact["Telephone Number"].lower():
-                search_results.append((sheet.title, contact))
-    
-    if search_results:
-        print("\nSearch Results:\n")
-        for category, contact in search_results:
-            print(f"\nCategory: {category}")
-            print("Name:", contact["Name"])
-            print("Telephone Number:", contact["Telephone Number"])
-    else:
-        print("\nNo matching contacts found.")
+    while True:
+        search_choice = input("\nDo you want to search for a contact? (yes/no):\n").strip().lower()
+        if search_choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey"]:
+            search_query = input("\nEnter the name or telephone number of the contact you want to search for:\n").strip().lower()
+            search_results = []
+
+            for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
+                contacts = sheet.get_all_records()
+                for contact in contacts:
+                    if search_query in str(contact["Name"]).lower() or search_query in str(contact["Telephone Number"]).lower():
+                        search_results.append((sheet.title, contact))
+
+            if search_results:
+                print("\nSearch Results:\n")
+                for category, contact in search_results:
+                    print(f"Category: {category}")
+                    print("Name:", contact["Name"])
+                    print("Telephone Number:", contact["Telephone Number"])
+            else:
+                print("\nNo matching contacts found.")
+            break
+        elif search_choice in ["no", "n", "nah", "nope", "negative"]:
+            print("\nNo problem. You can search for contacts later.")
+            break
+        elif search_choice == "esc":
+            print(exit_program_with_countdown())
+            return ""
+        else:
+            print("\nInvalid input. Please enter 'yes' or 'no', or type 'esc' to exit the program.")
+
+
 
 
 def print_sheet_data(sheet):
@@ -390,13 +485,18 @@ def exit_program_with_countdown():
     print("\nBoom!")
     return ""
 
-
+#MARK: M A I N  
 def main():
     if not use_program():
         print(exit_program_with_countdown())
         return
     
     print("Great! Let's proceed with the program.\n")
+    
+    chosen_color = choose_color()
+    if chosen_color == "":
+        return
+    print(chosen_color + ascii_art + RESET)
     
     view_existing_contacts()
     
