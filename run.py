@@ -1,8 +1,29 @@
 import gspread
 import re
 import csv
+import time
+import ascii_py
 from google.oauth2.service_account import Credentials
 # Not sure if I keep the CSV coz it's going to be updated along the way / after submission (possible) - bad
+
+#     ...                                         s                               s           ...     ..      ..                                                                               
+#    xH88"`~ .x8X                                  :8                              :8         x*8888x.:*8888: -"888:                                                                             
+#  :8888   .f"8888Hf        u.      u.    u.      .88                             .88        X   48888X `8888H  8888                  u.    u.                                         .u    .   
+# :8888>  X8L  ^""`   ...ue888b   x@88k u@88c.   :888ooo       u           .     :888ooo    X8x.  8888X  8888X  !888>        u      x@88k u@88c.       u          uL          .u     .d88B :@8c  
+# X8888  X888h        888R Y888r ^"8888""8888" -*8888888    us888u.   .udR88N  -*8888888    X8888 X8888  88888   "*8%-    us888u.  ^"8888""8888"    us888u.   .ue888Nc..   ud8888.  ="8888f8888r 
+# 88888  !88888.      888R I888>   8888  888R    8888    .@88 "8888" <888'888k   8888       '*888!X8888> X8888  xH8>   .@88 "8888"   8888  888R  .@88 "8888" d88E`"888E` :888'8888.   4888>'88"  
+# 88888   %88888      888R I888>   8888  888R    8888    9888  9888  9888 'Y"    8888         `?8 `8888  X888X X888>   9888  9888    8888  888R  9888  9888  888E  888E  d888 '88%"   4888> '    
+# 88888 '> `8888>     888R I888>   8888  888R    8888    9888  9888  9888        8888         -^  '888"  X888  8888>   9888  9888    8888  888R  9888  9888  888E  888E  8888.+"      4888>      
+# `8888L %  ?888   ! u8888cJ888    8888  888R   .8888Lu= 9888  9888  9888       .8888Lu=       dx '88~x. !88~  8888>   9888  9888    8888  888R  9888  9888  888E  888E  8888L       .d888L .+   
+#  `8888  `-*""   /   "*888*P"    "*88*" 8888"  ^%888*   9888  9888  ?8888u../  ^%888*       .8888Xf.888x:!    X888X.: 9888  9888   "*88*" 8888" 9888  9888  888& .888E  '8888c. .+  ^"8888*"    
+#    "888.      :"      'Y"         ""   'Y"      'Y"    "888*""888"  "8888P'     'Y"       :""888":~"888"     `888*"  "888*""888"    ""   'Y"   "888*""888" *888" 888&   "88888%       "Y"      
+#      `""***~"`                                          ^Y"   ^Y'     "P'                     "~'    "~        ""     ^Y"   ^Y'                 ^Y"   ^Y'   `"   "888E    "YP'                 
+#                                                                                                                                                            .dWi   `88E                         
+#                                                                                                                                                            4888~  J8%                          
+#                                                                                                                                                             ^"===*"`                  
+
+
+
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -122,7 +143,7 @@ def view_existing_contacts():
             print("5. All")
             print("6. I don't want to")
 
-            category_choice = input("\nEnter the number of the category you want to view: ")
+            category_choice = input("\nEnter the number of the category you want to view:\n")
             if category_choice == '1':
                 print_sheet_data(personal_sheet)
                 break
@@ -165,13 +186,16 @@ def add_contacts():
         add_contacts_input = input("\nDo you want to add new contacts? (Yes/No): ").strip().lower()
         if add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
             print("Which category would you like to add contacts to?")
-            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites:\n")
+            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites or enter 'esc' to exit.\n")
             
             while True:
                 sheet_choice = input("Enter your choice: \n").capitalize()
                 
                 if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
                     break
+                elif sheet_choice == "Esc":
+                    print(exit_program_with_countdown())
+                    return
                 else:
                     print("Invalid choice. Please enter 'Per', 'Pro', 'Eme', or 'Fav'.")
 
@@ -186,28 +210,28 @@ def add_contacts():
             
             while True:
                 num_contacts_input = input("How many contacts would you like to add? (only numbers) ")
-                if num_contacts_input.isdigit():
+                try:
                     num_contacts = int(num_contacts_input)
                     break
-                elif num_contacts_input.lower() == "esc":
-                    print("Exiting the program.")
-                    return
-                else:
-                    print("\nInvalid input. Please enter a number or type 'esc' to exit the program.")
-            
-            # _ acts as draft / placeholder variable (non main focus)
+                except ValueError:
+                    if num_contacts_input.lower() == "esc":
+                        print(exit_program_with_countdown())
+                        return
+                    else:
+                        print("\nInvalid input. Please enter a number or type 'esc' to exit the program.")
+             # _ acts as draft / placeholder variable (non main focus)
             for _ in range(num_contacts):
                 name = input("Enter contact name: ")
                 while True:
-                    number = input("Enter contact number (only numbers, +, or -): ")
+                    number = input("Enter contact number (only numbers, + or -): ")
                     # Added regular expression for the telephone number - might just delete it later on and keep it to only to numbers
                     if re.match(r'^[\d\+\-]+$', number):
                         break
                     elif number.lower() == "esc":
-                        print("Exiting the program.")
+                        print(exit_program_with_countdown())
                         return
                     else:
-                        print("Invalid telephone number. Please enter only numbers, +, or -.")
+                        print("Invalid telephone number. Please enter only numbers, + or -")
                 
                 if check_duplicate_contact(name, number):
                     print("Warning: This contact already exists.")
@@ -216,14 +240,16 @@ def add_contacts():
                     print("Contact added successfully.")
             
             break
-        elif add_contacts_input in ["no", "n", "nah", "nope", "negative"]:
+        elif add_contacts_input in ["no", "n"]:
             print("No contacts added.")
             break
         elif add_contacts_input == "esc":
-            print("Exiting the program.")
+            print(exit_program_with_countdown())
             return
         else:
             print("Invalid input. Please enter 'Yes' or 'No', or type 'esc' to exit the program.")
+
+
 
 
 
@@ -296,7 +322,27 @@ def export_contacts():
     contacts += existing_contacts
     export_to_csv(contacts)
     
-
+def search_contacts():
+    """
+    Searches for a contact by name or tel number
+    """
+    search_query = input("Enter the name or telephone number of the contact you want to search for:\n").strip().lower()
+    search_results = []
+    
+    for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
+        contacts = sheet.get_all_records()
+        for contact in contacts:
+            if search_query in contact["Name"].lower() or search_query in contact["Telephone Number"].lower():
+                search_results.append((sheet.title, contact))
+    
+    if search_results:
+        print("\nSearch Results:\n")
+        for category, contact in search_results:
+            print(f"\nCategory: {category}")
+            print("Name:", contact["Name"])
+            print("Telephone Number:", contact["Telephone Number"])
+    else:
+        print("\nNo matching contacts found.")
 
 
 def print_sheet_data(sheet):
@@ -308,11 +354,25 @@ def print_sheet_data(sheet):
     for row in sheet_data:
         print(row)
  
-   
-    
+
+# Basically the function to replace the "Exiting the program" into something nice and simpler
+def exit_program_with_countdown():
+    """
+    Exits the program with a countdown before exiting.
+    """
+    countdown = 3
+    print(f"\nExiting the program in {countdown}...")
+    while countdown > 0:
+        time.sleep(1)
+        print(countdown)
+        countdown -= 1
+    print("\nBoom!")
+    return ""
+
+
 def main():
     if not use_program():
-        print("Exiting the program.")
+        print(exit_program_with_countdown())
         return
     
     print("Great! Let's proceed with the program.\n")
@@ -339,6 +399,8 @@ def main():
     print_sheet_data(emergency_sheet)
     print_sheet_data(favorites_sheet)
 
+    search_contacts()
+    
     export_contacts()
 
 
