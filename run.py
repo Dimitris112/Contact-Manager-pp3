@@ -77,6 +77,10 @@ professional_sheet = SHEET.worksheet("Professional")
 emergency_sheet = SHEET.worksheet("Emergency")
 favorites_sheet = SHEET.worksheet("Favorites")
 
+yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey", "alright")
+no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never")
+
+
 personal_data = []
 
 professional_data = []
@@ -97,14 +101,17 @@ def use_program():
     """
     counter = 0
     while True:
-        user_input = input("Do you want to use the contact manager? (yes/no):\n").strip().lower()
-        if user_input in ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"):
+        user_input = input("Do you want to use the contact manager? (yes/no). You can enter 'esc' to terminate the program anytime.\n").strip().lower()
+        if user_input in yes_words:
             return True
-        elif user_input in ("no", "n", "nah", "nope", "negative"):
+        elif user_input in no_words:
+            return False
+        elif user_input == "esc":
             return False
         else:
             counter +=1
             print(f"\nI can do this all day. You've failed to give a correct answer {counter} times.")
+
 
 
 def choose_color():
@@ -115,7 +122,7 @@ def choose_color():
         print("\nDo you want to change the color for your input? (yes/no)")
         choice = input().strip().lower()
 
-        if choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+        if choice in yes_words:
             print("Which color do you want?")
             print("1. Red")
             print("2. Green")
@@ -142,15 +149,20 @@ def choose_color():
                 continue
 
             confirm_choice = input(f"You've chosen {chosen_color} as the input color. Proceed? (yes/no)\n").strip().lower()
-            if confirm_choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+            if confirm_choice in yes_words:
                 return chosen_color
             else:
                 print("Color selection canceled. Please choose again.")
+        elif choice in no_words:
+            print("No problem. The input color will remain unchanged.")
+            return None
         elif choice.lower() == "esc":
             print(exit_program_with_countdown())
             return ""
         else:
             print("Invalid input. Please enter 'yes', 'no' or 'esc' to exit the program.\n")
+
+
 
 
 
@@ -217,8 +229,8 @@ def view_existing_contacts():
     """
     counter = 0
     while True:
-        view_contacts = input("Do you want to view existing contacts? (Yes/No):\n").strip().lower()
-        if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+        view_contacts = input("\nDo you want to view existing contacts? (Yes/No):\n").strip().lower()
+        if view_contacts in yes_words:
             print("\nChoose a category:")
             print("1. Personal")
             print("2. Professional")
@@ -252,9 +264,12 @@ def view_existing_contacts():
             else:
                 counter += 1
                 print("Invalid choice. Please enter a number between 1 and 6.")
-        elif view_contacts in ["no", "n", "nah", "nope", "negative"]:
-            print("\nNo problem. You can view contacts later.")
+        elif view_contacts in no_words:
+            print("No problem. You can view contacts later.")
             break
+        elif search_choice == "esc":
+            print(exit_program_with_countdown())
+            return ""
         else:
             counter += 1
             print(f"\nI can do this all day. You've failed to give a correct answer {counter} times.")
@@ -268,7 +283,7 @@ def add_contacts():
     """
     while True:
         add_contacts_input = input("\nDo you want to add new contacts? (Yes/No):\n").strip().lower()
-        if add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+        if add_contacts_input in yes_words:
             print("\nWhich category would you like to add contacts to?")
             print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites or enter 'esc' to exit.\n")
             
@@ -278,8 +293,7 @@ def add_contacts():
                 if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
                     break
                 elif sheet_choice == "Esc":
-                    print(exit_program_with_countdown())
-                    return
+                    return exit_program_with_countdown()
                 else:
                     print("Invalid choice. Please enter 'Per', 'Pro', 'Eme', or 'Fav'.")
 
@@ -299,8 +313,7 @@ def add_contacts():
                     break
                 except ValueError:
                     if num_contacts_input.lower() == "esc":
-                        print(exit_program_with_countdown())
-                        return
+                        return exit_program_with_countdown()
                     else:
                         print("\nInvalid input. Please enter a number or type 'esc' to exit the program.")
              # _ acts as draft / placeholder variable (non main focus)
@@ -312,8 +325,7 @@ def add_contacts():
                     if re.match(r'^[\d\+\-]+$', number):
                         break
                     elif number.lower() == "esc":
-                        print(exit_program_with_countdown())
-                        return
+                        return exit_program_with_countdown()
                     else:
                         print("Invalid telephone number. Please enter only numbers, + or -")
                 
@@ -324,14 +336,15 @@ def add_contacts():
                     print("Contact added successfully.")
             
             break
-        elif add_contacts_input in ["no", "n", "nah", "nope", "negative"]:
+        elif add_contacts_input in no_words:
             print("No contacts added.")
             break
         elif add_contacts_input == "esc":
             print(exit_program_with_countdown())
-            return
+            return ""
         else:
             print("Invalid input. Please enter 'Yes' or 'No', or type 'esc' to exit the program.")
+
 
 
 
@@ -380,7 +393,7 @@ def export_contacts():
     """
     while True:
         export_choice = input("\nDo you want to export contacts? (Yes/No):\n").strip().lower()
-        if export_choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+        if export_choice in yes_words:
             print("\nWhich category would you like to export contacts from?\n")
             print("1. Personal")
             print("2. Professional")
@@ -412,7 +425,7 @@ def export_contacts():
             contacts += existing_contacts
             export_to_csv(contacts)
             break
-        elif export_choice in ["no", "n", "nah", "nope", "negative"]:
+        elif export_choice in no_words:
             print("No problem. You can export contacts later.")
             break
         elif export_choice == "esc":
@@ -430,7 +443,7 @@ def search_contacts():
     """
     while True:
         search_choice = input("\nDo you want to search for a contact? (yes/no):\n").strip().lower()
-        if search_choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey"]:
+        if search_choice in yes_words:
             search_query = input("\nEnter the name or telephone number of the contact you want to search for:\n").strip().lower()
             search_results = []
 
@@ -449,7 +462,7 @@ def search_contacts():
             else:
                 print("\nNo matching contacts found.")
             break
-        elif search_choice in ["no", "n", "nah", "nope", "negative"]:
+        elif search_choice in no_words:
             print("\nNo problem. You can search for contacts later.")
             break
         elif search_choice == "esc":
@@ -484,6 +497,7 @@ def exit_program_with_countdown():
         countdown -= 1
     print("\nBoom!")
     return ""
+    sys.exit()
 
 #MARK: M A I N  
 def main():
@@ -494,9 +508,12 @@ def main():
     print("Great! Let's proceed with the program.\n")
     
     chosen_color = choose_color()
-    if chosen_color == "":
+    if chosen_color is None:
+        pass
+    elif chosen_color == "":
         return
-    print(chosen_color + ascii_art + RESET)
+    else:
+        print(chosen_color + ascii_art + RESET)
     
     view_existing_contacts()
     
@@ -523,6 +540,8 @@ def main():
     search_contacts()
     
     export_contacts()
+    
+    print(exit_program_with_countdown())
 
 
 if __name__ == "__main__":
