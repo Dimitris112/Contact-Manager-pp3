@@ -91,6 +91,8 @@ favorites_data = []
 
 telephone_pattern =  r'^[\d+\-]+$'
 
+input_color = None
+
 
 def use_program():
     """
@@ -102,6 +104,8 @@ def use_program():
     counter = 0
     while True:
         user_input = input("Do you want to use the contact manager? (yes/no). You can enter 'esc' to terminate the program anytime.\n").strip().lower()
+        if input_color:
+            print(input_color, end="")
         if user_input in yes_words:
             return True
         elif user_input in no_words:
@@ -118,6 +122,8 @@ def choose_color():
     """
     Allows the user to change the input color with confirmation.
     """
+    global input_color
+    
     while True:
         print("\nDo you want to change the color for your input? (yes/no)")
         choice = input().strip().lower()
@@ -167,7 +173,7 @@ def choose_color():
 
 
 
-def add_data_with_name_column(sheet, data):
+def add_data_with_name_column(sheet, data, input_color):
     """
     Adds new data to the sheets with a predefined header
     If the sheet is empty, it sets a header row with its columns on A1 and B1
@@ -176,6 +182,8 @@ def add_data_with_name_column(sheet, data):
     Then it appends the data provided by the user to the sheet
     """
     existing_data = sheet.get_all_values()
+    if input_color:
+        print(input_color, end="")
     print(f"\nExisting data in {sheet.title} sheet:", existing_data)
 
     if not existing_data or not existing_data[0]:
@@ -223,13 +231,15 @@ def check_duplicate_contact(name, number):
     return False
 
 
-def view_existing_contacts():
+def view_existing_contacts(input_color):
     """
     Prompts the user if he wants to view existing contacts
     """
     counter = 0
     while True:
         view_contacts = input("\nDo you want to view existing contacts? (Yes/No):\n").strip().lower()
+        if input_color:
+            print(input_color, end="")
         if view_contacts in yes_words:
             print("\nChoose a category:")
             print("1. Personal")
@@ -241,22 +251,22 @@ def view_existing_contacts():
 
             category_choice = input("\nEnter the number of the category you want to view:\n")
             if category_choice == '1':
-                print_sheet_data(personal_sheet)
+                print_sheet_data(personal_sheet, input_color)
                 break
             elif category_choice == '2':
-                print_sheet_data(professional_sheet)
+                print_sheet_data(professional_sheet, input_color)
                 break
             elif category_choice == '3':
-                print_sheet_data(emergency_sheet)
+                print_sheet_data(emergency_sheet, input_color)
                 break
             elif category_choice == '4':
-                print_sheet_data(favorites_sheet)
+                print_sheet_data(favorites_sheet, input_color)
                 break
             elif category_choice == '5':
-                print_sheet_data(personal_sheet)
-                print_sheet_data(professional_sheet)
-                print_sheet_data(emergency_sheet)
-                print_sheet_data(favorites_sheet)
+                print_sheet_data(personal_sheet, input_color)
+                print_sheet_data(professional_sheet, input_color)
+                print_sheet_data(emergency_sheet, input_color)
+                print_sheet_data(favorites_sheet, input_color)
                 break
             elif category_choice == '6':
                 print("\nNo problem. You can view contacts later.")
@@ -267,8 +277,8 @@ def view_existing_contacts():
         elif view_contacts in no_words:
             print("No problem. You can view contacts later.")
             break
-        elif search_choice == "esc":
-            print(exit_program_with_countdown())
+        elif view_contacts == "esc":
+            print(exit_program_with_countdown(input_color))
             return ""
         else:
             counter += 1
@@ -277,12 +287,17 @@ def view_existing_contacts():
 
 
 
-def add_contacts():
+
+
+
+def add_contacts(input_color):
     """
     Prompts the user if he wants to add new contacts and adds them to the selected category.
     """
     while True:
         add_contacts_input = input("\nDo you want to add new contacts? (Yes/No):\n").strip().lower()
+        if input_color:
+            print(input_color, end="")
         if add_contacts_input in yes_words:
             print("\nWhich category would you like to add contacts to?")
             print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency, or 'Fav' for Favorites or enter 'esc' to exit.\n")
@@ -293,7 +308,7 @@ def add_contacts():
                 if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
                     break
                 elif sheet_choice == "Esc":
-                    return exit_program_with_countdown()
+                    return exit_program_with_countdown(input_color)
                 else:
                     print("Invalid choice. Please enter 'Per', 'Pro', 'Eme', or 'Fav'.")
 
@@ -313,7 +328,7 @@ def add_contacts():
                     break
                 except ValueError:
                     if num_contacts_input.lower() == "esc":
-                        return exit_program_with_countdown()
+                        return exit_program_with_countdown(input_color)
                     else:
                         print("\nInvalid input. Please enter a number or type 'esc' to exit the program.")
              # _ acts as draft / placeholder variable (non main focus)
@@ -325,14 +340,14 @@ def add_contacts():
                     if re.match(r'^[\d\+\-]+$', number):
                         break
                     elif number.lower() == "esc":
-                        return exit_program_with_countdown()
+                        return exit_program_with_countdown(input_color)
                     else:
                         print("Invalid telephone number. Please enter only numbers, + or -")
                 
                 if check_duplicate_contact(name, number):
                     print("Warning: This contact already exists.")
                 else:
-                    add_data_with_name_column(sheet, [[name, number]])
+                    add_data_with_name_column(sheet, [[name, number]], input_color)
                     print("Contact added successfully.")
             
             break
@@ -340,11 +355,10 @@ def add_contacts():
             print("No contacts added.")
             break
         elif add_contacts_input == "esc":
-            print(exit_program_with_countdown())
+            print(exit_program_with_countdown(input_color))
             return ""
         else:
             print("Invalid input. Please enter 'Yes' or 'No', or type 'esc' to exit the program.")
-
 
 
 
@@ -437,12 +451,14 @@ def export_contacts():
 
 
     
-def search_contacts():
+def search_contacts(input_color):
     """
     Searches for a contact by name or telephone number.
     """
     while True:
         search_choice = input("\nDo you want to search for a contact? (yes/no):\n").strip().lower()
+        if input_color:
+            print(input_color, end="")
         if search_choice in yes_words:
             search_query = input("\nEnter the name or telephone number of the contact you want to search for:\n").strip().lower()
             search_results = []
@@ -466,7 +482,7 @@ def search_contacts():
             print("\nNo problem. You can search for contacts later.")
             break
         elif search_choice == "esc":
-            print(exit_program_with_countdown())
+            print(exit_program_with_countdown(input_color))
             return ""
         else:
             print("\nInvalid input. Please enter 'yes' or 'no', or type 'esc' to exit the program.")
@@ -474,11 +490,13 @@ def search_contacts():
 
 
 
-def print_sheet_data(sheet):
+def print_sheet_data(sheet, input_color):
     """
     Prints the data from a specified sheet.
     """
     sheet_data = sheet.get_all_values()
+    if input_color:
+        print(input_color, end="")
     print(f"\n{sheet.title} Contacts:")
     for row in sheet_data:
         print(row)
@@ -499,6 +517,7 @@ def exit_program_with_countdown():
     return ""
     sys.exit()
 
+
 #MARK: M A I N  
 def main():
     if not use_program():
@@ -515,15 +534,15 @@ def main():
     else:
         print(chosen_color + ascii_art + RESET)
     
-    view_existing_contacts()
+    view_existing_contacts(chosen_color)
     
-    add_contacts()
+    add_contacts(chosen_color)
     
     # Add data for all sheets
-    add_data_with_name_column(personal_sheet, personal_data)
-    add_data_with_name_column(professional_sheet, professional_data)
-    add_data_with_name_column(emergency_sheet, emergency_data)
-    add_data_with_name_column(favorites_sheet, favorites_data)
+    add_data_with_name_column(personal_sheet, personal_data, chosen_color)
+    add_data_with_name_column(professional_sheet, professional_data, chosen_color)
+    add_data_with_name_column(emergency_sheet, emergency_data, chosen_color)
+    add_data_with_name_column(favorites_sheet, favorites_data, chosen_color)
     
     # Protect header for all sheets
     protect_header(personal_sheet)
@@ -532,12 +551,12 @@ def main():
     protect_header(favorites_sheet)
     
     # Prints data from each sheet
-    print_sheet_data(personal_sheet)
-    print_sheet_data(professional_sheet)
-    print_sheet_data(emergency_sheet)
-    print_sheet_data(favorites_sheet)
+    print_sheet_data(personal_sheet, chosen_color)
+    print_sheet_data(professional_sheet, chosen_color)
+    print_sheet_data(emergency_sheet, chosen_color)
+    print_sheet_data(favorites_sheet, chosen_color)
 
-    search_contacts()
+    search_contacts(chosen_color)
     
     export_contacts()
     
