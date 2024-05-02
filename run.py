@@ -7,8 +7,7 @@ import sys
 from google.oauth2.service_account import Credentials
 # Not sure if I keep the CSV coz it's going to be updated along the way / after submission (possible) - bad
 
-ascii_art = '''
-
+ascii_art = r'''
   /$$$$$$                        /$$                           /$$       
  /$$__  $$                      | $$                          | $$       
 | $$  \__/  /$$$$$$  /$$$$$$$  /$$$$$$    /$$$$$$   /$$$$$$$ /$$$$$$     
@@ -30,6 +29,7 @@ ascii_art = '''
                                             \______/                     
 
 '''
+
 
 
 print(ascii_art)
