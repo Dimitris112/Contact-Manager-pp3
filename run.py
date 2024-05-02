@@ -9,42 +9,31 @@ from google.oauth2.service_account import Credentials
 
 ascii_art = '''
 
-      ...                                         s                               s                  
-   xH88"`~ .x8X                                  :8                              :8                  
- :8888   .f"8888Hf        u.      u.    u.      .88                             .88                  
-:8888>  X8L  ^""`   ...ue888b   x@88k u@88c.   :888ooo       u           .     :888ooo               
-X8888  X888h        888R Y888r ^"8888""8888" -*8888888    us888u.   .udR88N  -*8888888               
-88888  !88888.      888R I888>   8888  888R    8888    .@88 "8888" <888'888k   8888                  
-88888   %88888      888R I888>   8888  888R    8888    9888  9888  9888 'Y"    8888                  
-88888 '> `8888>     888R I888>   8888  888R    8888    9888  9888  9888        8888                  
-`8888L %  ?888   ! u8888cJ888    8888  888R   .8888Lu= 9888  9888  9888       .8888Lu=               
- `8888  `-*""   /   "*888*P"    "*88*" 8888"  ^%888*   9888  9888  ?8888u../  ^%888*                 
-   "888.      :"      'Y"         ""   'Y"      'Y"    "888*""888"  "8888P'     'Y"                  
-     `""***~"`                                          ^Y"   ^Y'     "P'                            
-                                                                                                     
-                                                                                                     
-                                                                                                     
-    ...     ..      ..                                                                               
-  x*8888x.:*8888: -"888:                                                                             
- X   48888X `8888H  8888                  u.    u.                                         .u    .   
-X8x.  8888X  8888X  !888>        u      x@88k u@88c.       u          uL          .u     .d88B :@8c  
-X8888 X8888  88888   "*8%-    us888u.  ^"8888""8888"    us888u.   .ue888Nc..   ud8888.  ="8888f8888r 
-'*888!X8888> X8888  xH8>   .@88 "8888"   8888  888R  .@88 "8888" d88E`"888E` :888'8888.   4888>'88"  
-  `?8 `8888  X888X X888>   9888  9888    8888  888R  9888  9888  888E  888E  d888 '88%"   4888> '    
-  -^  '888"  X888  8888>   9888  9888    8888  888R  9888  9888  888E  888E  8888.+"      4888>      
-   dx '88~x. !88~  8888>   9888  9888    8888  888R  9888  9888  888E  888E  8888L       .d888L .+   
- .8888Xf.888x:!    X888X.: 9888  9888   "*88*" 8888" 9888  9888  888& .888E  '8888c. .+  ^"8888*"    
-:""888":~"888"     `888*"  "888*""888"    ""   'Y"   "888*""888" *888" 888&   "88888%       "Y"      
-    "~'    "~        ""     ^Y"   ^Y'                 ^Y"   ^Y'   `"   "888E    "YP'                 
-                                                                 .dWi   `88E                         
-                                                                 4888~  J8%                          
-                                                                  ^"===*"`                           
+  /$$$$$$                        /$$                           /$$       
+ /$$__  $$                      | $$                          | $$       
+| $$  \__/  /$$$$$$  /$$$$$$$  /$$$$$$    /$$$$$$   /$$$$$$$ /$$$$$$     
+| $$       /$$__  $$| $$__  $$|_  $$_/   |____  $$ /$$_____/|_  $$_/     
+| $$      | $$  \ $$| $$  \ $$  | $$      /$$$$$$$| $$        | $$       
+| $$    $$| $$  | $$| $$  | $$  | $$ /$$ /$$__  $$| $$        | $$ /$$   
+|  $$$$$$/|  $$$$$$/| $$  | $$  |  $$$$/|  $$$$$$$|  $$$$$$$  |  $$$$/   
+ \______/  \______/ |__/  |__/   \___/   \_______/ \_______/   \___/     
+ /$$      /$$                                                            
+| $$$    /$$$                                                            
+| $$$$  /$$$$  /$$$$$$  /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ 
+| $$ $$/$$ $$ |____  $$| $$__  $$ |____  $$ /$$__  $$ /$$__  $$ /$$__  $$
+| $$  $$$| $$  /$$$$$$$| $$  \ $$  /$$$$$$$| $$  \ $$| $$$$$$$$| $$  \__/
+| $$\  $ | $$ /$$__  $$| $$  | $$ /$$__  $$| $$  | $$| $$_____/| $$      
+| $$ \/  | $$|  $$$$$$$| $$  | $$|  $$$$$$$|  $$$$$$$|  $$$$$$$| $$      
+|__/     |__/ \_______/|__/  |__/ \_______/ \____  $$ \_______/|__/      
+                                            /$$  \ $$                    
+                                           |  $$$$$$/                    
+                                            \______/                     
 
 '''
 
 
 print(ascii_art)
-#Font Name: Fraktur - Contact Manager 
+#Font Name: Big Money-ne / Contact Manager 
 #https://patorjk.com/software/taag/#p=display&f=Fraktur&t=Contact%0AManager
 
 
@@ -136,7 +125,8 @@ def choose_color():
             print("4. Blue")
             print("5. Magenta")
             print("6. Cyan")
-            color_choice = input("\nEnter the number of the color you want:\n").strip()
+            print("7. Reset")
+            color_choice = input("\nEnter the number of the color you want or '7' to reset:\n").strip()
 
             if color_choice == "1":
                 chosen_color = COLORS['red']
@@ -150,8 +140,10 @@ def choose_color():
                 chosen_color = COLORS['magenta']
             elif color_choice == "6":
                 chosen_color = COLORS['cyan']
+            elif color_choice == "7":
+                chosen_color = RESET
             else:
-                print("Invalid color choice. Please enter a number between 1 and 6.\n")
+                print("Invalid color choice. Please enter a number between 1 and 7.\n")
                 continue
 
             confirm_choice = input(f"You've chosen {chosen_color} as the input color. Proceed? (yes/no)\n").strip().lower()
@@ -167,6 +159,7 @@ def choose_color():
             return ""
         else:
             print("Invalid input. Please enter 'yes', 'no' or 'esc' to exit the program.\n")
+
 
 
 
