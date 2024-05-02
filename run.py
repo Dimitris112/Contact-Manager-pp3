@@ -34,7 +34,7 @@ ascii_art = r'''
 
 print(ascii_art)
 #Font Name: Big Money-ne / Contact Manager 
-#https://patorjk.com/software/taag/#p=display&f=Fraktur&t=Contact%0AManager
+#https://patorjk.com/software/taag/#p=display&f=Big%20Money-ne&t=Contact%0AManager
 
 
 SCOPE = [
