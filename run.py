@@ -1,6 +1,5 @@
 import gspread
 import re
-import csv
 import time
 import ascii_py
 import sys
@@ -61,6 +60,7 @@ COLORS = {
 RESET = '\033[0m'
 
 
+
 personal_sheet = SHEET.worksheet("Personal")
 professional_sheet = SHEET.worksheet("Professional")
 emergency_sheet = SHEET.worksheet("Emergency")
@@ -103,7 +103,7 @@ def use_program():
             return False
         else:
             counter +=1
-            print(f"\nI can do this all day. You've failed to give\nacorrect answer {counter} times.")
+            print(f"\nI can do this all day. You've failed to give\na correct answer {counter} times.")
 
 
 
@@ -355,8 +355,6 @@ def add_contacts(input_color):
 
 
 
-
-
 def read_existing_contacts():
     """
     Reads existing contacts data from the 'contacts.csv' file.
@@ -369,79 +367,6 @@ def read_existing_contacts():
     except FileNotFoundError:
         existing_contacts = []
     return existing_contacts
-
-
-def export_all_contacts():
-    """
-    Exports contacts from all categories to the 'contacts.csv' file.
-    """
-    all_contacts = []
-    for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
-        all_contacts += sheet.get_all_values()
-    existing_contacts = read_existing_contacts()
-    all_contacts += existing_contacts
-    export_to_csv(all_contacts)
-
-
-def export_to_csv(data):
-    """
-    Writes the contacts data to a CSV file named 'contacts.csv'.
-    """
-    file_name = "contacts.csv"
-    with open(file_name, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(data)
-    print(f"\nContacts exported to '{file_name}' successfully.\n")
-
-
-def export_contacts():
-    """
-    Exports contacts to the 'contacts.csv' file.
-    """
-    while True:
-        export_choice = input("\nDo you want to export contacts? (Yes/No):\n").strip().lower()
-        if export_choice in yes_words:
-            print("\nWhich category would you like to export contacts from?\n")
-            print("1. Personal")
-            print("2. Professional")
-            print("3. Emergency")
-            print("4. Favorites")
-            print("5. All")
-            
-            category_choice = input("\nEnter the number of the category you\nwant to export:\n")
-            if category_choice == '1':
-                sheet = personal_sheet
-            elif category_choice == '2':
-                sheet = professional_sheet
-            elif category_choice == '3':
-                sheet = emergency_sheet
-            elif category_choice == '4':
-                sheet = favorites_sheet
-            elif category_choice == '5':
-                export_all_contacts()
-                return
-            elif category_choice.lower() == 'esc':
-                print(exit_program_with_countdown())
-                return ""
-            else:
-                print("Invalid choice. Please enter a number between 1 and 5\nor 'esc' to exit.\n")
-                return
-
-            contacts = sheet.get_all_values()
-            existing_contacts = read_existing_contacts()
-            contacts += existing_contacts
-            export_to_csv(contacts)
-            break
-        elif export_choice in no_words:
-            print("No problem. You can export contacts later.")
-            break
-        elif export_choice == "esc":
-            print(exit_program_with_countdown())
-            return ""
-        else:
-            print("Invalid input. Please enter 'Yes' or 'No', or type 'esc'\nto exit the program.")
-
-
 
     
 def search_contacts(input_color):
@@ -551,7 +476,6 @@ def main():
 
     search_contacts(chosen_color)
     
-    export_contacts()
     
     print(exit_program_with_countdown())
 
