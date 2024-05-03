@@ -126,7 +126,7 @@ def choose_color():
             print("5. Magenta")
             print("6. Cyan")
             print("7. Reset")
-            color_choice = input("\nEnter the number of the color you want or\n'7' to reset:\n").strip()
+            color_choice = input("\nEnter the number of the color you want or '7' to reset:\n").strip()
 
             if color_choice == "1":
                 chosen_color = COLORS['red']
@@ -146,7 +146,7 @@ def choose_color():
                 print("Invalid color choice. Please enter a number between 1\nand 7.\n")
                 continue
 
-            confirm_choice = input(f"You've chosen {chosen_color}\nas the input color. Proceed? (yes/no)\n").strip().lower()
+            confirm_choice = input(f"You've chosen {chosen_color}as the input color.\nProceed? (yes/no)\n").strip().lower()
             if confirm_choice in yes_words:
                 return chosen_color
             else:
@@ -230,7 +230,7 @@ def view_existing_contacts(input_color):
     """
     counter = 0
     while True:
-        view_contacts = input("\nDo you want to view existing contacts?\n(Yes/No):\n").strip().lower()
+        view_contacts = input(input_color + "\nDo you want to view existing contacts?\n(Yes/No):\n").strip().lower()
         if input_color:
             print(input_color, end="")
         if view_contacts in yes_words:
@@ -293,7 +293,7 @@ def add_contacts(input_color):
             print(input_color, end="")
         if add_contacts_input in yes_words:
             print("\nWhich category would you like to add contacts to?")
-            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for\nEmergency, or 'Fav' for Favorites or enter 'esc' to exit.\n")
+            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for\nEmergency, 'Fav' for Favorites or enter 'esc' to exit.\n")
             
             while True:
                 sheet_choice = input("Enter your choice: \n").capitalize()
@@ -326,16 +326,20 @@ def add_contacts(input_color):
                         print("\nInvalid input. Please enter a number or type\n'esc' to exit the program.")
              # _ acts as draft / placeholder variable (non main focus)
             for _ in range(num_contacts):
-                name = input("Enter contact name: ")
+                name = input("Enter contact name: (up to 30 characters)\n").strip()
+                if len(name) > 30:
+                    print("Name exceeds 30 characters. Please enter a name with 30 characters or less.")
+                    continue
                 while True:
-                    number = input("Enter contact number (only numbers, + or -): ")
+                    number = input("Enter contact number (only numbers, + or -)\n")
                     # Added regular expression for the telephone number - might just delete it later on and keep it to only to numbers
-                    if re.match(r'^[\d\+\-]+$', number):
+                    if len(number) > 20 or not re.match(r'^[\d\+\-]+$', number):
+                        print("Invalid telephone number. Please enter up to 20 characters\ncontaining only numbers, +, or -.")
                         break
                     elif number.lower() == "esc":
                         return exit_program_with_countdown(input_color)
                     else:
-                        print("Invalid telephone number. Please enter only\nnumbers, + or -")
+                        print("Invalid telephone number. Please enter only numbers, + or -")
                 
                 if check_duplicate_contact(name, number):
                     print("Warning: This contact already exists.")
@@ -355,20 +359,6 @@ def add_contacts(input_color):
 
 
 
-def read_existing_contacts():
-    """
-    Reads existing contacts data from the 'contacts.csv' file.
-    """
-    file_name = "contacts.csv"
-    try:
-        with open(file_name, mode='r', newline='') as file:
-            reader = csv.reader(file)
-            existing_contacts = list(reader)
-    except FileNotFoundError:
-        existing_contacts = []
-    return existing_contacts
-
-    
 def search_contacts(input_color):
     """
     Searches for a contact by name or telephone number.
@@ -450,7 +440,7 @@ def main():
     elif chosen_color == "":
         return
     else:
-        print(chosen_color + ascii_art + RESET)
+        print(chosen_color + RESET)
     
     view_existing_contacts(chosen_color)
     
@@ -475,7 +465,6 @@ def main():
     print_sheet_data(favorites_sheet, chosen_color)
 
     search_contacts(chosen_color)
-    
     
     print(exit_program_with_countdown())
 
