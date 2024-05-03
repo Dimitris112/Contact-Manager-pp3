@@ -4,7 +4,7 @@ import time
 import ascii_py
 import sys
 from google.oauth2.service_account import Credentials
-# Not sure if I keep the CSV coz it's going to be updated along the way / after submission (possible) - bad
+#The program takes a lot of time to load - be patient
 
 ascii_art = r'''
   /$$$$$$                        /$$                           /$$       
@@ -28,7 +28,6 @@ ascii_art = r'''
                                             \______/                     
 
 '''
-
 
 
 print(ascii_art)
@@ -66,8 +65,10 @@ professional_sheet = SHEET.worksheet("Professional")
 emergency_sheet = SHEET.worksheet("Emergency")
 favorites_sheet = SHEET.worksheet("Favorites")
 
-yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey", "alright")
+yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey", "alright", "ya")
 no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never")
+failed_times = "\nI can do this all day. You've failed to give a correct answer {} times.\n"
+teasing_message = "Oh, close but no cigar! Give it another shot!"
 
 
 personal_data = []
@@ -78,21 +79,21 @@ emergency_data = []
 
 favorites_data = []
 
-telephone_pattern =  r'^[\d+\-]+$'
+telephone_pattern =  r'^[\d+\- ]+$'
 
 input_color = None
 
 
 def use_program():
     """
-    The function to basically ask the user if he wants to use
-    the program or not
-    Y - Yes  / N - No
-    and then proceed accordingly
+    The function to basically ask the user if he wants to
+    use the contact manager or not
+    and then proceed accordingly.
     """
+    global counter
     counter = 0
     while True:
-        user_input = input("Do you want to use the contact manager? (yes/no).\nYou can enter 'esc' to terminate the program anytime.\n").strip().lower()
+        user_input = input("Do you want to use the contact manager? (yes/no)\nYou can enter 'esc' to terminate the program anytime.\n").strip().lower()
         if input_color:
             print(input_color, end="")
         if user_input in yes_words:
@@ -102,8 +103,8 @@ def use_program():
         elif user_input == "esc":
             return False
         else:
-            counter +=1
-            print(f"\nI can do this all day. You've failed to give\na correct answer {counter} times.")
+            counter += 1
+            print(failed_times.format(counter))
 
 
 
@@ -126,7 +127,7 @@ def choose_color():
             print("5. Magenta")
             print("6. Cyan")
             print("7. Reset")
-            color_choice = input("\nEnter the number of the color you want or '7' to reset:\n").strip()
+            color_choice = input("\nEnter the number of the color you want or '7' to reset\n").strip()
 
             if color_choice == "1":
                 chosen_color = COLORS['red']
@@ -143,7 +144,7 @@ def choose_color():
             elif color_choice == "7":
                 chosen_color = RESET
             else:
-                print("Invalid color choice. Please enter a number between 1\nand 7.\n")
+                print("Invalid color choice. Please enter a number between 1 and 7.\n")
                 continue
 
             confirm_choice = input(f"You've chosen {chosen_color}as the input color.\nProceed? (yes/no)\n").strip().lower()
@@ -230,9 +231,9 @@ def view_existing_contacts(input_color):
     """
     counter = 0
     while True:
-        view_contacts = input(input_color + "\nDo you want to view existing contacts?\n(Yes/No):\n").strip().lower()
         if input_color:
             print(input_color, end="")
+        view_contacts = input("\nDo you want to view existing contacts? (yes/no)\n").strip().lower()
         if view_contacts in yes_words:
             print("\nChoose a category:")
             print("1. Personal")
@@ -242,7 +243,7 @@ def view_existing_contacts(input_color):
             print("5. All")
             print("6. I don't want to")
 
-            category_choice = input("\nEnter the number of the category you\nwant to view:\n")
+            category_choice = input("\nEnter the number of the category you want to view\n")
             if category_choice == '1':
                 print_sheet_data(personal_sheet, input_color)
                 break
@@ -266,7 +267,10 @@ def view_existing_contacts(input_color):
                 break
             else:
                 counter += 1
-                print("Invalid choice. Please enter a number between 1 and 6.")
+                if counter >= 3:
+                    print("\nToo many incorrect attempts. See ya")
+                    return exit_program_with_countdown(input_color)
+                print(teasing_message)
         elif view_contacts in no_words:
             print("No problem. You can view contacts later.")
             break
@@ -275,7 +279,11 @@ def view_existing_contacts(input_color):
             return ""
         else:
             counter += 1
-            print(f"\nI can do this all day. You've failed to give\na correct answer {counter} times.")
+            if counter >= 3:
+                print("\nToo many incorrect attempts. See ya")
+                print(exit_program_with_countdown)
+                return ""
+            print(teasing_message)
 
 
 
@@ -288,22 +296,22 @@ def add_contacts(input_color):
     Prompts the user if he wants to add new contacts and adds them to the selected category.
     """
     while True:
-        add_contacts_input = input("\nDo you want to add new contacts?\n(Yes/No):\n").strip().lower()
+        add_contacts_input = input("\nDo you want to add new contacts? (yes/no)\n").strip().lower()
         if input_color:
             print(input_color, end="")
         if add_contacts_input in yes_words:
             print("\nWhich category would you like to add contacts to?")
-            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for\nEmergency, 'Fav' for Favorites or enter 'esc' to exit.\n")
+            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency,\n'Fav' for Favorites or 'esc' to exit.\n")
             
             while True:
-                sheet_choice = input("Enter your choice: \n").capitalize()
+                sheet_choice = input("Enter your choice\n").capitalize()
                 
                 if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
                     break
                 elif sheet_choice == "Esc":
                     return exit_program_with_countdown(input_color)
                 else:
-                    print("Invalid choice. Please enter 'Per', 'Pro', 'Eme',\nor 'Fav'.")
+                    print("Invalid choice. Please enter 'Per', 'Pro', 'Eme' or 'Fav'.")
 
             if sheet_choice == 'Per':
                 sheet = personal_sheet
@@ -314,39 +322,68 @@ def add_contacts(input_color):
             elif sheet_choice == 'Fav':
                 sheet = favorites_sheet
             
-            while True:
-                num_contacts_input = input("\nHow many contacts would you like\nto add? (only numbers)\n")
+            num_contacts = 0
+            contact_count = 0
+            while not 1 <= num_contacts <= 5:
+                num_contacts_input = input("\nHow many contacts would you like to add? (1-5)\n")
+                if num_contacts_input.lower() == "esc":
+                    return exit_program_with_countdown(input_color)
+
                 try:
                     num_contacts = int(num_contacts_input)
-                    break
                 except ValueError:
-                    if num_contacts_input.lower() == "esc":
-                        return exit_program_with_countdown(input_color)
-                    else:
-                        print("\nInvalid input. Please enter a number or type\n'esc' to exit the program.")
-             # _ acts as draft / placeholder variable (non main focus)
-            for _ in range(num_contacts):
-                name = input("Enter contact name: (up to 30 characters)\n").strip()
-                if len(name) > 30:
-                    print("Name exceeds 30 characters. Please enter a name with 30 characters or less.")
+                    print("Invalid input. Please enter a number between 1 and 5.")
+                    contact_count += 1
+                    if contact_count == 1:
+                        print("You can't seem to follow instructions. Try again.")
+                    elif contact_count == 2:
+                        print("Seriously? You're still doing this wrong.")
+                    elif contact_count == 3:
+                        print("Come on, you can do better than this.")
+                    elif contact_count >= 4:
+                        print(f"Okay, I see what's happening. You've failed {contact_count} times. Are you even trying?")
                     continue
+
+                if not 1 <= num_contacts <= 5:
+                    print("Invalid input. Please enter a number between 1 and 5.")
+                    contact_count += 1
+                    if contact_count == 1:
+                        print("You can't seem to follow instructions. Try again.")
+                    elif contact_count == 2:
+                        print("Seriously? You're still doing this wrong.")
+                    elif contact_count == 3:
+                        print("Come on, you can do better than this.")
+                    elif contact_count >= 4:
+                        print(f"Okay, I see what's happening. You've failed {contact_count} times. Are you even trying?")
+            
+            for _ in range(num_contacts):
                 while True:
-                    number = input("Enter contact number (only numbers, + or -)\n")
-                    # Added regular expression for the telephone number - might just delete it later on and keep it to only to numbers
-                    if len(number) > 20 or not re.match(r'^[\d\+\-]+$', number):
-                        print("Invalid telephone number. Please enter up to 20 characters\ncontaining only numbers, +, or -.")
+                    name = input("Enter contact name: (up to 30 characters)\n").strip()
+                    if len(name) > 30:
+                        print("\nName exceeds 30 characters. Please enter a name with 30 characters or less.")
+                        print("Enter 'no' if you don't want to add a contact.")
+                        continue
+                    elif name.lower() == "no":
+                        print("So you don't want to add a contact.")
                         break
-                    elif number.lower() == "esc":
-                        return exit_program_with_countdown(input_color)
                     else:
-                        print("Invalid telephone number. Please enter only numbers, + or -")
+                        break
+                if name.lower() == "no":
+                    break
+                
+                number = input("Enter contact number up to 20 digits (only numbers, + or -)\n")
+                if not re.match(telephone_pattern, number):
+                    print(f"Invalid telephone number. Please enter up to 20 digits containing only numbers, + or -")
+                    continue
+                elif number.lower() == "esc":
+                    return exit_program_with_countdown(input_color)
                 
                 if check_duplicate_contact(name, number):
                     print("Warning: This contact already exists.")
                 else:
                     add_data_with_name_column(sheet, [[name, number]], input_color)
                     print("Contact added successfully.")
-            
+
             break
         elif add_contacts_input in no_words:
             print("No contacts added.")
@@ -359,16 +396,22 @@ def add_contacts(input_color):
 
 
 
+
+
+
+
+
+
 def search_contacts(input_color):
     """
     Searches for a contact by name or telephone number.
     """
     while True:
-        search_choice = input("\nDo you want to search for a contact?\n(yes/no):\n").strip().lower()
+        search_choice = input("\nDo you want to search for a contact? (yes/no)\n").strip().lower()
         if input_color:
             print(input_color, end="")
         if search_choice in yes_words:
-            search_query = input("\nEnter the name or telephone number of the\ncontact you want to search for:\n").strip().lower()
+            search_query = input("\nEnter the name or telephone number of the contact you want\nto search for\n").strip().lower()
             search_results = []
 
             for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
@@ -393,7 +436,7 @@ def search_contacts(input_color):
             print(exit_program_with_countdown(input_color))
             return ""
         else:
-            print("\nInvalid input. Please enter 'yes' or 'no', or type 'esc'\nto exit the program.")
+            print("\nInvalid input. Please enter 'yes', 'no' or type 'esc'\nto exit the program.")
 
 
 
@@ -407,7 +450,7 @@ def print_sheet_data(sheet, input_color):
         print(input_color, end="")
     print(f"\n{sheet.title} Contacts:")
     for row in sheet_data:
-        print(row)
+        print(", ".join(row))
  
 
 # Basically the function to replace the "Exiting the program" into something nice and simpler
@@ -415,15 +458,21 @@ def exit_program_with_countdown():
     """
     Exits the program with a countdown before exiting.
     """
+    print(f"\nExiting the program in ...")
     countdown = 3
-    print(f"\nExiting the program in {countdown}...")
     while countdown > 0:
         time.sleep(1)
         print(countdown)
         countdown -= 1
     print("\nBoom!")
+    print("This is the end of the program created by Dimitris - 2024")
+    print("For more information, visit:")
+    print("\U0001F464 LinkedIn: https://www.linkedin.com/in/dimitrios-thlivitis/")
+    print("\U0001F4BB GitHub Repository: https://github.com/Dimitris112/Contact-Manager-pp3")
     return ""
     sys.exit()
+
+
 
 
 #MARK: M A I N  
@@ -446,24 +495,12 @@ def main():
     
     add_contacts(chosen_color)
     
-    # Add data for all sheets
-    add_data_with_name_column(personal_sheet, personal_data, chosen_color)
-    add_data_with_name_column(professional_sheet, professional_data, chosen_color)
-    add_data_with_name_column(emergency_sheet, emergency_data, chosen_color)
-    add_data_with_name_column(favorites_sheet, favorites_data, chosen_color)
-    
     # Protect header for all sheets
     protect_header(personal_sheet)
     protect_header(professional_sheet)
     protect_header(emergency_sheet)
     protect_header(favorites_sheet)
     
-    # Prints data from each sheet
-    print_sheet_data(personal_sheet, chosen_color)
-    print_sheet_data(professional_sheet, chosen_color)
-    print_sheet_data(emergency_sheet, chosen_color)
-    print_sheet_data(favorites_sheet, chosen_color)
-
     search_contacts(chosen_color)
     
     print(exit_program_with_countdown())
