@@ -3,6 +3,7 @@ import re
 import time
 import ascii_py
 import sys
+import phonenumbers
 from google.oauth2.service_account import Credentials
 #The program takes a lot of time to load - be patient
 
@@ -65,8 +66,8 @@ professional_sheet = SHEET.worksheet("Professional")
 emergency_sheet = SHEET.worksheet("Emergency")
 favorites_sheet = SHEET.worksheet("Favorites")
 
-yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey", "alright", "ya")
-no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never")
+yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey", "alright", "ya", "ofc")
+no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never", "ne")
 failed_times = "\nI can do this all day. You've failed to give a correct answer {} times.\n"
 teasing_message = "Oh, close but no cigar! Give it another shot!"
 
@@ -371,12 +372,18 @@ def add_contacts(input_color):
                 if name.lower() == "no":
                     break
                 
-                number = input("Enter contact number up to 20 digits (only numbers, + or -)\n")
-                if not re.match(telephone_pattern, number):
-                    print(f"Invalid telephone number. Please enter up to 20 digits containing only numbers, + or -")
-                    continue
-                elif number.lower() == "esc":
-                    return exit_program_with_countdown(input_color)
+                while True:
+                    number = input("Enter contact number up to 20 digits (only numbers)\n")
+                    if not number.isdigit():
+                        print(f"Invalid telephone number. Please enter up to 20 digits containing only numbers.")
+                        continue
+                    elif len(number) > 20:
+                        print(f"Telephone number exceeds 20 digits. Please enter up to 20 digits.")
+                        continue
+                    elif number.lower() == "esc":
+                        return exit_program_with_countdown(input_color)
+                    else:
+                        break
                 
                 if check_duplicate_contact(name, number):
                     print("Warning: This contact already exists.")
@@ -400,8 +407,6 @@ def add_contacts(input_color):
 
 
 
-
-
 def search_contacts(input_color):
     """
     Searches for a contact by name or telephone number.
@@ -411,7 +416,7 @@ def search_contacts(input_color):
         if input_color:
             print(input_color, end="")
         if search_choice in yes_words:
-            search_query = input("\nEnter the name or telephone number of the contact you want\nto search for\n").strip().lower()
+            search_query = input("\nEnter the name or telephone number of the contact you want to search for\n").strip().lower()
             search_results = []
 
             for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
@@ -452,6 +457,43 @@ def print_sheet_data(sheet, input_color):
     for row in sheet_data:
         print(", ".join(row))
  
+
+
+def select_section(input_color):
+    """
+    Prompts the user to select an action after searching contacts
+    """
+    while True:
+        if input_color:
+            print(input_color, end="")
+        print("\nWhat would you like to do next?")
+        print("1. View contacts")
+        print("2. Add contacts")
+        print("3. Change color")
+        print("4. Exit")
+        
+        choice = input("Enter the number of your choice\n").strip()
+        
+        if choice == "1":
+            view_existing_contacts(input_color)
+            break
+        elif choice == "2":
+            add_contacts(input_color)
+            break
+        elif choice == "3":
+            choose_color = chosen_color()
+            if choose_color is None:
+                pass
+            else:
+                print(chosen_color + RESET)
+        elif choice == "4":
+            print(exit_program_with_countdown())
+            return
+        else:
+            print("Invalid choice. Please enter a number between 1 and 4.")
+
+
+
 
 # Basically the function to replace the "Exiting the program" into something nice and simpler
 def exit_program_with_countdown():
@@ -503,7 +545,7 @@ def main():
     
     search_contacts(chosen_color)
     
-    print(exit_program_with_countdown())
+    select_section(chosen_color)
 
 
 if __name__ == "__main__":
