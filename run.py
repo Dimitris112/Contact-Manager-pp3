@@ -110,56 +110,77 @@ def use_program():
 
 def choose_color():
     """
-    Allows the user to change the input color with confirmation.
+    Allows the user to change the input color with excitement and a dash of spice!
     """
     global input_color
     
     while True:
-        print("\nDo you want to change the color for your input? (yes/no)")
+        print("\nFeeling like changing the color for your input? (yes/no)")
         choice = input().strip().lower()
 
         if choice in yes_words:
-            print("Which color do you want?")
-            print("1. Red")
-            print("2. Green")
-            print("3. Yellow")
-            print("4. Blue")
-            print("5. Magenta")
-            print("6. Cyan")
-            print("7. Reset")
-            color_choice = input("\nEnter the number of the color you want or '7' to reset\n").strip()
+            while True:
+                print("Alright, let's splash some color into your life!")
+                print("Pick your poison:")
+                print("1. Red - Like a blazing fire!")
+                print("2. Green - As fresh as the morning dew!")
+                print("3. Yellow - Bright as the sun!")
+                print("4. Blue - Cool as the ocean breeze!")
+                print("5. Magenta - A splash of vibrant energy!")
+                print("6. Cyan - Like the clear sky on a sunny day!")
+                print("7. Reset - Back to basics")
 
-            if color_choice == "1":
-                chosen_color = COLORS['red']
-            elif color_choice == "2":
-                chosen_color = COLORS['green']
-            elif color_choice == "3":
-                chosen_color = COLORS['yellow']
-            elif color_choice == "4":
-                chosen_color = COLORS['blue']
-            elif color_choice == "5":
-                chosen_color = COLORS['magenta']
-            elif color_choice == "6":
-                chosen_color = COLORS['cyan']
-            elif color_choice == "7":
-                chosen_color = RESET
-            else:
-                print("Invalid color choice. Please enter a number between 1 and 7.\n")
-                continue
+                color_choice = input("\nChoose the number of the color you fancy or '7' to reset\n").strip()
 
-            confirm_choice = input(f"You've chosen {chosen_color}as the input color.\nProceed? (yes/no)\n").strip().lower()
-            if confirm_choice in yes_words:
-                return chosen_color
-            else:
-                print("Color selection canceled. Please choose again.")
+                if color_choice == "1":
+                    chosen_color = COLORS['red']
+                    chosen_color_name = "Red"
+                elif color_choice == "2":
+                    chosen_color = COLORS['green']
+                    chosen_color_name = "Green"
+                elif color_choice == "3":
+                    chosen_color = COLORS['yellow']
+                    chosen_color_name = "Yellow"
+                elif color_choice == "4":
+                    chosen_color = COLORS['blue']
+                    chosen_color_name = "Blue"
+                elif color_choice == "5":
+                    chosen_color = COLORS['magenta']
+                    chosen_color_name = "Magenta"
+                elif color_choice == "6":
+                    chosen_color = COLORS['cyan']
+                    chosen_color_name = "Cyan"
+                elif color_choice == "7":
+                    chosen_color = RESET
+                    chosen_color_name = "Default"
+                else:
+                    print("Whoops! That's not a color I can work with. Try again!\n")
+                    continue
+
+                confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name} as your input color.\nReady to rock it? (yes/no)\n").strip().lower()
+                if confirm_choice in yes_words:
+                    input_color = chosen_color
+                    break
+                elif confirm_choice in no_words:
+                    print("\nFeeling a bit indecisive, are we? Want to try a different color? (yes/no)")
+                    retry_choice = input().strip().lower()
+                    if retry_choice in yes_words:
+                        continue
+                    else:
+                        return RESET
+                elif confirm_choice == "esc":
+                    print(exit_program_with_countdown())
+                    return ""
+                else:
+                    print("Not feeling the vibe? Let's start over then.\n")
         elif choice in no_words:
-            print("No problem. The input color will remain unchanged.")
+            print("No problemo! Let's keep it simple and sleek.")
             return None
-        elif choice.lower() == "esc":
+        elif choice == "esc":
             print(exit_program_with_countdown())
             return ""
         else:
-            print(invalid_input_yes_no)
+            print("Oops! I didn't catch that. Can you try again? (yes/no/esc)\n")
 
 
 
@@ -224,6 +245,10 @@ def check_duplicate_contact(name, number):
             if contact["Name"] == name or contact["Telephone Number"] == number:
                 return True
     return False
+
+
+
+
 
 
 def view_existing_contacts(input_color):
@@ -314,35 +339,46 @@ def validate_phone_number(phone_number):
 
 def add_contacts(input_color):
     """
-    Prompts the user if he wants to add new contacts and adds them to the selected category.
+    Prompts the user if they want to add new contacts and adds them to the selected category.
     """
     while True:
         add_contacts_input = input("\nDo you want to add new contacts? (yes/no)\n").strip().lower()
         if input_color:
             print(input_color, end="")
         if add_contacts_input in yes_words:
-            print("\nWhich category would you like to add contacts to?")
-            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency,\n'Fav' for Favorites.\n")
-            
-            while True:
-                sheet_choice = input("Enter your choice\n").capitalize()
-                
-                if sheet_choice in ['Per', 'Pro', 'Eme', 'Fav']:
-                    break
-                elif sheet_choice == "Esc":
-                    return exit_program_with_countdown(input_color)
-                else:
-                    print("Invalid choice. Please enter 'Per', 'Pro', 'Eme' or 'Fav'.")
+            print("\nSelect a category to add contacts to:")
+            print("1. Personal")
+            print("2. Professional")
+            print("3. Emergency")
+            print("4. Favorites")
+            print("5. Skip")
+            print("6. Return to main menu")
 
-            if sheet_choice == 'Per':
-                sheet = personal_sheet
-            elif sheet_choice == 'Pro':
-                sheet = professional_sheet
-            elif sheet_choice == 'Eme':
-                sheet = emergency_sheet
-            elif sheet_choice == 'Fav':
-                sheet = favorites_sheet
-            
+            while True:
+                category_choice = input("\nEnter the number of the category you want to add contacts to\n")
+                
+                if category_choice == '1':
+                    sheet = personal_sheet
+                    break
+                elif category_choice == '2':
+                    sheet = professional_sheet
+                    break
+                elif category_choice == '3':
+                    sheet = emergency_sheet
+                    break
+                elif category_choice == '4':
+                    sheet = favorites_sheet
+                    break
+                elif category_choice == '5':
+                    print("\nNo problem. Skipping to the next step.")
+                    return
+                elif category_choice == '6':
+                    print("\nReturning to the main menu.")
+                    select_section()
+                    return
+                else:
+                    print("Invalid choice. Please enter a number between 1 and 6.")
+
             num_contacts = 0
             contact_count = 0
             while not 1 <= num_contacts <= 5:
@@ -430,6 +466,7 @@ def add_contacts(input_color):
 
 
 
+
 def search_contacts(input_color):
     """
     Searches for a contact by name or telephone number.
@@ -482,7 +519,7 @@ def print_sheet_data(sheet, input_color):
  
 
 
-def select_section(input_color):
+def select_section(input_color=None):
     """
     Prompts the user to select an action after searching contacts
     """
@@ -519,7 +556,7 @@ def select_section(input_color):
 
 
 # Basically the function to replace the "Exiting the program" into something nice
-def exit_program_with_countdown():
+def exit_program_with_countdown(input_color=None):
     """
     Exits the program with a countdown before exiting.
     """
