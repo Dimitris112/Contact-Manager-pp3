@@ -110,7 +110,7 @@ def use_program():
 
 def choose_color():
     """
-    Allows the user to change the input color with excitement and a dash of spice!
+    Allows the user to change the input color for excitement and a dash of spice!
     """
     global input_color
     
@@ -151,23 +151,23 @@ def choose_color():
                     chosen_color = COLORS['cyan']
                     chosen_color_name = "Cyan"
                 elif color_choice == "7":
-                    chosen_color = RESET
-                    chosen_color_name = "Default"
+                    input_color = RESET
+                    print("Resetting color to default.")
+                    return RESET
+                elif color_choice.lower() == "esc":
+                    print(exit_program_with_countdown())
+                    return ""
                 else:
                     print("Whoops! That's not a color I can work with. Try again!\n")
                     continue
 
-                confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name} as your input color.\nReady to rock it? (yes/no)\n").strip().lower()
+                confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name} as your input color.\nAre you pleased with that option? (yes/no)\n").strip().lower()
                 if confirm_choice in yes_words:
                     input_color = chosen_color
-                    break
+                    return input_color
                 elif confirm_choice in no_words:
-                    print("\nFeeling a bit indecisive, are we? Want to try a different color? (yes/no)")
-                    retry_choice = input().strip().lower()
-                    if retry_choice in yes_words:
-                        continue
-                    else:
-                        return RESET
+                    print("\nLet's try a different color then!")
+                    break
                 elif confirm_choice == "esc":
                     print(exit_program_with_countdown())
                     return ""
@@ -175,12 +175,14 @@ def choose_color():
                     print("Not feeling the vibe? Let's start over then.\n")
         elif choice in no_words:
             print("No problemo! Let's keep it simple and sleek.")
-            return None
-        elif choice == "esc":
+            return RESET
+        elif choice.lower() == "esc":
             print(exit_program_with_countdown())
             return ""
         else:
             print("Oops! I didn't catch that. Can you try again? (yes/no/esc)\n")
+
+
 
 
 
@@ -251,14 +253,12 @@ def check_duplicate_contact(name, number):
 
 
 
-def view_existing_contacts(input_color):
+def view_existing_contacts(input_color=None):
     """
     Prompts the user if he wants to view existing contacts
     """
     counter = 0
     while True:
-        if input_color:
-            print(input_color, end="")
         view_contacts = input("\nDo you want to view existing contacts? (yes/no)\n").strip().lower()
         if view_contacts in yes_words:
             print("\nChoose a category:")
@@ -291,6 +291,9 @@ def view_existing_contacts(input_color):
             elif category_choice == '6':
                 print("\nNo problem. You can view contacts later.")
                 break
+            elif category_choice.lower() == "esc":
+                print(exit_program_with_countdown(input_color))
+                return ""
             else:
                 counter += 1
                 if counter >= 3:
@@ -307,9 +310,11 @@ def view_existing_contacts(input_color):
             counter += 1
             if counter >= 3:
                 print("\nToo many incorrect attempts. See ya")
-                print(exit_program_with_countdown)
+                print(exit_program_with_countdown(input_color))
                 return ""
             print(teasing_message)
+
+
 
 
 
@@ -538,14 +543,12 @@ def select_section(input_color=None):
             add_contacts(input_color)
         elif choice == "3":
             input_color = choose_color()
-        elif choice == "4":
-            print(exit_program_with_countdown())
-            break
-        elif choice.lower() == "esc":
-            print(exit_program_with_countdown())
-            break
+        elif choice == "esc" or choice == "4":
+            print(exit_program_with_countdown(input_color))
+            return ""
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")
+
 
 
 
@@ -571,8 +574,8 @@ def exit_program_with_countdown(input_color=None):
     print("For more information, visit:")
     print("\U0001F464 LinkedIn: https://www.linkedin.com/in/dimitrios-thlivitis/")
     print("\U0001F4BB GitHub Repository: https://github.com/Dimitris112/Contact-Manager-pp3")
-    return ""
     sys.exit()
+
 
 
 
@@ -591,7 +594,8 @@ def main():
     elif chosen_color == "":
         return
     else:
-        print(chosen_color + RESET)
+        print(chosen_color)
+        print(RESET)
     
     view_existing_contacts(chosen_color)
     
@@ -606,6 +610,7 @@ def main():
     search_contacts(chosen_color)
     
     select_section(chosen_color)
+
 
 
 if __name__ == "__main__":
