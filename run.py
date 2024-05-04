@@ -70,7 +70,7 @@ yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "ab
 no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never", "ne")
 failed_times = "\nI can do this all day. You've failed to give a correct answer {} times.\n"
 teasing_message = "Oh, close but no cigar! Give it another shot!"
-
+invalid_input_yes_no = "\nInvalid input. Please enter (yes/no)\n"
 
 personal_data = []
 
@@ -160,7 +160,7 @@ def choose_color():
             print(exit_program_with_countdown())
             return ""
         else:
-            print("Invalid input. Please enter 'yes', 'no' or 'esc' to exit\nthe program.\n")
+            print(invalid_input_yes_no)
 
 
 
@@ -359,7 +359,7 @@ def add_contacts(input_color):
             
             for _ in range(num_contacts):
                 while True:
-                    name = input("Enter contact name: (up to 30 characters)\n").strip()
+                    name = input("Enter contact name (up to 30 characters)\n").strip()
                     if len(name) > 30:
                         print("\nName exceeds 30 characters. Please enter a name with 30 characters or less.")
                         print("Enter 'no' if you don't want to add a contact.")
@@ -399,7 +399,7 @@ def add_contacts(input_color):
             print(exit_program_with_countdown(input_color))
             return ""
         else:
-            print("Invalid input. Please enter 'Yes' or 'No', or type 'esc' to\nexit the program.")
+            print(invalid_input_yes_no)
 
 
 
@@ -441,7 +441,7 @@ def search_contacts(input_color):
             print(exit_program_with_countdown(input_color))
             return ""
         else:
-            print("\nInvalid input. Please enter 'yes', 'no' or type 'esc'\nto exit the program.")
+            print(invalid_input_yes_no)
 
 
 
@@ -472,25 +472,25 @@ def select_section(input_color):
         print("3. Change color")
         print("4. Exit")
         
-        choice = input("Enter the number of your choice\n").strip()
+        choice = input("Enter the number of your choice.\n").strip()
         
         if choice == "1":
             view_existing_contacts(input_color)
-            break
         elif choice == "2":
             add_contacts(input_color)
-            break
         elif choice == "3":
-            choose_color = chosen_color()
-            if choose_color is None:
-                pass
-            else:
-                print(chosen_color + RESET)
+            choose_color = choose_color()
+            if choose_color is not None:
+                print(choose_color + RESET)
         elif choice == "4":
             print(exit_program_with_countdown())
-            return
+            break
+        elif choice.lower() == "esc":
+            print(exit_program_with_countdown())
+            break
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")
+
 
 
 
