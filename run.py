@@ -5,6 +5,7 @@ import ascii_py
 import sys
 import phonenumbers
 from google.oauth2.service_account import Credentials
+from phonenumbers import PhoneNumberFormat
 #The program takes a lot of time to load - be patient
 
 ascii_art = r'''
@@ -67,7 +68,7 @@ emergency_sheet = SHEET.worksheet("Emergency")
 favorites_sheet = SHEET.worksheet("Favorites")
 
 yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey", "alright", "ya", "ofc")
-no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never", "ne")
+no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never", "ne", "nop")
 failed_times = "\nI can do this all day. You've failed to give a correct answer {} times.\n"
 teasing_message = "Oh, close but no cigar! Give it another shot!"
 invalid_input_yes_no = "\nInvalid input. Please enter (yes/no)\n"
@@ -79,8 +80,6 @@ professional_data = []
 emergency_data = []
 
 favorites_data = []
-
-telephone_pattern =  r'^[\d+\- ]+$'
 
 input_color = None
 
@@ -161,6 +160,7 @@ def choose_color():
             return ""
         else:
             print(invalid_input_yes_no)
+
 
 
 
@@ -289,6 +289,26 @@ def view_existing_contacts(input_color):
 
 
 
+def validate_phone_number(phone_number):
+    """
+    Validates a phone number using the phonenumbers library and formats it in international format.
+    """
+    try:
+        parsed_number = phonenumbers.parse(phone_number, None)
+        
+        if not phonenumbers.is_valid_number(parsed_number):
+            print("Invalid phone number format.")
+            return False
+        
+        formatted_number = phonenumbers.format_number(parsed_number, PhoneNumberFormat.INTERNATIONAL)
+        return formatted_number, parsed_number.country_code
+    except phonenumbers.phonenumberutil.NumberParseException:
+        print("Error parsing phone number. Please enter a valid phone number.")
+        return False, None
+
+
+
+
 
 
 
@@ -302,7 +322,7 @@ def add_contacts(input_color):
             print(input_color, end="")
         if add_contacts_input in yes_words:
             print("\nWhich category would you like to add contacts to?")
-            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency,\n'Fav' for Favorites or 'esc' to exit.\n")
+            print("Enter 'Per' for Personal, 'Pro' for Professional, 'Eme' for Emergency,\n'Fav' for Favorites.\n")
             
             while True:
                 sheet_choice = input("Enter your choice\n").capitalize()
@@ -383,12 +403,14 @@ def add_contacts(input_color):
                     elif number.lower() == "esc":
                         return exit_program_with_countdown(input_color)
                     else:
-                        break
+                        formatted_number, country_code = validate_phone_number(number)
+                        if formatted_number:
+                            break
                 
                 if check_duplicate_contact(name, number):
                     print("Warning: This contact already exists.")
                 else:
-                    add_data_with_name_column(sheet, [[name, number]], input_color)
+                    add_data_with_name_column(sheet, [[name, formatted_number]], input_color)
                     print("Contact added successfully.")
 
             break
@@ -400,6 +422,7 @@ def add_contacts(input_color):
             return ""
         else:
             print(invalid_input_yes_no)
+
 
 
 
@@ -464,8 +487,6 @@ def select_section(input_color):
     Prompts the user to select an action after searching contacts
     """
     while True:
-        if input_color:
-            print(input_color, end="")
         print("\nWhat would you like to do next?")
         print("1. View contacts")
         print("2. Add contacts")
@@ -479,9 +500,7 @@ def select_section(input_color):
         elif choice == "2":
             add_contacts(input_color)
         elif choice == "3":
-            choose_color = choose_color()
-            if choose_color is not None:
-                print(choose_color + RESET)
+            input_color = choose_color()
         elif choice == "4":
             print(exit_program_with_countdown())
             break
@@ -495,7 +514,11 @@ def select_section(input_color):
 
 
 
-# Basically the function to replace the "Exiting the program" into something nice and simpler
+
+
+
+
+# Basically the function to replace the "Exiting the program" into something nice
 def exit_program_with_countdown():
     """
     Exits the program with a countdown before exiting.
