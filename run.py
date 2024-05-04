@@ -191,8 +191,6 @@ def choose_color(input_color=None):
 
 
 
-
-
 def add_data_with_name_column(sheet, data, input_color):
     """
     Adds new data to the sheets with a predefined header
@@ -518,7 +516,7 @@ def delete_contacts(input_color):
     Deletes a contact from the specified category or from all categories.
     """
     while True:
-        delete_choice = input("\nFeeling adventurous? Shall we delete some contacts? (yes/no)\n").strip().lower()
+        delete_choice = input("\nDo you want to delete any of your contacts? (yes/no)\n").strip().lower()
         if input_color:
             print(input_color, end="")
         if delete_choice in yes_words:
@@ -539,21 +537,6 @@ def delete_contacts(input_color):
                     print("\nAlright, let's not stir up trouble. Back to the main menu.")
                     return
 
-                if category_choice == '5':
-                    contact_to_delete = input("Enter the name or telephone number of the contact you want to remove from all categories\n").strip().lower()
-                    deleted = False
-                    for sheet in all_categories:
-                        contacts = sheet.get_all_records()
-                        for contact in contacts:
-                            if contact_to_delete in str(contact["Name"]).lower() or contact_to_delete in str(contact["Telephone Number"]).lower():
-                                sheet.delete_row(contacts.index(contact) + 2)
-                                deleted = True
-                    if deleted:
-                        print("Contact removed from all categories successfully.")
-                    else:
-                        print("Couldn't find that contact in any category.")
-                    return
-
                 try:
                     category_index = int(category_choice) - 1
                     if category_index not in range(len(all_categories)):
@@ -563,18 +546,32 @@ def delete_contacts(input_color):
                     continue
 
                 sheet = all_categories[category_index]
+                sheet_data = sheet.get_all_values()
+                if not sheet_data or len(sheet_data) <= 1:
+                    print("No contacts found in this category.")
+                    break
 
-                contact_to_delete = input("Enter the name or telephone number of the contact you want to delete\n").strip().lower()
-                contacts = sheet.get_all_records()
-                deleted = False
-                for contact in contacts:
-                    if contact_to_delete in str(contact["Name"]).lower() or contact_to_delete in str(contact["Telephone Number"]).lower():
-                        sheet.delete_row(contacts.index(contact) + 2)
-                        deleted = True
-                if deleted:
-                    print("Contact removed successfully.")
+                print("Contacts in this category:")
+                for index, row in enumerate(sheet_data[1:], start=1):
+                    print(f"{index}. {row[0]}")
+
+                action_choice = input("\nDo you want to delete all contacts in this category? (yes/no)\n").strip().lower()
+
+                if action_choice in yes_words:
+                    sheet.clear()
+                    print("All contacts in this category deleted successfully.")
+                elif action_choice in no_words:
+                    name_choice = input("Enter the number of the contact you want to delete or 'cancel' to go back\n").strip().lower()
+                    if name_choice == 'cancel':
+                        break
+                    elif name_choice.isdigit() and 1 <= int(name_choice) <= len(sheet_data) - 1:
+                        contact_index = int(name_choice) + 1
+                        sheet.delete_rows(contact_index)
+                        print("Contact removed successfully.")
+                    else:
+                        print("Invalid input. Please enter the number corresponding to the contact you want to delete.")
                 else:
-                    print("Couldn't find that contact.")
+                    print(invalid_input_yes_no)
                 break
         elif delete_choice in no_words:
             print("\nPlaying it safe, eh? No contacts deleted.")
@@ -584,6 +581,7 @@ def delete_contacts(input_color):
             return ""
         else:
             print(invalid_input_yes_no)
+
 
 
 
@@ -626,11 +624,6 @@ def select_section(input_color=None):
             return
         else:
             print("Invalid choice. Please enter a number between 1 and 5.")
-
-
-
-
-
 
 
 
