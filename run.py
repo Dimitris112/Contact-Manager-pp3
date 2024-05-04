@@ -3,9 +3,7 @@ import re
 import time
 import ascii_py
 import sys
-import phonenumbers
 from google.oauth2.service_account import Credentials
-from phonenumbers import PhoneNumberFormat
 #The program takes a lot of time to load - be patient
 
 ascii_art = r'''
@@ -82,6 +80,17 @@ emergency_data = []
 favorites_data = []
 
 input_color = None
+
+
+
+def format_phone_number(number):
+    phone_pattern = r'^[\+\-\(\)\.\s/0-9]{4,20}$'
+
+    if re.match(phone_pattern, number):
+        return number
+    else:
+        return None
+
 
 
 def use_program():
@@ -187,10 +196,6 @@ def choose_color(input_color=None):
 
 
 
-
-
-
-
 def add_data_with_name_column(sheet, data, input_color):
     """
     Adds new data to the sheets with a predefined header
@@ -247,8 +252,6 @@ def check_duplicate_contact(name, number):
             if contact["Name"] == name or contact["Telephone Number"] == number:
                 return True
     return False
-
-
 
 
 
@@ -313,35 +316,8 @@ def view_existing_contacts(input_color=None):
                 print(exit_program_with_countdown(input_color))
                 return ""
             print(teasing_message)
-
-
-
-
-
-
-def validate_phone_number(phone_number):
-    """
-    Validates a phone number using the phonenumbers library and formats it in international format.
-    """
-    try:
-        parsed_number = phonenumbers.parse(phone_number, None)
-        
-        if not phonenumbers.is_valid_number(parsed_number):
-            print("Invalid phone number format.")
-            return False
-        
-        formatted_number = phonenumbers.format_number(parsed_number, PhoneNumberFormat.INTERNATIONAL)
-        return formatted_number, parsed_number.country_code
-    except phonenumbers.phonenumberutil.NumberParseException:
-        print("Error parsing phone number. Please enter a valid phone number.")
-        return False, None
-
-
-
-
-
-
-
+            
+            
 def add_contacts(input_color):
     """
     Prompts the user if they want to add new contacts and adds them to the selected category.
@@ -357,119 +333,68 @@ def add_contacts(input_color):
             print("3. Emergency")
             print("4. Favorites")
             print("5. Skip")
-            print("6. Return to main menu")
+            print("6. Return to the main menu")
 
             while True:
                 category_choice = input("\nEnter the number of the category you want to add contacts to\n")
-                
-                if category_choice == '1':
-                    sheet = personal_sheet
-                    break
-                elif category_choice == '2':
-                    sheet = professional_sheet
-                    break
-                elif category_choice == '3':
-                    sheet = emergency_sheet
-                    break
-                elif category_choice == '4':
-                    sheet = favorites_sheet
-                    break
-                elif category_choice == '5':
-                    print("\nNo problem. Skipping to the next step.")
-                    return
-                elif category_choice == '6':
+
+                if category_choice == '6':
                     print("\nReturning to the main menu.")
                     select_section()
                     return
+                elif category_choice.isdigit() and 1 <= int(category_choice) <= 4:
+                    sheet = [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet][int(category_choice) - 1]
+                    break
                 else:
                     print("Invalid choice. Please enter a number between 1 and 6.")
 
-            num_contacts = 0
-            contact_count = 0
-            while not 1 <= num_contacts <= 5:
-                num_contacts_input = input("\nHow many contacts would you like to add? (1-5)\n")
+            while True:
+                num_contacts_input = input("\nHow many contacts would you like to add? (1-5)\n").strip()
                 if num_contacts_input.lower() == "esc":
                     return exit_program_with_countdown(input_color)
 
                 try:
                     num_contacts = int(num_contacts_input)
+                    if not 1 <= num_contacts <= 5:
+                        raise ValueError
+                    break
                 except ValueError:
                     print("Invalid input. Please enter a number between 1 and 5.")
-                    contact_count += 1
-                    if contact_count == 1:
-                        print("You can't seem to follow instructions. Try again.")
-                    elif contact_count == 2:
-                        print("Seriously? You're still doing this wrong.")
-                    elif contact_count == 3:
-                        print("Come on, you can do better than this.")
-                    elif contact_count >= 4:
-                        print(f"Okay, I see what's happening. You've failed {contact_count} times. Are you even trying?")
-                    continue
 
-                if not 1 <= num_contacts <= 5:
-                    print("Invalid input. Please enter a number between 1 and 5.")
-                    contact_count += 1
-                    if contact_count == 1:
-                        print("You can't seem to follow instructions. Try again.")
-                    elif contact_count == 2:
-                        print("Seriously? You're still doing this wrong.")
-                    elif contact_count == 3:
-                        print("Come on, you can do better than this.")
-                    elif contact_count >= 4:
-                        print(f"Okay, I see what's happening. You've failed {contact_count} times. Are you even trying?")
-            
             for _ in range(num_contacts):
                 while True:
-                    name = input("Enter contact name (up to 30 characters)\n").strip()
+                    name = input("\nEnter contact name (up to 30 characters)\n").strip()
                     if len(name) > 30:
                         print("\nName exceeds 30 characters. Please enter a name with 30 characters or less.")
-                        print("Enter 'no' if you don't want to add a contact.")
                         continue
-                    elif name.lower() == "no":
-                        print("So you don't want to add a contact.")
-                        break
                     else:
                         break
-                if name.lower() == "no":
-                    break
-                
+
                 while True:
-                    number = input("Enter contact number up to 20 digits (only numbers)\n")
-                    if not number.isdigit():
-                        print(f"Invalid telephone number. Please enter up to 20 digits containing only numbers.")
-                        continue
-                    elif len(number) > 20:
-                        print(f"Telephone number exceeds 20 digits. Please enter up to 20 digits.")
-                        continue
-                    elif number.lower() == "esc":
-                        return exit_program_with_countdown(input_color)
+                    number = input("\nEnter contact number (4 to 20 digits)\n").strip()
+                    formatted_number = format_phone_number(number)
+                    if formatted_number:
+                        break
                     else:
-                        formatted_number, country_code = validate_phone_number(number)
-                        if formatted_number:
-                            break
-                
+                        print("\nInvalid phone number format. Please enter your contact as\n+1234567890, (123) 456-7890, 123-456-7890, 123.456.7890, 123/456.7890, 1234567890")
+                        continue
+
                 if check_duplicate_contact(name, number):
-                    print("Warning: This contact already exists.")
+                    print("\nWarning: This contact already exists.")
                 else:
                     add_data_with_name_column(sheet, [[name, formatted_number]], input_color)
-                    print("Contact added successfully.")
+                    print("\nContact added successfully.")
 
             break
         elif add_contacts_input in no_words:
-            print("No contacts added.")
+            print("\nNo contacts added.")
             break
         elif add_contacts_input == "esc":
             print(exit_program_with_countdown(input_color))
             return ""
         else:
             print(invalid_input_yes_no)
-
-
-
-
-
-
-
+            
 
 
 def search_contacts(input_color):
@@ -624,9 +549,6 @@ def select_section(input_color=None):
             return
         else:
             print("Invalid choice. Please enter a number between 1 and 5.")
-
-
-
 
 
 
