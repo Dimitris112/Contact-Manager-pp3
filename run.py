@@ -108,14 +108,16 @@ def use_program():
 
 
 
-def choose_color():
+def choose_color(input_color=None):
     """
     Allows the user to change the input color for excitement and a dash of spice!
     """
-    global input_color
-    
     while True:
-        print("\nFeeling like changing the color for your input? (yes/no)")
+        if not input_color:
+            print("\nFeeling like changing the color for your input? (yes/no)")
+        else:
+            print("\nWould you like to change the color for your input? (yes/no)")
+
         choice = input().strip().lower()
 
         if choice in yes_words:
@@ -151,36 +153,36 @@ def choose_color():
                     chosen_color = COLORS['cyan']
                     chosen_color_name = "Cyan"
                 elif color_choice == "7":
-                    input_color = RESET
-                    print("Resetting color to default.")
-                    return RESET
+                    if input_color:
+                        print("Resetting color to default.")
+                    return RESET if input_color else None
                 elif color_choice.lower() == "esc":
                     print(exit_program_with_countdown())
-                    return ""
+                    return None
                 else:
                     print("Whoops! That's not a color I can work with. Try again!\n")
                     continue
 
                 confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name} as your input color.\nAre you pleased with that option? (yes/no)\n").strip().lower()
                 if confirm_choice in yes_words:
-                    input_color = chosen_color
-                    return input_color
+                    return chosen_color
                 elif confirm_choice in no_words:
                     print("\nLet's try a different color then!")
                     break
                 elif confirm_choice == "esc":
                     print(exit_program_with_countdown())
-                    return ""
+                    return None
                 else:
                     print("Not feeling the vibe? Let's start over then.\n")
         elif choice in no_words:
             print("No problemo! Let's keep it simple and sleek.")
-            return RESET
+            return RESET if input_color else None
         elif choice.lower() == "esc":
             print(exit_program_with_countdown())
-            return ""
+            return None
         else:
             print("Oops! I didn't catch that. Can you try again? (yes/no/esc)\n")
+
 
 
 
@@ -511,6 +513,82 @@ def search_contacts(input_color):
 
 
 
+def delete_contacts(input_color):
+    """
+    Deletes a contact from the specified category or from all categories.
+    """
+    while True:
+        delete_choice = input("\nFeeling adventurous? Shall we delete some contacts? (yes/no)\n").strip().lower()
+        if input_color:
+            print(input_color, end="")
+        if delete_choice in yes_words:
+            all_categories = [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]
+
+            while True:
+                print("\nSelect a category to delete contacts from:")
+                print("1. Personal")
+                print("2. Professional")
+                print("3. Emergency")
+                print("4. Favorites")
+                print("5. All categories")
+                print("6. Return to main menu")
+
+                category_choice = input("\nEnter the number of the category you want to clean up\n")
+
+                if category_choice == '6':
+                    print("\nAlright, let's not stir up trouble. Back to the main menu.")
+                    return
+
+                if category_choice == '5':
+                    contact_to_delete = input("Enter the name or telephone number of the contact you want to remove from all categories\n").strip().lower()
+                    deleted = False
+                    for sheet in all_categories:
+                        contacts = sheet.get_all_records()
+                        for contact in contacts:
+                            if contact_to_delete in str(contact["Name"]).lower() or contact_to_delete in str(contact["Telephone Number"]).lower():
+                                sheet.delete_row(contacts.index(contact) + 2)
+                                deleted = True
+                    if deleted:
+                        print("Contact removed from all categories successfully.")
+                    else:
+                        print("Couldn't find that contact in any category.")
+                    return
+
+                try:
+                    category_index = int(category_choice) - 1
+                    if category_index not in range(len(all_categories)):
+                        raise ValueError
+                except ValueError:
+                    print("Hmm, trying to be tricky, are we? Enter a number between 1 and 6.")
+                    continue
+
+                sheet = all_categories[category_index]
+
+                contact_to_delete = input("Enter the name or telephone number of the contact you want to delete\n").strip().lower()
+                contacts = sheet.get_all_records()
+                deleted = False
+                for contact in contacts:
+                    if contact_to_delete in str(contact["Name"]).lower() or contact_to_delete in str(contact["Telephone Number"]).lower():
+                        sheet.delete_row(contacts.index(contact) + 2)
+                        deleted = True
+                if deleted:
+                    print("Contact removed successfully.")
+                else:
+                    print("Couldn't find that contact.")
+                break
+        elif delete_choice in no_words:
+            print("\nPlaying it safe, eh? No contacts deleted.")
+            break
+        elif delete_choice == "esc":
+            print(exit_program_with_countdown(input_color))
+            return ""
+        else:
+            print(invalid_input_yes_no)
+
+
+
+
+
 def print_sheet_data(sheet, input_color):
     """
     Prints the data from a specified sheet.
@@ -525,15 +603,13 @@ def print_sheet_data(sheet, input_color):
 
 
 def select_section(input_color=None):
-    """
-    Prompts the user to select an action after searching contacts
-    """
     while True:
         print("\nWhat would you like to do next?")
         print("1. View contacts")
         print("2. Add contacts")
-        print("3. Change color")
-        print("4. Exit")
+        print("3. Delete contacts")
+        print("4. Change color")
+        print("5. Exit")
         
         choice = input("Enter the number of your choice.\n").strip()
         
@@ -542,12 +618,16 @@ def select_section(input_color=None):
         elif choice == "2":
             add_contacts(input_color)
         elif choice == "3":
-            input_color = choose_color()
-        elif choice == "esc" or choice == "4":
+            delete_contacts(input_color)
+        elif choice == "4":
+            input_color = choose_color(input_color)
+        elif choice == "5":
             print(exit_program_with_countdown(input_color))
-            return ""
+            return
         else:
-            print("Invalid choice. Please enter a number between 1 and 4.")
+            print("Invalid choice. Please enter a number between 1 and 5.")
+
+
 
 
 
@@ -593,9 +673,6 @@ def main():
         pass
     elif chosen_color == "":
         return
-    else:
-        print(chosen_color)
-        print(RESET)
     
     view_existing_contacts(chosen_color)
     
@@ -609,10 +686,11 @@ def main():
     
     search_contacts(chosen_color)
     
+    delete_contacts(chosen_color)
+    
     select_section(chosen_color)
-
-
 
 if __name__ == "__main__":
     main()
+
 
