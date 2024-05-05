@@ -59,7 +59,6 @@ COLORS = {
 RESET = '\033[0m'
 
 
-
 personal_sheet = SHEET.worksheet("Personal")
 professional_sheet = SHEET.worksheet("Professional")
 emergency_sheet = SHEET.worksheet("Emergency")
@@ -83,13 +82,24 @@ input_color = None
 
 
 
-def format_phone_number(number):
-    phone_pattern = r'^[\+\-\(\)\.\s/0-9]{4,20}$'
+def validate_contact_info(phone_number, email, birthday):
+    """
+    Validates phone number, email address, and birthday format
+    """
+    phone_pattern = r'^[\+\-\(\)\.\s/0-9]{4,30}$'
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    birthday_pattern = r'^\d{2}[-/._]\d{2}$'
 
-    if re.match(phone_pattern, number):
-        return number
-    else:
-        return None
+    phone_valid = bool(re.match(phone_pattern, phone_number))
+    email_valid = bool(re.match(email_pattern, email))
+    birthday_valid = bool(re.match(birthday_pattern, birthday))
+
+    return {
+        "phone_valid": phone_valid,
+        "email_valid": email_valid,
+        "birthday_valid": birthday_valid
+    }
+
 
 
 
@@ -116,17 +126,14 @@ def use_program():
             print(failed_times.format(counter))
 
 
-
-def choose_color(input_color=None):
+def choose_color():
     """
     Allows the user to change the input color for excitement and a dash of spice!
     """
+    global input_color
+    
     while True:
-        if not input_color:
-            print("\nFeeling like changing the color for your input? (yes/no)")
-        else:
-            print("\nWould you like to change the color for your input? (yes/no)")
-
+        print("\nFeeling like changing the color for your input? (yes/no)")
         choice = input().strip().lower()
 
         if choice in yes_words:
@@ -162,38 +169,36 @@ def choose_color(input_color=None):
                     chosen_color = COLORS['cyan']
                     chosen_color_name = "Cyan"
                 elif color_choice == "7":
-                    if input_color:
-                        print("Resetting color to default.")
-                    return RESET if input_color else None
+                    input_color = RESET
+                    print("Resetting color to default.")
+                    return RESET
                 elif color_choice.lower() == "esc":
                     print(exit_program_with_countdown())
-                    return None
+                    return ""
                 else:
                     print("Whoops! That's not a color I can work with. Try again!\n")
                     continue
 
                 confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name} as your input color.\nAre you pleased with that option? (yes/no)\n").strip().lower()
                 if confirm_choice in yes_words:
-                    return chosen_color
+                    input_color = chosen_color
+                    return input_color
                 elif confirm_choice in no_words:
                     print("\nLet's try a different color then!")
                     break
                 elif confirm_choice == "esc":
                     print(exit_program_with_countdown())
-                    return None
+                    return ""
                 else:
                     print("Not feeling the vibe? Let's start over then.\n")
         elif choice in no_words:
             print("No problemo! Let's keep it simple and sleek.")
-            return RESET if input_color else None
+            return RESET
         elif choice.lower() == "esc":
             print(exit_program_with_countdown())
-            return None
+            return ""
         else:
             print("Oops! I didn't catch that. Can you try again? (yes/no/esc)\n")
-
-
-
 
 
 def add_data_with_name_column(sheet, data, input_color):
@@ -210,18 +215,19 @@ def add_data_with_name_column(sheet, data, input_color):
     print(f"\nExisting data in {sheet.title} sheet:", existing_data)
 
     if not existing_data or not existing_data[0]:
-        header_row = ["Name", "Telephone Number"]
+        header_row = ["Name", "Telephone Number", "Email address", "Birthday", "Notes"]
         sheet.insert_row(header_row, index=1)
-        sheet.format("A1:B1", {"textFormat": {"bold": True}})
+        sheet.format("A1:E1", {"textFormat": {"bold": True}})
     else:
         for row in data:
+            if len(row[4]) > 60:
+                row[4] = row[4][:60]
             sheet.append_row(row)
 
 
 def protect_header(sheet):
     """
-    Basically this function will pop an "alert" to the user if he tries to 
-    delete the header row (Name, Telephone Number) - A1:B1
+    Protects the header row for the sheets
     """
     sheet_id = sheet.id
     requests = [{
@@ -232,7 +238,7 @@ def protect_header(sheet):
                     "startRowIndex": 0,
                     "endRowIndex": 1,
                     "startColumnIndex": 0,
-                    "endColumnIndex": 2
+                    "endColumnIndex": 5
                 },
                 "warningOnly": True
             }
@@ -241,9 +247,9 @@ def protect_header(sheet):
     SHEET.batch_update({"requests": requests})
 
 
-def check_duplicate_contact(name, number):
+def check_duplicate_contact(name, number, email, birthday):
     """
-    Checks if a contact already exists (name or tel number)
+    Checks if a contact already exists (name / tel number / email or dob)
     in any of the sheets
     """
     for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
@@ -318,9 +324,10 @@ def view_existing_contacts(input_color=None):
             print(teasing_message)
             
             
+
 def add_contacts(input_color):
     """
-    Prompts the user if they want to add new contacts and adds them to the selected category.
+    Prompts the user if he wants to add new contacts and adds them to the selected category.
     """
     while True:
         add_contacts_input = input("\nDo you want to add new contacts? (yes/no)\n").strip().lower()
@@ -345,6 +352,9 @@ def add_contacts(input_color):
                 elif category_choice.isdigit() and 1 <= int(category_choice) <= 4:
                     sheet = [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet][int(category_choice) - 1]
                     break
+                elif category_choice == '5':
+                    print("Alright, skipped.")
+                    return
                 else:
                     print("Invalid choice. Please enter a number between 1 and 6.")
 
@@ -371,18 +381,64 @@ def add_contacts(input_color):
                         break
 
                 while True:
-                    number = input("\nEnter contact number (4 to 20 digits)\n").strip()
-                    formatted_number = format_phone_number(number)
-                    if formatted_number:
+                    number = input("\nEnter contact number (4 to 30 digits)\n").strip()
+                    formatted_num = number
+                    phone_valid = validate_contact_info(formatted_num, "", "")["phone_valid"]
+                    if not phone_valid:
+                         print("\nInvalid phone number format. Please enter your contact as\n+1234567890, (123) 456-7890, 123-456-7890, 123.456.7890,\n123/456.7890, 1234567890")
+                         continue
+                    else:
+                         break
+                
+                while True:
+                    email_prompt = input("\nDo you want to enter an email address for the contact? (yes/no)\n").strip().lower()
+                    if email_prompt in yes_words:
+                        email = input("\nEnter the contact's email address\n").strip()
+                        if '@' not in email or '.' not in email or email.count('@') != 1:
+                            print("\nInvalid email address. Please enter a valid email address containing one '@' and at least one '.'")
+                            continue
+                        break
+                    elif email_prompt in no_words:
                         break
                     else:
-                        print("\nInvalid phone number format. Please enter your contact as\n+1234567890, (123) 456-7890, 123-456-7890, 123.456.7890, 123/456.7890, 1234567890")
-                        continue
+                        print("Invalid input. Please enter 'yes' or 'no'.")
 
-                if check_duplicate_contact(name, number):
+                while True:
+                    add_birthday_prompt = input("\nDo you want to add the contact's birthday? (yes/no)\n").strip().lower()
+                    if add_birthday_prompt in yes_words:
+                        birthday = input("\nEnter contact birthday (dd/mm)\n").strip()
+                        if not re.match(r'^\d{2}[-/._]\d{2}$', birthday):
+                            print("\nInvalid birthday format. Please enter birthday in dd/mm format.")
+                            continue
+                        break
+                    elif add_birthday_prompt in no_words:
+                        break
+                    else:
+                        print("Invalid input. Please enter 'yes' or 'no'.")
+
+                validation_result = validate_contact_info(formatted_num, email, birthday)
+                if not all(validation_result.values()):
+                    print("\nInvalid contact information. Please check and try again.")
+                    continue
+
+                if check_duplicate_contact(name, formatted_num, email, birthday):
                     print("\nWarning: This contact already exists.")
                 else:
-                    add_data_with_name_column(sheet, [[name, formatted_number]], input_color)
+                    
+                    while True:
+                        notes_prompt = input("\nDo you want to write some notes for this contact? (yes/no)\n").strip().lower()
+                        if notes_prompt in yes_words:
+                            notes = input("\nEnter notes for the contact\n")
+                            if len(notes) > 60:
+                                print("\nNotes exceed 60 characters. C'mon.")
+                                notes = notes[:60]
+                            break
+                        elif notes_prompt in no_words:
+                            break
+                        else:
+                            print("Invalid input. Please enter 'yes' or 'no'.")
+
+                    add_data_with_name_column(sheet, [[name, formatted_num, email, birthday, notes]], input_color)
                     print("\nContact added successfully.")
 
             break
@@ -394,26 +450,35 @@ def add_contacts(input_color):
             return ""
         else:
             print(invalid_input_yes_no)
-            
+
 
 
 def search_contacts(input_color):
     """
-    Searches for a contact by name or telephone number.
+    Searches for a contact by name, telephone number, email, or birthday.
     """
     while True:
         search_choice = input("\nDo you want to search for a contact? (yes/no)\n").strip().lower()
         if input_color:
             print(input_color, end="")
         if search_choice in yes_words:
-            search_query = input("\nEnter the name or telephone number of the contact you want to search for\n").strip().lower()
+            search_query = input("\nEnter the name, telephone number, email, or birthday of the contact you want to search for\n").strip().lower()
+            search_type = input("\nHow do you want to search?\n1. Contacts starting with the letter\n2. Contacts containing the letter\nEnter the number of your choice\n").strip()
+
             search_results = []
 
             for sheet in [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]:
                 contacts = sheet.get_all_records()
                 for contact in contacts:
-                    if search_query in str(contact["Name"]).lower() or search_query in str(contact["Telephone Number"]).lower():
-                        search_results.append((sheet.title, contact))
+                    contact_name = str(contact["Name"]).lower()
+                    contact_email = str(contact["Email address"]).lower()
+                    contact_birthday = str(contact["Birthday"]).lower()
+                    if search_type == '1':
+                        if contact_name.startswith(search_query) or contact_email.startswith(search_query) or contact_birthday.startswith(search_query):
+                            search_results.append((sheet.title, contact))
+                    elif search_type == '2':
+                        if search_query in contact_name or search_query in contact_email or search_query in contact_birthday:
+                            search_results.append((sheet.title, contact))
 
             if search_results:
                 print("\nSearch Results:\n")
@@ -421,6 +486,8 @@ def search_contacts(input_color):
                     print(f"Category: {category}")
                     print("Name:", contact["Name"])
                     print("Telephone Number:", contact["Telephone Number"])
+                    print("Email:", contact["Email address"])
+                    print("Birthday:", contact["Birthday"])
             else:
                 print("\nNo matching contacts found.")
             break
@@ -434,11 +501,103 @@ def search_contacts(input_color):
             print(invalid_input_yes_no)
 
 
+def edit_contact(input_color):
+    """
+    Allows the user to edit an existing contact.
+    """
+    while True:
+        edit_choice = input("\nDo you want to edit any of your contacts? (yes/no)\n").strip().lower()
+        if input_color:
+            print(input_color, end="")
+        if edit_choice in yes_words:
+            all_categories = [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]
+
+            while True:
+                print("\nSelect a category to edit contacts from:")
+                print("1. Personal")
+                print("2. Professional")
+                print("3. Emergency")
+                print("4. Favorites")
+                print("5. Return to main menu")
+
+                category_choice = input("\nEnter the number of the category you want to edit contacts from\n")
+
+                if category_choice == '5':
+                    print("\nAlright, let's not stir up trouble. Back to the main menu.")
+                    return
+
+                try:
+                    category_index = int(category_choice) - 1
+                    if category_index not in range(len(all_categories)):
+                        raise ValueError
+                except ValueError:
+                    print("Hmm, trying to be tricky, are we? Enter a number between 1 and 5.")
+                    continue
+
+                sheet = all_categories[category_index]
+                sheet_data = sheet.get_all_values()
+                if not sheet_data or len(sheet_data) <= 1:
+                    print("No contacts found in this category.")
+                    break
+
+                print("Contacts in this category:")
+                for index, row in enumerate(sheet_data[1:], start=1):
+                    print(f"{index}. {row[0]}")
+
+                action_choice = input("\nDo you want to edit a contact in this category? (yes/no)\n").strip().lower()
+
+                if action_choice in yes_words:
+                    name_choice = input("Enter the number of the contact you want to edit or 'cancel' to go back\n").strip().lower()
+                    if name_choice == 'cancel':
+                        break
+                    elif name_choice.isdigit() and 1 <= int(name_choice) <= len(sheet_data) - 1:
+                        contact_index = int(name_choice) + 1
+                        contact = sheet.row_values(contact_index)
+                        print("\nEditing contact:")
+                        print(f"Name: {contact[0]}")
+                        print(f"Telephone Number: {contact[1]}")
+                        print(f"Email: {contact[2]}")
+                        print(f"Birthday: {contact[3]}")
+                        print(f"Notes: {contact[4]}")
+
+                        while True:
+                            field_choice = input("\nEnter the number of the field you want to edit (1-5) or 'cancel' to go back\n").strip().lower()
+
+                            if field_choice == 'cancel':
+                                break
+                            elif field_choice.isdigit() and 1 <= int(field_choice) <= 5:
+                                field_index = int(field_choice) - 1
+                                new_value = input("\nEnter the new value for the field\n").strip()
+
+                                
+                                contact[field_index] = new_value
+                                sheet.update_row(contact_index, contact)
+
+                                print("Contact updated successfully.")
+                                break
+                            else:
+                                print("Invalid input. Please enter a number between 1 and 5.")
+                elif action_choice in no_words:
+                    print("\nNo contacts edited.")
+                    break
+                else:
+                    print(invalid_input_yes_no)
+                break
+        elif edit_choice in no_words:
+            print("\nAlright, no changes made. Your contacts remain untouched.")
+            break
+        elif edit_choice == "esc":
+            print(exit_program_with_countdown(input_color))
+            return ""
+        else:
+            print(invalid_input_yes_no)
+
 
 
 def delete_contacts(input_color):
     """
-    Deletes a contact from the specified category or from all categories.
+    Allows the user to delete contacts from the specified category or from all categories
+    If the user selects '5. All categories', a confirmation prompt is displayed before deleting all contacts
     """
     while True:
         delete_choice = input("\nDo you want to delete any of your contacts? (yes/no)\n").strip().lower()
@@ -480,23 +639,32 @@ def delete_contacts(input_color):
                 for index, row in enumerate(sheet_data[1:], start=1):
                     print(f"{index}. {row[0]}")
 
-                action_choice = input("\nDo you want to delete all contacts in this category? (yes/no)\n").strip().lower()
-
-                if action_choice in yes_words:
-                    sheet.clear()
-                    print("All contacts in this category deleted successfully.")
-                elif action_choice in no_words:
-                    name_choice = input("Enter the number of the contact you want to delete or 'cancel' to go back\n").strip().lower()
-                    if name_choice == 'cancel':
-                        break
-                    elif name_choice.isdigit() and 1 <= int(name_choice) <= len(sheet_data) - 1:
-                        contact_index = int(name_choice) + 1
-                        sheet.delete_rows(contact_index)
-                        print("Contact removed successfully.")
+                if category_choice == '5':
+                    confirm_choice = input("\nAre you sure you want to delete all contacts in all categories? (yes/no)\n").strip().lower()
+                    if confirm_choice in yes_words:
+                        for sheet in all_categories:
+                            sheet.clear()
+                        print("All contacts in all categories deleted successfully.")
                     else:
-                        print("Invalid input. Please enter the number corresponding to the contact you want to delete.")
+                        print("Deletion canceled.")
                 else:
-                    print(invalid_input_yes_no)
+                    action_choice = input("\nDo you want to delete all contacts in this category? (yes/no)\n").strip().lower()
+
+                    if action_choice in yes_words:
+                        sheet.clear()
+                        print("All contacts in this category deleted successfully.")
+                    elif action_choice in no_words:
+                        name_choice = input("Enter the number of the contact you want to delete or 'cancel' to go back\n").strip().lower()
+                        if name_choice == 'cancel':
+                            break
+                        elif name_choice.isdigit() and 1 <= int(name_choice) <= len(sheet_data) - 1:
+                            contact_index = int(name_choice) + 1
+                            sheet.delete_rows(contact_index)
+                            print("Contact removed successfully.")
+                        else:
+                            print("Invalid input. Please enter the number corresponding to the contact you want to delete.")
+                    else:
+                        print(invalid_input_yes_no)
                 break
         elif delete_choice in no_words:
             print("\nPlaying it safe, eh? No contacts deleted.")
@@ -506,9 +674,6 @@ def delete_contacts(input_color):
             return ""
         else:
             print(invalid_input_yes_no)
-
-
-
 
 
 
@@ -530,25 +695,29 @@ def select_section(input_color=None):
         print("\nWhat would you like to do next?")
         print("1. View contacts")
         print("2. Add contacts")
-        print("3. Delete contacts")
-        print("4. Change color")
-        print("5. Exit")
-        
+        print("3. Edit contacts")
+        print("4. Delete contacts")
+        print("5. Change color")
+        print("6. Exit")
+
         choice = input("Enter the number of your choice.\n").strip()
-        
+
         if choice == "1":
             view_existing_contacts(input_color)
         elif choice == "2":
             add_contacts(input_color)
         elif choice == "3":
-            delete_contacts(input_color)
+            edit_contact(input_color)
         elif choice == "4":
-            input_color = choose_color(input_color)
+            delete_contacts(input_color)
         elif choice == "5":
+            input_color = choose_color(input_color)
+        elif choice == "6":
             print(exit_program_with_countdown(input_color))
             return
         else:
-            print("Invalid choice. Please enter a number between 1 and 5.")
+            print("Invalid choice. Please enter a number between 1 and 6.")
+
 
 
 
@@ -588,6 +757,9 @@ def main():
         pass
     elif chosen_color == "":
         return
+    else:
+        print(chosen_color)
+        
     
     view_existing_contacts(chosen_color)
     
@@ -600,6 +772,8 @@ def main():
     protect_header(favorites_sheet)
     
     search_contacts(chosen_color)
+    
+    edit_contact(chosen_color)
     
     delete_contacts(chosen_color)
     
