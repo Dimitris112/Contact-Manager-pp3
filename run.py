@@ -329,6 +329,8 @@ def add_contacts(input_color):
     """
     Prompts the user if he wants to add new contacts and adds them to the selected category.
     """
+    email = ""
+    
     while True:
         add_contacts_input = input("\nDo you want to add new contacts? (yes/no)\n").strip().lower()
         if input_color:
@@ -385,11 +387,13 @@ def add_contacts(input_color):
                     formatted_num = number
                     phone_valid = validate_contact_info(formatted_num, "", "")["phone_valid"]
                     if not phone_valid:
-                         print("\nInvalid phone number format. Please enter your contact as\n+1234567890, (123) 456-7890, 123-456-7890, 123.456.7890,\n123/456.7890, 1234567890")
-                         continue
+                        print("\nInvalid phone number format. Please enter your contact as\n+1234567890, (123) 456-7890, 123-456-7890, 123.456.7890,\n123/456.7890, 1234567890")
+                        continue
                     else:
-                         break
+                        break
                 
+                email = ""
+
                 while True:
                     email_prompt = input("\nDo you want to enter an email address for the contact? (yes/no)\n").strip().lower()
                     if email_prompt in yes_words:
@@ -399,19 +403,23 @@ def add_contacts(input_color):
                             continue
                         break
                     elif email_prompt in no_words:
+                        print("No email added.")
                         break
                     else:
                         print("Invalid input. Please enter 'yes' or 'no'.")
+
+                birthday = ""
 
                 while True:
                     add_birthday_prompt = input("\nDo you want to add the contact's birthday? (yes/no)\n").strip().lower()
                     if add_birthday_prompt in yes_words:
                         birthday = input("\nEnter contact birthday (dd/mm)\n").strip()
-                        if not re.match(r'^\d{2}[-/._]\d{2}$', birthday):
+                        if not re.match(r'^\d{2}[-/._]\d{2}$', birthday) and not re.match(r'^\d{2}[-/._]\d{2}$', birthday):
                             print("\nInvalid birthday format. Please enter birthday in dd/mm format.")
                             continue
                         break
                     elif add_birthday_prompt in no_words:
+                        print("Alright. No birthday wishes.")
                         break
                     else:
                         print("Invalid input. Please enter 'yes' or 'no'.")
@@ -424,7 +432,8 @@ def add_contacts(input_color):
                 if check_duplicate_contact(name, formatted_num, email, birthday):
                     print("\nWarning: This contact already exists.")
                 else:
-                    
+                    notes = ""
+
                     while True:
                         notes_prompt = input("\nDo you want to write some notes for this contact? (yes/no)\n").strip().lower()
                         if notes_prompt in yes_words:
@@ -434,6 +443,7 @@ def add_contacts(input_color):
                                 notes = notes[:60]
                             break
                         elif notes_prompt in no_words:
+                            print("Ok, I get it. You don't want to add any notes.")
                             break
                         else:
                             print("Invalid input. Please enter 'yes' or 'no'.")
@@ -462,8 +472,15 @@ def search_contacts(input_color):
         if input_color:
             print(input_color, end="")
         if search_choice in yes_words:
-            search_query = input("\nEnter the name, telephone number, email, or birthday of the contact you want to search for\n").strip().lower()
-            search_type = input("\nHow do you want to search?\n1. Contacts starting with the letter\n2. Contacts containing the letter\nEnter the number of your choice\n").strip()
+            search_query = input("\nEnter the search term (name, telephone number, email, or birthday)\nof the contact you want to search for\n").strip().lower()
+
+            filter_options = ["name", "telephone number", "email", "birthday"]
+            print("\nFilter options:")
+            for idx, option in enumerate(filter_options, start=1):
+                print(f"{idx}. {option.capitalize()}")
+            print("5. All")
+
+            filter_choice = input("\nEnter the number of the filter you want to apply\n").strip()
 
             search_results = []
 
@@ -473,11 +490,29 @@ def search_contacts(input_color):
                     contact_name = str(contact["Name"]).lower()
                     contact_email = str(contact["Email address"]).lower()
                     contact_birthday = str(contact["Birthday"]).lower()
-                    if search_type == '1':
-                        if contact_name.startswith(search_query) or contact_email.startswith(search_query) or contact_birthday.startswith(search_query):
+                    contact_phone = str(contact["Telephone Number"]).lower()
+
+                    if filter_choice == '5':
+                        if search_query in contact_name or search_query in contact_email or search_query in contact_birthday or search_query in contact_phone:
                             search_results.append((sheet.title, contact))
-                    elif search_type == '2':
-                        if search_query in contact_name or search_query in contact_email or search_query in contact_birthday:
+                    else:
+                        try:
+                            filter_idx = int(filter_choice) - 1
+                            if not 0 <= filter_idx < len(filter_options):
+                                raise ValueError
+                        except ValueError:
+                            print("Invalid filter choice. Please enter a valid number.")
+                            break
+
+                        filter_key = filter_options[filter_idx]
+
+                        if filter_key == "name" and search_query in contact_name:
+                            search_results.append((sheet.title, contact))
+                        elif filter_key == "telephone number" and search_query in contact_phone:
+                            search_results.append((sheet.title, contact))
+                        elif filter_key == "email" and search_query in contact_email:
+                            search_results.append((sheet.title, contact))
+                        elif filter_key == "birthday" and search_query in contact_birthday:
                             search_results.append((sheet.title, contact))
 
             if search_results:
@@ -499,6 +534,8 @@ def search_contacts(input_color):
             return ""
         else:
             print(invalid_input_yes_no)
+
+
 
 
 def edit_contact(input_color):
