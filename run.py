@@ -47,13 +47,54 @@ SHEET = GSPREAD_CLIENT.open("contact_manager")
 
 #ANSI escape coloring codes
 COLORS = {
-    'red': '\033[91m',
-    'green': '\033[92m',
-    'yellow': '\033[93m',
-    'blue': '\033[94m',
-    'magenta': '\033[95m',
-    'cyan': '\033[96m'
+    "1": {"name": "black", "code": "\u001b[30m"},
+    "2": {"name": "red", "code": "\u001b[31m"},
+    "3": {"name": "green", "code": "\u001b[32m"},
+    "4": {"name": "yellow", "code": "\u001b[33m"},
+    "5": {"name": "blue", "code": "\u001b[34m"},
+    "6": {"name": "magenta", "code": "\u001b[35m"},
+    "7": {"name": "cyan", "code": "\u001b[36m"},
+    "8": {"name": "white", "code": "\u001b[37m"},
+    "9": {"name": "reset", "code": "\u001b[0m"},
+    "10": {"name": "background_black", "code": "\u001b[40m"},
+    "11": {"name": "background_red", "code": "\u001b[41m"},
+    "12": {"name": "background_green", "code": "\u001b[42m"},
+    "13": {"name": "background_yellow", "code": "\u001b[43m"},
+    "14": {"name": "background_blue", "code": "\u001b[44m"},
+    "15": {"name": "background_magenta", "code": "\u001b[45m"},
+    "16": {"name": "background_cyan", "code": "\u001b[46m"},
+    "17": {"name": "background_white", "code": "\u001b[47m"},
+    "18": {"name": "background_reset", "code": "\u001b[49m"},
+    "19": {"name": "green_on_black", "code": "\u001b[30;42m"}
 }
+
+PRESETS = {
+    "Vibrant Green": {
+        "input_color": COLORS["3"]["code"],
+        "background_color": COLORS["10"]["code"]
+    },
+    "Ocean Breeze": {
+        "input_color": COLORS["5"]["code"],
+        "background_color": COLORS["17"]["code"]
+    },
+    "Sunrise": {
+        "input_color": COLORS["2"]["code"],
+        "background_color": COLORS["13"]["code"]
+    },
+    "Emerald City": {
+        "input_color": COLORS["3"]["code"],
+        "background_color": COLORS["10"]["code"]
+    },
+    "Mystic Purple": {
+        "input_color": COLORS["6"]["code"],
+        "background_color": COLORS["16"]["code"]
+    },
+    "Golden Sunset": {
+        "input_color": COLORS["4"]["code"],
+        "background_color": COLORS["15"]["code"]
+    }
+}
+
 
 RESET = '\033[0m'
 
