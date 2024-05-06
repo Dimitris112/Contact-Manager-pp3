@@ -251,47 +251,49 @@ def view_existing_contacts(input_color=None):
     """
     counter = 0
     while True:
-        view_contacts = input("\nDo you want to view existing contacts? (yes/no)\n").strip().lower()
-        if view_contacts in yes_words:
-            print("\nChoose a category:")
-            print("1. Personal")
-            print("2. Professional")
-            print("3. Emergency")
-            print("4. Favorites")
-            print("5. All")
-            print("6. I don't want to")
+        print("\nDo you want to view existing contacts? (yes/no)")
+        view_contacts = input().strip().lower()
 
-            category_choice = input("\nEnter the number of the category you want to view\n")
-            if category_choice == '1':
-                print_sheet_data(personal_sheet, input_color)
-                break
-            elif category_choice == '2':
-                print_sheet_data(professional_sheet, input_color)
-                break
-            elif category_choice == '3':
-                print_sheet_data(emergency_sheet, input_color)
-                break
-            elif category_choice == '4':
-                print_sheet_data(favorites_sheet, input_color)
-                break
-            elif category_choice == '5':
-                print_sheet_data(personal_sheet, input_color)
-                print_sheet_data(professional_sheet, input_color)
-                print_sheet_data(emergency_sheet, input_color)
-                print_sheet_data(favorites_sheet, input_color)
-                break
-            elif category_choice == '6':
-                print("\nNo problem. You can view contacts later.")
-                break
-            elif category_choice.lower() == "esc":
-                print(exit_program_with_countdown(input_color))
-                return ""
-            else:
-                counter += 1
-                if counter >= 3:
-                    print("\nToo many incorrect attempts. See ya")
-                    return exit_program_with_countdown(input_color)
-                print(teasing_message)
+        if view_contacts in yes_words:
+            while True:
+                print("\nChoose a category:")
+                print("1. Personal")
+                print("2. Professional")
+                print("3. Emergency")
+                print("4. Favorites")
+                print("5. All")
+                print("6. I don't want to")
+
+                category_choice = input("\nEnter the number of the category you want to view\n").strip()
+
+                if category_choice == '6':
+                    print("\nNo problem. You can view contacts later.")
+                    break
+                elif category_choice.isdigit() and 1 <= int(category_choice) <= 5:
+                    if category_choice == '5':
+                        print_sheet_data(personal_sheet, input_color)
+                        print_sheet_data(professional_sheet, input_color)
+                        print_sheet_data(emergency_sheet, input_color)
+                        print_sheet_data(favorites_sheet, input_color)
+                        return
+                    else:
+                        sheet = [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet][int(category_choice) - 1]
+                        print_sheet_data(sheet, input_color)
+                        print("\nDo you want to view contacts from another category? (yes/no)")
+                        choice = input().strip().lower()
+                        if choice in yes_words:
+                            continue
+                        elif choice in no_words:
+                            break
+                        elif choice == "esc":
+                            print(exit_program_with_countdown(input_color))
+                            return ""
+                        else:
+                            print("Invalid input. Please enter 'yes' or 'no'.")
+                            continue
+                else:
+                    print("Oh, close but no cigar! Give it another shot!")
+                    continue
         elif view_contacts in no_words:
             print("No problem. You can view contacts later.")
             break
@@ -305,6 +307,10 @@ def view_existing_contacts(input_color=None):
                 print(exit_program_with_countdown(input_color))
                 return ""
             print(teasing_message)
+
+
+
+
             
             
 
@@ -446,24 +452,52 @@ def add_contacts(input_color):
 
 
 
+
 def search_contacts(input_color):
     """
     Searches for a contact by name, telephone number, email, or birthday.
     """
+    counter = 0
     while True:
-        search_choice = input("\nDo you want to search for a contact? (yes/no)\n").strip().lower()
-        if input_color:
-            print(input_color, end="")
+        print("\nDo you want to search for a contact? (yes/no)")
+        search_choice = input().strip().lower()
+
         if search_choice in yes_words:
-            search_query = input("\nEnter the search term (name, telephone number, email, or birthday)\nof the contact you want to search for\n").strip().lower()
+            search_query_map = {
+                '1': 'name',
+                '2': 'telephone number',
+                '3': 'email',
+                '4': 'birthday',
+                '5': 'skip'
+            }
 
-            filter_options = ["name", "telephone number", "email", "birthday"]
-            print("\nFilter options:")
-            for idx, option in enumerate(filter_options, start=1):
-                print(f"{idx}. {option.capitalize()}")
-            print("5. All")
+            print("\nEnter the search term number from the following list:\n"
+                  "1. Name\n"
+                  "2. Telephone number\n"
+                  "3. Email\n"
+                  "4. Birthday\n"
+                  "5. I don't want to")
 
-            filter_choice = input("\nEnter the number of the filter you want to apply\n").strip()
+            search_query = input().strip()
+
+            if search_query not in search_query_map:
+                print("\nInvalid search option. Please enter a number from 1 to 5.")
+                continue
+
+            search_term = search_query_map[search_query]
+
+            if search_term == 'skip':
+                print("\nNo problem. You can search for contacts later.")
+                break
+
+            if search_term == 'name':
+                search_value = input("\nEnter the name of the contact you want to search for\n").strip().lower()
+            elif search_term == 'telephone number':
+                search_value = input("\nEnter the telephone number of the contact you want to search for\n").strip().lower()
+            elif search_term == 'email':
+                search_value = input("\nEnter the email of the contact you want to search for\n").strip().lower()
+            elif search_term == 'birthday':
+                search_value = input("\nEnter the birthday of the contact you want to search for\n").strip().lower()
 
             search_results = []
 
@@ -475,28 +509,14 @@ def search_contacts(input_color):
                     contact_birthday = str(contact["Birthday"]).lower()
                     contact_phone = str(contact["Telephone Number"]).lower()
 
-                    if filter_choice == '5':
-                        if search_query in contact_name or search_query in contact_email or search_query in contact_birthday or search_query in contact_phone:
-                            search_results.append((sheet.title, contact))
-                    else:
-                        try:
-                            filter_idx = int(filter_choice) - 1
-                            if not 0 <= filter_idx < len(filter_options):
-                                raise ValueError
-                        except ValueError:
-                            print("Invalid filter choice. Please enter a valid number.")
-                            break
-
-                        filter_key = filter_options[filter_idx]
-
-                        if filter_key == "name" and search_query in contact_name:
-                            search_results.append((sheet.title, contact))
-                        elif filter_key == "telephone number" and search_query in contact_phone:
-                            search_results.append((sheet.title, contact))
-                        elif filter_key == "email" and search_query in contact_email:
-                            search_results.append((sheet.title, contact))
-                        elif filter_key == "birthday" and search_query in contact_birthday:
-                            search_results.append((sheet.title, contact))
+                    if search_term == 'name' and search_value in contact_name:
+                        search_results.append((sheet.title, contact))
+                    elif search_term == 'telephone number' and search_value in contact_phone:
+                        search_results.append((sheet.title, contact))
+                    elif search_term == 'email' and search_value in contact_email:
+                        search_results.append((sheet.title, contact))
+                    elif search_term == 'birthday' and search_value in contact_birthday:
+                        search_results.append((sheet.title, contact))
 
             if search_results:
                 print("\nSearch Results:\n")
@@ -508,7 +528,9 @@ def search_contacts(input_color):
                     print("Birthday:", contact["Birthday"])
             else:
                 print("\nNo matching contacts found.")
+
             break
+
         elif search_choice in no_words:
             print("\nNo problem. You can search for contacts later.")
             break
@@ -516,7 +538,12 @@ def search_contacts(input_color):
             print(exit_program_with_countdown(input_color))
             return ""
         else:
-            print(invalid_input_yes_no)
+            counter += 1
+            if counter >= 4:
+                print("\nToo many incorrect attempts. See ya")
+                print(exit_program_with_countdown(input_color))
+                return ""
+            print(teasing_message)
 
 
 
