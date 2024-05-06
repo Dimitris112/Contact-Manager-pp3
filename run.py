@@ -28,8 +28,12 @@ ascii_art = r'''
                                             \______/                     
 
 '''
+colored_ascii_art = "\033[92m" + ascii_art
+print(colored_ascii_art)
+#Revert the colors back to default after printing the ascii art
+RESET = '\033[0m'
+print(RESET)
 
-print(ascii_art)
 #Font Name: Big Money-ne / Contact Manager 
 #https://patorjk.com/software/taag/#p=display&f=Big%20Money-ne&t=Contact%0AManager
 
@@ -96,7 +100,7 @@ PRESETS = {
 }
 
 
-RESET = '\033[0m'
+
 
 
 personal_sheet = SHEET.worksheet("Personal")
@@ -177,43 +181,46 @@ def choose_color():
         choice = input().strip().lower()
 
         if choice in yes_words:
-            while True:
-                print("Alright, let's splash some color into your life!")
-                print("Pick your poison:")
-                print("1. Red - Like a blazing fire!")
-                print("2. Green - As fresh as the morning dew!")
-                print("3. Yellow - Bright as the sun!")
-                print("4. Blue - Cool as the ocean breeze!")
-                print("5. Magenta - A splash of vibrant energy!")
-                print("6. Cyan - Like the clear sky on a sunny day!")
-                print("7. Reset - Back to basics")
-
-                color_choice = input("\nChoose the number of the color you fancy or '7' to reset\n").strip()
-
-                if color_choice == "7":
-                    input_color = RESET
-                    print("Resetting color to default.")
-                    return RESET
-                elif color_choice.lower() == "esc":
-                    print(exit_program_with_countdown())
-                    return ""
-                elif color_choice.isdigit() and 1 <= int(color_choice) <= 6:
-                    chosen_color = list(COLORS.values())[int(color_choice) - 1]
-                    chosen_color_name = list(COLORS.keys())[int(color_choice) - 1]
-                    confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name.capitalize()} as your input color.\nAre you pleased with that option? (yes/no)\n").strip().lower()
-                    if confirm_choice in yes_words:
-                        input_color = chosen_color
-                        return input_color
-                    elif confirm_choice in no_words:
-                        print("\nLet's try a different color then!")
-                        break
-                    elif confirm_choice == "esc":
-                        print(exit_program_with_countdown())
-                        return ""
-                    else:
-                        print("Not feeling the vibe? Let's start over then.\n")
+            print("\nWould you like to choose a preset color combination or customize your own?")
+            print("1. Choose preset")
+            print("2. Customize")
+            preset_or_custom = input("Enter your choice (1 or 2)\n").strip()
+            
+            if preset_or_custom == "1":
+                print("Pick one of the available presets:")
+                for i, preset in enumerate(PRESETS.keys()):
+                    print(f"{i + 1}. {preset}")
+                preset_choice = input("Enter the number of the preset: ").strip()
+                
+                if preset_choice.isdigit() and 1 <= int(preset_choice) <= len(PRESETS):
+                    chosen_preset = list(PRESETS.values())[int(preset_choice) - 1]
+                    input_color = chosen_preset["input_color"]
+                    background_color = chosen_preset["background_color"]
+                    print(f"\nSelected preset: {list(PRESETS.keys())[int(preset_choice) - 1]}")
+                    print("Input color:", input_color["name"])
+                    print("Background color:", background_color["name"])
+                    return input_color
                 else:
-                    print("Whoops! That's not a color I can work with. Try again!\n")
+                    print("Invalid choice. Please enter a valid preset number.")
+            elif preset_or_custom == "2":
+                print("Choose your custom color combination:")
+                for i, combination in enumerate(COMBINATIONS.keys()):
+                    print(f"{i + 1}. {combination}")
+                custom_choice = input("Enter the number of the combination: ").strip()
+                
+                if custom_choice.isdigit() and 1 <= int(custom_choice) <= len(COMBINATIONS):
+                    chosen_combination = list(COMBINATIONS.values())[int(custom_choice) - 1]
+                    input_color = chosen_combination["input_color"]
+                    background_color = chosen_combination["background_color"]
+                    print(f"\nSelected custom combination: {custom_choice}")
+                    print("Input color:", input_color)
+                    print("Background color:", background_color)
+                    return input_color
+                else:
+                    print("Invalid choice. Please enter a valid combination number.")
+            else:
+                print("Invalid choice. Please enter '1' to choose a preset or '2' to customize.")
+                
         elif choice in no_words:
             print("No problemo! Let's keep it simple and sleek.")
             return RESET
@@ -222,6 +229,7 @@ def choose_color():
             return ""
         else:
             print("Oops! I didn't catch that. Can you try again? (yes/no/esc)\n")
+
 
 
 
