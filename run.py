@@ -29,7 +29,6 @@ ascii_art = r'''
 
 '''
 
-
 print(ascii_art)
 #Font Name: Big Money-ne / Contact Manager 
 #https://patorjk.com/software/taag/#p=display&f=Big%20Money-ne&t=Contact%0AManager
@@ -150,47 +149,30 @@ def choose_color():
 
                 color_choice = input("\nChoose the number of the color you fancy or '7' to reset\n").strip()
 
-                if color_choice == "1":
-                    chosen_color = COLORS['red']
-                    chosen_color_name = "Red"
-                elif color_choice == "2":
-                    chosen_color = COLORS['green']
-                    chosen_color_name = "Green"
-                elif color_choice == "3":
-                    chosen_color = COLORS['yellow']
-                    chosen_color_name = "Yellow"
-                elif color_choice == "4":
-                    chosen_color = COLORS['blue']
-                    chosen_color_name = "Blue"
-                elif color_choice == "5":
-                    chosen_color = COLORS['magenta']
-                    chosen_color_name = "Magenta"
-                elif color_choice == "6":
-                    chosen_color = COLORS['cyan']
-                    chosen_color_name = "Cyan"
-                elif color_choice == "7":
+                if color_choice == "7":
                     input_color = RESET
                     print("Resetting color to default.")
                     return RESET
                 elif color_choice.lower() == "esc":
                     print(exit_program_with_countdown())
                     return ""
+                elif color_choice.isdigit() and 1 <= int(color_choice) <= 6:
+                    chosen_color = list(COLORS.values())[int(color_choice) - 1]
+                    chosen_color_name = list(COLORS.keys())[int(color_choice) - 1]
+                    confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name.capitalize()} as your input color.\nAre you pleased with that option? (yes/no)\n").strip().lower()
+                    if confirm_choice in yes_words:
+                        input_color = chosen_color
+                        return input_color
+                    elif confirm_choice in no_words:
+                        print("\nLet's try a different color then!")
+                        break
+                    elif confirm_choice == "esc":
+                        print(exit_program_with_countdown())
+                        return ""
+                    else:
+                        print("Not feeling the vibe? Let's start over then.\n")
                 else:
                     print("Whoops! That's not a color I can work with. Try again!\n")
-                    continue
-
-                confirm_choice = input(f"\nVoilà! You've chosen {chosen_color}{chosen_color_name} as your input color.\nAre you pleased with that option? (yes/no)\n").strip().lower()
-                if confirm_choice in yes_words:
-                    input_color = chosen_color
-                    return input_color
-                elif confirm_choice in no_words:
-                    print("\nLet's try a different color then!")
-                    break
-                elif confirm_choice == "esc":
-                    print(exit_program_with_countdown())
-                    return ""
-                else:
-                    print("Not feeling the vibe? Let's start over then.\n")
         elif choice in no_words:
             print("No problemo! Let's keep it simple and sleek.")
             return RESET
@@ -201,11 +183,12 @@ def choose_color():
             print("Oops! I didn't catch that. Can you try again? (yes/no/esc)\n")
 
 
+
 def add_data_with_name_column(sheet, data, input_color):
     """
     Adds new data to the sheets with a predefined header
-    If the sheet is empty, it sets a header row with its columns on A1 and B1
-    as "Name" and "Telephone Number"
+    If the sheet is empty, it sets a header row with its columns on A1 and E1
+    as "Name","Telephone Number", "Email Address", "Birthday" and "Notes" 
     
     Then it appends the data provided by the user to the sheet
     """
@@ -748,7 +731,7 @@ def select_section(input_color=None):
         elif choice == "4":
             delete_contacts(input_color)
         elif choice == "5":
-            input_color = choose_color(input_color)
+            input_color = choose_color()
         elif choice == "6":
             print(exit_program_with_countdown(input_color))
             return
