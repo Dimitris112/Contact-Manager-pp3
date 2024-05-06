@@ -12,18 +12,35 @@
     <style>
         body {
             font-family: Arial;
+            margin: 0;
+            padding: 0;
+            background: url('images/background/image_bg.jpg') no-repeat center center / cover;
         }
-        .center-terminal{
+
+
+        .center-terminal {
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
+        #run-program {
+            width: 200px;
+            height: 40px;
+            background-color: #E84610;
+            border: 1px solid #808080;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
         /**
         * Default styles for xterm.js
         */
 
         .xterm {
-            font-feature-settings: "liga"0;
+            font-feature-settings: "liga" 0;
             position: relative;
             user-select: none;
             -ms-user-select: none;
