@@ -29,7 +29,7 @@ ascii_art = r'''
 
 '''
 colored_ascii_art = "\033[92m" + ascii_art
-print(colored_ascii_art)
+print(colored_ascii_art + "PLEASE BE PATIENT. The program takes more time to load than GTA V does.")
 #Revert the colors back to default after printing the ascii art
 RESET = '\033[0m'
 print(RESET)
@@ -51,53 +51,14 @@ SHEET = GSPREAD_CLIENT.open("contact_manager")
 
 #ANSI escape coloring codes
 COLORS = {
-    "1": {"name": "black", "code": "\u001b[30m"},
-    "2": {"name": "red", "code": "\u001b[31m"},
-    "3": {"name": "green", "code": "\u001b[32m"},
-    "4": {"name": "yellow", "code": "\u001b[33m"},
-    "5": {"name": "blue", "code": "\u001b[34m"},
-    "6": {"name": "magenta", "code": "\u001b[35m"},
-    "7": {"name": "cyan", "code": "\u001b[36m"},
-    "8": {"name": "white", "code": "\u001b[37m"},
-    "9": {"name": "reset", "code": "\u001b[0m"},
-    "10": {"name": "background_black", "code": "\u001b[40m"},
-    "11": {"name": "background_red", "code": "\u001b[41m"},
-    "12": {"name": "background_green", "code": "\u001b[42m"},
-    "13": {"name": "background_yellow", "code": "\u001b[43m"},
-    "14": {"name": "background_blue", "code": "\u001b[44m"},
-    "15": {"name": "background_magenta", "code": "\u001b[45m"},
-    "16": {"name": "background_cyan", "code": "\u001b[46m"},
-    "17": {"name": "background_white", "code": "\u001b[47m"},
-    "18": {"name": "background_reset", "code": "\u001b[49m"},
-    "19": {"name": "green_on_black", "code": "\u001b[30;42m"}
+    'red': '\033[91m',
+    'green': '\033[92m',
+    'yellow': '\033[93m',
+    'blue': '\033[94m',
+    'magenta': '\033[95m',
+    'cyan': '\033[96m'
 }
 
-PRESETS = {
-    "Vibrant Green": {
-        "input_color": COLORS["3"]["code"],
-        "background_color": COLORS["10"]["code"]
-    },
-    "Ocean Breeze": {
-        "input_color": COLORS["5"]["code"],
-        "background_color": COLORS["17"]["code"]
-    },
-    "Sunrise": {
-        "input_color": COLORS["2"]["code"],
-        "background_color": COLORS["13"]["code"]
-    },
-    "Emerald City": {
-        "input_color": COLORS["3"]["code"],
-        "background_color": COLORS["10"]["code"]
-    },
-    "Mystic Purple": {
-        "input_color": COLORS["6"]["code"],
-        "background_color": COLORS["16"]["code"]
-    },
-    "Golden Sunset": {
-        "input_color": COLORS["4"]["code"],
-        "background_color": COLORS["15"]["code"]
-    }
-}
 
 
 
@@ -170,63 +131,84 @@ def use_program():
             print(failed_times.format(counter))
 
 
-def choose_color():
+#Basically a refactored choose_color function broken into 4 smaller ones
+def print_color_options(colors):
     """
-    Allows the user to change the input color for excitement and a dash of spice!
+    Print color options along with reset option
+    """
+    for index, (color_name, color_code) in enumerate(colors.items(), start=1):
+        print(f"{index}. {color_name.capitalize()}")
+    print(f"7. Reset")
+
+def reset_color():
+    """
+    Reset the input color to default
     """
     global input_color
-    
+    input_color = RESET
+    return input_color
+
+def select_color(choice):
+    """
+    Select the input color based on the user's choice
+    """
+    global input_color
+    if choice == 7:
+        reset_color()
+        return
+    elif 1 <= choice <= len(COLORS):
+        chosen_color = list(COLORS.values())[choice - 1]
+        input_color = chosen_color
+        return input_color
+    else:
+        print("Oops! That's not a valid option. Please try again.")
+
+
+
+
+def choose_color():
+    """
+    Allow the user to change the input color
+    """
+    global input_color
+
     while True:
         print("\nFeeling like changing the color for your input? (yes/no)")
         choice = input().strip().lower()
 
         if choice in yes_words:
-            print("\nWould you like to choose a preset color combination or customize your own?")
-            print("1. Choose preset")
-            print("2. Customize")
-            preset_or_custom = input("Enter your choice (1 or 2)\n").strip()
+            print("Alright, let's splash some color into your life!")
+            print_color_options(COLORS)
             
-            if preset_or_custom == "1":
-                print("Pick one of the available presets:")
-                for i, preset in enumerate(PRESETS.keys()):
-                    print(f"{i + 1}. {preset}")
-                preset_choice = input("Enter the number of the preset: ").strip()
-                
-                if preset_choice.isdigit() and 1 <= int(preset_choice) <= len(PRESETS):
-                    chosen_preset = list(PRESETS.values())[int(preset_choice) - 1]
-                    input_color = chosen_preset["input_color"]
-                    background_color = chosen_preset["background_color"]
-                    print(f"\nSelected preset: {list(PRESETS.keys())[int(preset_choice) - 1]}")
-                    print("Input color:", input_color["name"])
-                    print("Background color:", background_color["name"])
-                    return input_color
-                else:
-                    print("Invalid choice. Please enter a valid preset number.")
-            elif preset_or_custom == "2":
-                print("Choose your custom color combination:")
-                for i, combination in enumerate(COMBINATIONS.keys()):
-                    print(f"{i + 1}. {combination}")
-                custom_choice = input("Enter the number of the combination: ").strip()
-                
-                if custom_choice.isdigit() and 1 <= int(custom_choice) <= len(COMBINATIONS):
-                    chosen_combination = list(COMBINATIONS.values())[int(custom_choice) - 1]
-                    input_color = chosen_combination["input_color"]
-                    background_color = chosen_combination["background_color"]
-                    print(f"\nSelected custom combination: {custom_choice}")
-                    print("Input color:", input_color)
-                    print("Background color:", background_color)
-                    return input_color
-                else:
-                    print("Invalid choice. Please enter a valid combination number.")
+            color_choice = input("\nChoose the number of the color you fancy or '7' to reset\n").strip()
+
+            if color_choice == "7":
+                input_color = reset_color()
+                print(input_color + "Color reset to default")
+                continue
+            elif color_choice.isdigit() and 1 <= int(color_choice) <= len(COLORS):
+                selected_color = select_color(int(color_choice))
+                if selected_color:
+                    color_name = list(COLORS.keys())[int(color_choice)  - 1]
+                    print(f"Selected color: {input_color}{color_name.capitalize()}")
+                    confirm = input("\nAre you sure? (yes/no)\n").strip().lower()
+                    if confirm in yes_words:
+                        return selected_color
+                    elif confirm in no_words:
+                        continue
+                    elif confirm == "esc":
+                        return exit_program_with_countdown()
+                    else:
+                        print("Invalid input. Please enter 'yes', 'no', or 'esc'.")
             else:
-                print("Invalid choice. Please enter '1' to choose a preset or '2' to customize.")
-                
+                print("Oops! That's not a valid option. Please try again.")
         elif choice in no_words:
             print("No problemo! Let's keep it simple and sleek.")
+            input_color = reset_color()
+            print("Current color:", input_color)
             return RESET
         elif choice.lower() == "esc":
-            print(exit_program_with_countdown())
-            return ""
+            return exit_program_with_countdown()
         else:
             print("Oops! I didn't catch that. Can you try again? (yes/no/esc)\n")
 
@@ -292,8 +274,6 @@ def check_duplicate_contact(name, number, email, birthday):
     return False
 
 
-
-
 def view_existing_contacts(input_color=None):
     """
     Prompts the user if he wants to view existing contacts
@@ -317,7 +297,7 @@ def view_existing_contacts(input_color=None):
 
                 if category_choice == '6':
                     print("\nNo problem. You can view contacts later.")
-                    break
+                    return
                 elif category_choice.isdigit() and 1 <= int(category_choice) <= 5:
                     if category_choice == '5':
                         print_sheet_data(personal_sheet, input_color)
@@ -333,19 +313,20 @@ def view_existing_contacts(input_color=None):
                         if choice in yes_words:
                             continue
                         elif choice in no_words:
-                            break
+                            return
                         elif choice == "esc":
                             print(exit_program_with_countdown(input_color))
                             return ""
                         else:
-                            print("Invalid input. Please enter 'yes' or 'no'.")
+                            print(invalid_input_yes_no)
                             continue
                 else:
                     print("Oh, close but no cigar! Give it another shot!")
                     continue
+            break
         elif view_contacts in no_words:
             print("No problem. You can view contacts later.")
-            break
+            return
         elif view_contacts == "esc":
             print(exit_program_with_countdown(input_color))
             return ""
@@ -357,18 +338,12 @@ def view_existing_contacts(input_color=None):
                 return ""
             print(teasing_message)
 
-
-
-
-            
             
 
 def add_contacts(input_color):
     """
-    Prompts the user if he wants to add new contacts and adds them to the selected category.
+    Prompts the user if he wants to add new contacts and adds them to the selected category
     """
-    email = ""
-    
     while True:
         add_contacts_input = input("\nDo you want to add new contacts? (yes/no)\n").strip().lower()
         if input_color:
@@ -431,7 +406,6 @@ def add_contacts(input_color):
                         break
                 
                 email = ""
-
                 while True:
                     email_prompt = input("\nDo you want to enter an email address for the contact? (yes/no)\n").strip().lower()
                     if email_prompt in yes_words:
@@ -439,25 +413,46 @@ def add_contacts(input_color):
                         if '@' not in email or '.' not in email or email.count('@') != 1:
                             print("\nInvalid email address. Please enter a valid email address containing one '@' and at least one '.'")
                             continue
-                        break
+                        else:
+                            break
+                    elif email_prompt == 'esc':
+                        return exit_program_with_countdown(input_color)
                     elif email_prompt in no_words:
                         print("No email added.")
                         break
                     else:
-                        print("Invalid input. Please enter 'yes' or 'no'.")
-
+                        print(invalid_input_yes_no)
+                    
                 birthday = ""
-
+                add_birthday_prompt = input("\nDo you want to add the contact's birthday? (yes/no)\n").strip().lower()
+                if add_birthday_prompt in yes_words:
+                    birthday = input("\nEnter contact birthday (dd/mm)\n").strip()
+                    if not re.match(r'^\d{2}[-/._]\d{2}$', birthday) and not re.match(r'^\d{2}[-/._]\d{2}$', birthday):
+                        print("\nInvalid birthday format. Please enter birthday in dd/mm format.")
+                        continue
+                elif add_birthday_prompt == 'esc':
+                    return exit_program_with_countdown(input_color)
+                elif add_birthday_prompt not in no_words:
+                    print(invalid_input_yes_no)
+                    continue
+                else:
+                    print("No birthday added.")
+                
+                notes = ""
                 while True:
-                    add_birthday_prompt = input("\nDo you want to add the contact's birthday? (yes/no)\n").strip().lower()
-                    if add_birthday_prompt in yes_words:
-                        birthday = input("\nEnter contact birthday (dd/mm)\n").strip()
-                        if not re.match(r'^\d{2}[-/._]\d{2}$', birthday) and not re.match(r'^\d{2}[-/._]\d{2}$', birthday):
-                            print("\nInvalid birthday format. Please enter birthday in dd/mm format.")
-                            continue
+                    notes_prompt = input("\nDo you want to write some notes for this contact? (yes/no)\n").strip().lower()
+                    if notes_prompt in yes_words:
+                        notes = input("\nEnter notes for the contact\n")
+                        if len(notes) > 60:
+                            print("\nNotes exceed 60 characters.")
+                            notes = notes[:60]
+                        else:
+                            print("Notes added.")
                         break
-                    elif add_birthday_prompt in no_words:
-                        print("Alright. No birthday wishes.")
+                    elif notes_prompt == 'esc':
+                        return exit_program_with_countdown(input_color)
+                    elif notes_prompt in no_words:
+                        print("No notes added.")
                         break
                     else:
                         print("Invalid input. Please enter 'yes' or 'no'.")
@@ -470,29 +465,24 @@ def add_contacts(input_color):
                 if check_duplicate_contact(name, formatted_num, email, birthday):
                     print("\nWarning: This contact already exists.")
                 else:
-                    notes = ""
-
-                    while True:
-                        notes_prompt = input("\nDo you want to write some notes for this contact? (yes/no)\n").strip().lower()
-                        if notes_prompt in yes_words:
-                            notes = input("\nEnter notes for the contact\n")
-                            if len(notes) > 60:
-                                print("\nNotes exceed 60 characters. C'mon.")
-                                notes = notes[:60]
-                            break
-                        elif notes_prompt in no_words:
-                            print("Ok, I get it. You don't want to add any notes.")
-                            break
-                        else:
-                            print("Invalid input. Please enter 'yes' or 'no'.")
-
+                    added_contact_info = {
+                        "Name": name,
+                        "Phone Number": formatted_num,
+                        "Email": email,
+                        "Birthday": birthday,
+                        "Notes": notes
+                    }
                     add_data_with_name_column(sheet, [[name, formatted_num, email, birthday, notes]], input_color)
                     print("\nContact added successfully.")
+
+            print("\nAdded Contact Information:")
+            for key, value in added_contact_info.items():
+                print(f"{key}: {value}")
 
             break
         elif add_contacts_input in no_words:
             print("\nNo contacts added.")
-            break
+            return
         elif add_contacts_input == "esc":
             print(exit_program_with_countdown(input_color))
             return ""
@@ -500,11 +490,10 @@ def add_contacts(input_color):
             print(invalid_input_yes_no)
 
 
-
-
+                            
 def search_contacts(input_color):
     """
-    Searches for a contact by name, telephone number, email, or birthday.
+    Searches for a contact by name, telephone number, email, or birthday
     """
     counter = 0
     while True:
@@ -520,7 +509,7 @@ def search_contacts(input_color):
                 '5': 'skip'
             }
 
-            print("\nEnter the search term number from the following list:\n"
+            print("\nEnter the search term number from the following list\n"
                   "1. Name\n"
                   "2. Telephone number\n"
                   "3. Email\n"
@@ -571,10 +560,10 @@ def search_contacts(input_color):
                 print("\nSearch Results:\n")
                 for category, contact in search_results:
                     print(f"Category: {category}")
-                    print("Name:", contact["Name"])
-                    print("Telephone Number:", contact["Telephone Number"])
-                    print("Email:", contact["Email address"])
-                    print("Birthday:", contact["Birthday"])
+                    print("1. Name:", contact["Name"])
+                    print("2. Telephone Number:", contact["Telephone Number"])
+                    print("3. Email:", contact["Email address"])
+                    print("4. Birthday:", contact["Birthday"])
             else:
                 print("\nNo matching contacts found.")
 
@@ -599,7 +588,7 @@ def search_contacts(input_color):
 
 def edit_contact(input_color):
     """
-    Allows the user to edit an existing contact.
+    Allows the user to edit an existing contact
     """
     while True:
         edit_choice = input("\nDo you want to edit any of your contacts? (yes/no)\n").strip().lower()
@@ -609,7 +598,7 @@ def edit_contact(input_color):
             all_categories = [personal_sheet, professional_sheet, emergency_sheet, favorites_sheet]
 
             while True:
-                print("\nSelect a category to edit contacts from:")
+                print("\nSelect a category to edit contacts from")
                 print("1. Personal")
                 print("2. Professional")
                 print("3. Emergency")
@@ -654,8 +643,12 @@ def edit_contact(input_color):
                         print(f"Telephone Number: {contact[1]}")
                         print(f"Email: {contact[2]}")
                         print(f"Birthday: {contact[3]}")
-                        print(f"Notes: {contact[4]}")
-
+                        
+                        if len(contact) >= 5:
+                            print(f"Notes: {contact[4]}")
+                        else:
+                            print("No notes for this contact.")
+                            
                         while True:
                             field_choice = input("\nEnter the number of the field you want to edit (1-5) or 'cancel' to go back\n").strip().lower()
 
@@ -663,8 +656,11 @@ def edit_contact(input_color):
                                 break
                             elif field_choice.isdigit() and 1 <= int(field_choice) <= 5:
                                 field_index = int(field_choice) - 1
-                                new_value = input("\nEnter the new value for the field\n").strip()
+                                category = sheet.title.lower()
+                                new_value = input(f"\nEnter the new value for the {category}\n").strip()
 
+                                while len(contact) <= field_index:
+                                    contact.append('')
                                 
                                 contact[field_index] = new_value
                                 sheet.update_row(contact_index, contact)
@@ -681,12 +677,13 @@ def edit_contact(input_color):
                 break
         elif edit_choice in no_words:
             print("\nAlright, no changes made. Your contacts remain untouched.")
-            break
+            return
         elif edit_choice == "esc":
             print(exit_program_with_countdown(input_color))
             return ""
         else:
             print(invalid_input_yes_no)
+
 
 
 
@@ -764,12 +761,13 @@ def delete_contacts(input_color):
                 break
         elif delete_choice in no_words:
             print("\nPlaying it safe, eh? No contacts deleted.")
-            break
+            return
         elif delete_choice == "esc":
             print(exit_program_with_countdown(input_color))
             return ""
         else:
             print(invalid_input_yes_no)
+
 
 
 
@@ -852,7 +850,7 @@ def main():
     if chosen_color is None:
         pass
     elif chosen_color == "":
-        return
+        print("Using default color.")
     else:
         print(chosen_color)
         
@@ -877,5 +875,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
