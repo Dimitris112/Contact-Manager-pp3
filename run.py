@@ -364,12 +364,14 @@ def add_contacts(input_color):
     Prompts the user if he wants to add new contacts
     and adds them to the selected category
     """
+    added_contact_info = {}
+
     while True:
-        add_contacts_input = input(
-            "\nDo you want to add new contacts? (yes/no)\n"
-        ).strip().lower()
+        add_contacts_input = input("\nDo you want to add new contacts? "
+                                   "(yes/no)\n").strip().lower()
         if input_color:
             print(input_color, end="")
+
         if add_contacts_input in yes_words:
             print("\nSelect a category to add contacts to:")
             print("1. Personal")
@@ -378,6 +380,7 @@ def add_contacts(input_color):
             print("4. Favorites")
             print("5. Skip")
             print("6. Return to the main menu")
+
             while True:
                 category_choice = input("\nEnter the number of the category "
                                         "you want to add contacts to\n")
@@ -392,17 +395,18 @@ def add_contacts(input_color):
                         professional_sheet,
                         emergency_sheet,
                         favorites_sheet
-                        ][int(category_choice) - 1]
+                    ][int(category_choice) - 1]
                     break
                 elif category_choice == '5':
                     print("Alright, skipped.")
                     return
                 else:
-                    print("Invalid choice. Please enter a number between "
-                          "1 and 6.")
+                    print("Invalid choice. Please enter a number "
+                          "between 1 and 6.")
+
             while True:
-                num_contacts_input = input("\nHow many contacts would you "
-                                           "like to add? (1-5)\n").strip()
+                num_contacts_input = input("\nHow many contacts would "
+                                           "you like to add? (1-5)\n").strip()
                 if num_contacts_input.lower() == "esc":
                     return exit_program_with_countdown(input_color)
                 try:
@@ -411,51 +415,50 @@ def add_contacts(input_color):
                         raise ValueError
                     break
                 except ValueError:
-                    print("Invalid input. Please enter a number between "
-                          "1 and 5.")
+                    print("Invalid input. Please enter a number "
+                          "between 1 and 5.")
+
             for _ in range(num_contacts):
+                contact_info = {}
                 while True:
-                    name = input("\nEnter contact name (up to 30 characters)\n"
-                                 ).strip()
+                    name = input("\nEnter contact name (up to 30 "
+                                 "characters)\n").strip()
                     if len(name) > 30:
-                        print("\nName exceeds 30 characters. Please enter a "
-                              "name with 30 characters or less.")
+                        print("\nName exceeds 30 characters. Please enter "
+                              "a name with 30 characters or less.")
                         continue
                     else:
                         break
+
                 while True:
-                    number = input("\nEnter contact number (4 to 30 digits)\n"
-                                   ).strip()
+                    number = input("\nEnter contact number (4 to 30 "
+                                   "digits)\n").strip()
                     formatted_num = number
-                    phone_valid = validate_contact_info(formatted_num, "", "")[
-                                  "phone_valid"]
+                    phone_valid = validate_contact_info(formatted_num, "", ""
+                                                        )["phone_valid"]
                     if not phone_valid:
                         print("\nInvalid phone number format. Please enter "
-                              "your "
-                              "contact as\n"
+                              "your contact as\n"
                               "+1234567890, (123) 456-7890, 123-456-7890, "
                               "123.456.7890,\n"
                               "123/456.7890, 1234567890")
-
                         continue
                     else:
                         break
+
                 email = ""
                 while True:
-                    email_prompt = input(
-                        "\nDo you want to enter an email address for the "
-                        "contact? (yes/no)\n"
-                    ).strip().lower()
+                    email_prompt = input("\nDo you want to enter an email "
+                                         "address for the contact? (yes/no)\n"
+                                         ).strip().lower()
                     if email_prompt in yes_words:
-                        email = input(
-                            "\nEnter the contact's email address\n"
-                            ).strip()
-                        if '@' not in email \
-                                or '.' not in email \
+                        email = input("\nEnter the contact's email address\n"
+                                      ).strip()
+                        if '@' not in email or '.' not in email \
                                 or email.count('@') != 1:
-                            print("\nInvalid email address. Please enter a "
-                                  "valid email address containing one '@' and "
-                                  "at least one '.'")
+                            print("\nInvalid email address. Please enter "
+                                  "a valid email address containing one '@' "
+                                  "and at least one '.'")
                             continue
                         else:
                             break
@@ -466,25 +469,30 @@ def add_contacts(input_color):
                         break
                     else:
                         print(invalid_input_yes_no)
+
                 birthday = ""
-                add_birthday_prompt = input("\nDo you want to add the "
-                                            "contact's birthday? (yes/no)\n"
-                                            ).strip().lower()
-                if add_birthday_prompt in yes_words:
-                    birthday = input("\nEnter contact birthday (dd/mm)\n"
-                                     ).strip()
-                    if not re.match(r'^\d{2}[-/._]\d{2}$', birthday) \
-                            and not re.match(r'^\d{2}[-/._]\d{2}$', birthday):
-                        print("\nInvalid birthday format. Please enter "
-                              "birthday in dd/mm format.")
-                        continue
-                elif add_birthday_prompt == 'esc':
-                    return exit_program_with_countdown(input_color)
-                elif add_birthday_prompt not in no_words:
-                    print(invalid_input_yes_no)
-                    continue
-                else:
-                    print("No birthday added.")
+                while True:
+                    add_birthday_prompt = input("\nDo you want to add the "
+                                                "contact's birthday? "
+                                                "(yes/no)\n"
+                                                ).strip().lower()
+                    if add_birthday_prompt in yes_words:
+                        birthday = input("\nEnter contact birthday (dd/mm)\n"
+                                         ).strip()
+                        if not re.match(r'^\d{2}[-/._]\d{2}$', birthday):
+                            print("\nInvalid birthday format. Please enter "
+                                  "birthday in dd/mm format.")
+                            continue
+                        else:
+                            break
+                    elif add_birthday_prompt == 'esc':
+                        return exit_program_with_countdown(input_color)
+                    elif add_birthday_prompt in no_words:
+                        print("No birthday added.")
+                        break
+                    else:
+                        print(invalid_input_yes_no)
+
                 notes = ""
                 while True:
                     notes_prompt = input("\nDo you want to write some notes "
@@ -504,18 +512,20 @@ def add_contacts(input_color):
                         print("No notes added.")
                         break
                     else:
-                        print("Invalid input. Please enter 'yes' or 'no'.")
+                        print(invalid_input_yes_no)
+
                 validation_result = validate_contact_info(formatted_num,
                                                           email, birthday)
                 if not all(validation_result.values()):
-                    print("\nInvalid contact information. Please check "
-                          "and try again.")
+                    print("\nInvalid contact information. Please check and "
+                          "try again.")
                     continue
+
                 if check_duplicate_contact(name, formatted_num,
                                            email, birthday):
                     print("\nWarning: This contact already exists.")
                 else:
-                    added_contact_info = {
+                    contact_info = {
                         "Name": name,
                         "Phone Number": formatted_num,
                         "Email": email,
@@ -523,13 +533,19 @@ def add_contacts(input_color):
                         "Notes": notes
                     }
                     add_data_with_name_column(sheet, [[name, formatted_num,
-                                                       email, birthday, notes]
-                                                      ], input_color)
+                                                       email, birthday,
+                                                       notes]], input_color)
                     print("\nContact added successfully.")
+
+                added_contact_info[name] = contact_info
+
             print("\nAdded Contact Information:")
-            for key, value in added_contact_info.items():
-                print(f"{key}: {value}")
+            for name, contact_info in added_contact_info.items():
+                print(f"Name: {name}")
+                for key, value in contact_info.items():
+                    print(f"{key}: {value}")
             break
+
         elif add_contacts_input in no_words:
             print("\nNo contacts added.")
             return
