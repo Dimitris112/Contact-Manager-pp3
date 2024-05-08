@@ -1,14 +1,10 @@
-ascii-python==0.1.0
-ascii_py==2.0
 cachetools==5.3.3
-colorama==0.4.4
 google-auth==2.29.0
 google-auth-oauthlib==1.2.0
 gspread==6.1.0
 numpy==1.26.4
 oauthlib==3.2.2
 opencv-python==4.9.0.80
-Pillow==8.0.1
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 requests-oauthlib==2.0.0
