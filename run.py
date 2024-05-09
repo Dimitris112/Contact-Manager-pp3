@@ -2,6 +2,7 @@ import gspread
 import re
 import time
 import sys
+from tabulate import tabulate
 from google.oauth2.service_account import Credentials
 
 ascii_art = r'''
@@ -88,7 +89,7 @@ emergency_data = []
 favorites_data = []
 input_color = None
 
-phone_pattern = r'^[\+\-\(\)\.\s/0-9]{4,30}$'
+phone_pattern = r'^[\+\-\(\)\.\s/0-9]{4,18}$'
 email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 birthday_pattern = r'^\d{2}[-/._]\d{2}$'
 
@@ -416,22 +417,22 @@ def add_contacts(input_color):
                     break
                 except ValueError:
                     print("Invalid input. Please enter a number between "
-                          "1 and 5.")
+                          "1 and 3.")
 
             for _ in range(num_contacts):
                 contact_info = {}
                 while True:
-                    name = input("\nEnter contact name (up to 30 "
+                    name = input("\nEnter contact name (up to 20 "
                                  "characters)\n").strip()
-                    if len(name) > 30:
-                        print("\nName exceeds 30 characters. Please enter a "
-                              "name with 30 characters or less.")
+                    if len(name) > 20:
+                        print("\nName exceeds 20 characters. Please enter a "
+                              "name with 20 characters or less.")
                         continue
                     else:
                         break
 
                 while True:
-                    number = input("\nEnter contact number (4 to 30 "
+                    number = input("\nEnter contact number (4 to 18 "
                                    "digits)\n").strip()
                     if not validate_contact_info(number, "", "")[
                             "phone_valid"]:
@@ -513,6 +514,7 @@ def add_contacts(input_color):
 
                 sheet.append_row([name, number, email, birthday, notes])
                 print("\nContact added successfully.")
+                print(tabulate([contact], headers=headers, tablefmt="pretty"))
 
                 added_contact_info[name] = {
                     "Name": name,
@@ -712,6 +714,8 @@ def edit_contact(input_color):
                                 contact[field_index] = new_value
                                 sheet.update_row(contact_index, contact)
                                 print("Contact updated successfully.")
+                                print(tabulate([contact], headers=headers,
+                                               tablefmt="pretty"))
                                 break
                             else:
                                 print("Invalid input. Please enter a number "
@@ -776,8 +780,13 @@ def delete_contacts(input_color):
                     print("No contacts found in this category.")
                     break
                 print("Contacts in this category:")
+                headers = ["ID", "Name", "Telephone Number", "Email",
+                           "Birthday"]
+                contacts_table = []
                 for index, row in enumerate(sheet_data[1:], start=1):
-                    print(f"{index}. {row[0]}")
+                    contacts_table.append([index] + row)
+                print(tabulate(contacts_table, headers=headers,
+                               tablefmt="pretty"))
                 if category_choice == '5':
                     confirm_choice = input("\nAre you sure you want to delete "
                                            "all contacts in all categories? "
@@ -825,16 +834,23 @@ def delete_contacts(input_color):
             print(invalid_input_yes_no)
 
 
+
 def print_sheet_data(sheet, input_color):
     """
-    Prints the data from a specified sheet.
+    Prints the contact details in a tabulate format
+    including the header row using the pretty format
     """
     sheet_data = sheet.get_all_values()
     if input_color:
         print(input_color, end="")
     print(f"\n{sheet.title} Contacts:")
-    for row in sheet_data:
-        print(", ".join(row))
+    if sheet_data:
+        headers = sheet_data[0]
+        data = sheet_data[1:]
+        print(tabulate(data, headers=headers, tablefmt="pretty"))
+    else:
+        print("No contacts found in this category.")
+
 
 
 def select_section(input_color=None):
