@@ -54,7 +54,6 @@ SHEET = GSPREAD_CLIENT.open("contact_manager")
 
 
 # ANSI escape coloring codes
-
 COLORS = {
     'red': '\033[91m',
     'green': '\033[92m',
@@ -75,6 +74,10 @@ yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative",
              "okey", "alright", "ya", "ofc")
 no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
             "ne", "nop")
+invalid_phone_message = ("\nInvalid phone number format. Please enter "
+                         "a valid phone number. +1234567890,\n(123) "
+                         "456-7890, 123-456-7890, 123.456.7890, "
+                         "123/456.7890, 1234567890")
 failed_times = (
     "\nI can do this all day. You've failed to give a correct"
     " answer {} times.\n"
@@ -89,14 +92,30 @@ emergency_data = []
 favorites_data = []
 input_color = None
 
+# Tel phone regex accepts + - ( ) / . 0 to 9 empty_space and accepts a
+# range of 4 to 18 chars
 phone_pattern = r'^[\+\-\(\)\.\s/0-9]{4,18}$'
-email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+
+# Email regex accepts . _ % + - @ a to z no matter the lower/uppercase
+# before the '@' accepts any of the above
+# the TLD after the '.' accepts a to z lower or uppercase
+# the whole email address must be at least 2 chars long
+email_pattern = re.compile(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    re.IGNORECASE
+)
+
+# Birthday regex accepts dates in the mm dd format including
+# - / . _ and accepts only 2 digits for each
 birthday_pattern = r'^\d{2}[-/._]\d{2}$'
 
 
 def validate_contact_info(phone_number, email, birthday):
     """
-    Validates phone number, email address, and birthday format
+    Takes 3 parameters of phone_number - email - birthday and checks whether
+    they are in the correct format by using a regular expression and returns
+    a dictionary with valid or invalid info using 3 keys as for phone_valid -
+    email_valid - birthday_valid as boolean values if they are true or false
     """
 
     phone_valid = bool(re.match(phone_pattern, phone_number))
@@ -112,9 +131,11 @@ def validate_contact_info(phone_number, email, birthday):
 
 def use_program():
     """
-    The function to basically ask the user if he wants to
-    use the contact manager or not
-    and then proceed accordingly.
+    Prompts the user to use the program or not while looping until the user
+    provides a 'yes' - 'no' or 'esc' input. The 'yes' returns True and
+    goes forward with the program, the 'no' and 'esc' return False which
+    terminate the program and each time the user enters anything else than
+    the above, there is counter which iterates by 1 each time
     """
     global counter
     counter = 0
@@ -140,7 +161,11 @@ def use_program():
 # Basically a refactored choose_color function broken into 4 smaller ones
 def print_color_options(colors):
     """
-    Print color options along with reset option
+    Takes colors as argument which is the dictionary of COLORS from above
+    alongside with the names and the ANSI escape codes, then iterates over them
+    in the dictionary and prints the capitalized color name along with its
+    index starting from 1
+    then prints the 7th option which is 'Reset'
     """
     for index, (color_name, color_code) in enumerate(colors.items(), start=1):
         print(f"{index}. {color_name.capitalize()}")
@@ -149,7 +174,8 @@ def print_color_options(colors):
 
 def reset_color():
     """
-    Reset the input color to default
+    Makes sure the input color is the RESET ANSI escape code and
+    uses the global input_color variable and returns it as RESET
     """
     global input_color
     input_color = RESET
@@ -158,7 +184,13 @@ def reset_color():
 
 def select_color(choice):
     """
-    Select the input color based on the user's choice
+    Takes choice as the argument and the user's choice as input to select
+    a color for the text. If the user chooses '7', it resets it by calling the
+    reset_color function and returns it
+
+    If the choice is between 1 and the length of COLORS (6) then updates the
+    color based on the user's selection
+    If the input is invalid, then prompts a message to try again
     """
     global input_color
     if choice == 7:
@@ -174,7 +206,23 @@ def select_color(choice):
 
 def choose_color():
     """
-    Allow the user to change the input color
+    Allows the user to select a color for his text
+    includes the global input_color and starts with a while loop that
+    goes indefinitely until the user enters a 'yes' or 'no' word that count
+    as valid input or 'esc' to terminate the program
+
+    In the 'yes' situation, prompts the user to choose a color by asking
+    to enter '1 to 6' in the COLORS dictionary or '7' to reset it to default
+    Then prompts a 'Selected color:' with the color name and the text with the
+    changed color, the user is then asked with 'Are you sure?' to confirm his
+    choice, if he enters 'no' in this prompt, the '1 - 7' prompt will be
+    printed for him to choose over again
+
+    In the 'no' situation, the program will continue with the next function
+    and set the color to RESET
+
+    If the input is anything more than a 'yes' - 'no' - 'esc' a message will
+    prompt to enter valid input and will keep appearing until the user does so
     """
     global input_color
 
@@ -228,16 +276,18 @@ def choose_color():
 
 def add_data_with_name_column(sheet, data, input_color):
     """
-    Adds new data to the sheets with a predefined header
-    If the sheet is empty, it sets a header row with its columns on A1 and E1
-    as "Name","Telephone Number", "Email Address", "Birthday" and "Notes"
-
-    Then it appends the data provided by the user to the sheet
+    Takes 'sheet' - 'data' - 'input_color' as parameters
+    checks if there is existing data in the sheet, is there's not or the header
+    row is empty, then it sets the A1 to E1 rows as the header for 'Name' -
+    'Telephone Number' - 'Email address' - 'Birthday' - 'Notes'
+    
+    Shortens the 'Notes' field to 40 chars max if its length exceeds it
     """
-    existing_data = sheet.get_all_values()
-    if input_color:
-        print(input_color, end="")
-    print(f"\nExisting data in {sheet.title} sheet:", existing_data)
+    # test to see if read latency drops
+    # existing_data = sheet.get_all_values()
+    # if input_color:
+    #     print(input_color, end="")
+    # print(f"\nExisting data in {sheet.title} sheet:", existing_data)
 
     if not existing_data or not existing_data[0]:
         header_row = ["Name", "Telephone Number", "Email address",
@@ -246,14 +296,24 @@ def add_data_with_name_column(sheet, data, input_color):
         sheet.format("A1:E1", {"textFormat": {"bold": True}})
     else:
         for row in data:
-            if len(row[4]) > 60:
-                row[4] = row[4][:60]
+            if len(row[4]) > 40:
+                row[4] = row[4][:40]
             sheet.append_row(row)
 
 
 def protect_header(sheet):
     """
-    Protects the header row for the sheets
+    Takes 'sheet' as parameter, retrieves the ID of the sheet and then
+    specifies on which sheet needs protection
+    
+    Then sends a list of requests to google sheets API, each request is a
+    dictionary with a protected range for the sheet
+    
+    The range covers the whole header row as column 0 to 5 and row 0 to 1
+    with the warning only set to True, sets it to be just as a warning
+    rather as an obstacle preventing the changes
+    
+    At the end sends the list of requests to the API using the batch method
     """
     sheet_id = sheet.id
     requests = [{
@@ -436,10 +496,7 @@ def add_contacts(input_color):
                                    "digits)\n").strip()
                     if not validate_contact_info(number, "", "")[
                             "phone_valid"]:
-                        print("\nInvalid phone number format. Please enter "
-                              "a valid phone number. +1234567890,\n(123) "
-                              "456-7890, 123-456-7890, 123.456.7890, "
-                              "123/456.7890, 1234567890")
+                        print(invalid_phone_message)
                         continue
                     else:
                         break
@@ -498,9 +555,9 @@ def add_contacts(input_color):
                                          "\n").strip().lower()
                     if notes_prompt in yes_words:
                         notes = input("\nEnter notes for the contact\n")
-                        if len(notes) > 60:
-                            print("\nNotes exceed 60 characters.")
-                            notes = notes[:60]
+                        if len(notes) > 40:
+                            print("\nNotes exceed 40 characters.")
+                            notes = notes[:40]
                         else:
                             print("Notes added.")
                         break
@@ -633,7 +690,7 @@ def search_contacts(input_color):
             print(teasing_message)
 
 
-def edit_contact(input_color):
+def edit_contacts(input_color):
     """
     Allows the user to edit an existing contact
     """
@@ -834,7 +891,6 @@ def delete_contacts(input_color):
             print(invalid_input_yes_no)
 
 
-
 def print_sheet_data(sheet, input_color):
     """
     Prints the contact details in a tabulate format
@@ -852,7 +908,6 @@ def print_sheet_data(sheet, input_color):
         print("No contacts found in this category.")
 
 
-
 def select_section(input_color=None):
     while True:
         print("\nWhat would you like to do next?")
@@ -868,7 +923,7 @@ def select_section(input_color=None):
         elif choice == "2":
             add_contacts(input_color)
         elif choice == "3":
-            edit_contact(input_color)
+            edit_contacts(input_color)
         elif choice == "4":
             delete_contacts(input_color)
         elif choice == "5":
@@ -879,10 +934,8 @@ def select_section(input_color=None):
         else:
             print("Invalid choice. Please enter a number between 1 and 6.")
 
-# Basically the function to replace the "Exiting the program" into
-# something nice
 
-
+# Basically the function to replace the "Exiting the program"
 def exit_program_with_countdown(input_color=None):
     """
     Exits the program with a countdown before exiting.
@@ -902,9 +955,8 @@ def exit_program_with_countdown(input_color=None):
           "https://github.com/Dimitris112/Contact-Manager-pp3")
     sys.exit()
 
+
 # MARK: M A I N
-
-
 def main():
     if not use_program():
         print(exit_program_with_countdown())
@@ -917,15 +969,18 @@ def main():
         print("Using default color.")
     else:
         print(chosen_color)
+
     view_existing_contacts(chosen_color)
     add_contacts(chosen_color)
+
     # Protect header for all sheets
     protect_header(personal_sheet)
     protect_header(professional_sheet)
     protect_header(emergency_sheet)
     protect_header(favorites_sheet)
+
     search_contacts(chosen_color)
-    edit_contact(chosen_color)
+    edit_contacts(chosen_color)
     delete_contacts(chosen_color)
     select_section(chosen_color)
 
