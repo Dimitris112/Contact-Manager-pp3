@@ -112,10 +112,16 @@ birthday_pattern = r'^\d{2}[-/._]\d{2}$'
 
 def validate_contact_info(phone_number, email, birthday):
     """
-    Takes 3 parameters of phone_number - email - birthday and checks whether
-    they are in the correct format by using a regular expression and returns
-    a dictionary with valid or invalid info using 3 keys as for phone_valid -
-    email_valid - birthday_valid as boolean values if they are true or false
+    Validates phone number - email - birthday input using regular expression
+
+    Args:
+        phone_number (str): Contacts hone number
+        email (str): Contacts email address
+        birthday (str): Contacts birthday
+
+    Returns:
+        Dictionary: Whether each input is valid or not
+        Keys: phone_valid - email_valid - birthday_valid (all are boolean)
     """
 
     phone_valid = bool(re.match(phone_pattern, phone_number))
@@ -131,11 +137,11 @@ def validate_contact_info(phone_number, email, birthday):
 
 def use_program():
     """
-    Prompts the user to use the program or not while looping until the user
-    provides a 'yes' - 'no' or 'esc' input. The 'yes' returns True and
-    goes forward with the program, the 'no' and 'esc' return False which
-    terminate the program and each time the user enters anything else than
-    the above, there is counter which iterates by 1 each time
+    Prompts the user to use the program and and loops until the user provides a
+    'yes' - 'no' or 'esc' input
+
+    Returns:
+        bool: True for 'yes' else False
     """
     global counter
     counter = 0
@@ -161,11 +167,14 @@ def use_program():
 # Basically a refactored choose_color function broken into 4 smaller ones
 def print_color_options(colors):
     """
-    Takes colors as argument which is the dictionary of COLORS from above
-    alongside with the names and the ANSI escape codes, then iterates over them
-    in the dictionary and prints the capitalized color name along with its
-    index starting from 1
-    then prints the 7th option which is 'Reset'
+    Displays color options for the user to choose from, lists each color with a
+    number starting on and the last option is 'Reset'
+
+    Args:
+        colors (dict): Dictionary containing color names as keys and their
+        ANSI escape codes as values
+
+
     """
     for index, (color_name, color_code) in enumerate(colors.items(), start=1):
         print(f"{index}. {color_name.capitalize()}")
@@ -174,8 +183,10 @@ def print_color_options(colors):
 
 def reset_color():
     """
-    Makes sure the input color is the RESET ANSI escape code and
-    uses the global input_color variable and returns it as RESET
+    Resets the text color to default by using global input_color
+
+    Returns:
+        str: ANSI escape code to default - RESET
     """
     global input_color
     input_color = RESET
@@ -184,13 +195,14 @@ def reset_color():
 
 def select_color(choice):
     """
-    Takes choice as the argument and the user's choice as input to select
-    a color for the text. If the user chooses '7', it resets it by calling the
-    reset_color function and returns it
+    Prompts the user to select a color.
 
-    If the choice is between 1 and the length of COLORS (6) then updates the
-    color based on the user's selection
-    If the input is invalid, then prompts a message to try again
+    Args:
+        choice (int): User choice of color, reset color if choice is '7'
+
+    Returns:
+        (str) or None: Selected color as string, None if RESET, retry if
+        invalid input
     """
     global input_color
     if choice == 7:
@@ -206,23 +218,11 @@ def select_color(choice):
 
 def choose_color():
     """
-    Allows the user to select a color for his text
-    includes the global input_color and starts with a while loop that
-    goes indefinitely until the user enters a 'yes' or 'no' word that count
-    as valid input or 'esc' to terminate the program
+    Allows users to choose text color
 
-    In the 'yes' situation, prompts the user to choose a color by asking
-    to enter '1 to 6' in the COLORS dictionary or '7' to reset it to default
-    Then prompts a 'Selected color:' with the color name and the text with the
-    changed color, the user is then asked with 'Are you sure?' to confirm his
-    choice, if he enters 'no' in this prompt, the '1 - 7' prompt will be
-    printed for him to choose over again
-
-    In the 'no' situation, the program will continue with the next function
-    and set the color to RESET
-
-    If the input is anything more than a 'yes' - 'no' - 'esc' a message will
-    prompt to enter valid input and will keep appearing until the user does so
+    Returns:
+        (str): Selected color, RESET if not changed, exit the program
+        if input is 'esc'
     """
     global input_color
 
@@ -276,18 +276,17 @@ def choose_color():
 
 def add_data_with_name_column(sheet, data, input_color):
     """
-    Takes 'sheet' - 'data' - 'input_color' as parameters
-    checks if there is existing data in the sheet, is there's not or the header
-    row is empty, then it sets the A1 to E1 rows as the header for 'Name' -
-    'Telephone Number' - 'Email address' - 'Birthday' - 'Notes'
-    
-    Shortens the 'Notes' field to 40 chars max if its length exceeds it
+    Adds data to the Google sheet document
+
+    Args:
+        sheet (object): Google sheets where data will be added
+        data (list): Data to be added to the sheet
+        input_color (str): Selected color for text
     """
-    # test to see if read latency drops
-    # existing_data = sheet.get_all_values()
-    # if input_color:
-    #     print(input_color, end="")
-    # print(f"\nExisting data in {sheet.title} sheet:", existing_data)
+    existing_data = sheet.get_all_values()
+    if input_color:
+        print(input_color, end="")
+    print(f"\nExisting data in {sheet.title} sheet:", existing_data)
 
     if not existing_data or not existing_data[0]:
         header_row = ["Name", "Telephone Number", "Email address",
@@ -303,17 +302,10 @@ def add_data_with_name_column(sheet, data, input_color):
 
 def protect_header(sheet):
     """
-    Takes 'sheet' as parameter, retrieves the ID of the sheet and then
-    specifies on which sheet needs protection
-    
-    Then sends a list of requests to google sheets API, each request is a
-    dictionary with a protected range for the sheet
-    
-    The range covers the whole header row as column 0 to 5 and row 0 to 1
-    with the warning only set to True, sets it to be just as a warning
-    rather as an obstacle preventing the changes
-    
-    At the end sends the list of requests to the API using the batch method
+    Protects the header row of the Google sheet document
+
+    Args:
+        sheet (object): Header will be protected in Google sheet
     """
     sheet_id = sheet.id
     requests = [{
@@ -335,8 +327,16 @@ def protect_header(sheet):
 
 def check_duplicate_contact(name, number, email, birthday):
     """
-    Checks if a contact already exists (name / tel number / email or dob)
-    in any of the sheets
+    Checks for duplicate contacts
+
+    Args:
+        name (str): Contacts name
+        number (int): Contacts tel number
+        email (str): Contacts email address
+        birthday (date): Contacts birthday
+
+    Returns:
+        bool: True if contact exists else False
     """
     for sheet in [personal_sheet, professional_sheet,
                   emergency_sheet, favorites_sheet]:
@@ -350,7 +350,15 @@ def check_duplicate_contact(name, number, email, birthday):
 
 def view_existing_contacts(input_color=None):
     """
-    Prompts the user if he wants to view existing contacts
+    Prompts the user to view existing contacts
+
+    Args:
+        input_color (str, optional): Selected color default to None
+
+    Returns:
+        None: Function exits after displaying or skipping contacts, if input is
+        'esc' or invalid input up to 3 times, triggers exit function and
+        terminate the program
     """
     counter = 0
     while True:
@@ -412,6 +420,7 @@ def view_existing_contacts(input_color=None):
             print(exit_program_with_countdown(input_color))
             return ""
         else:
+            # Exit on 3rd wrong input
             counter += 1
             if counter >= 3:
                 print("\nToo many incorrect attempts. See ya")
@@ -422,9 +431,13 @@ def view_existing_contacts(input_color=None):
 
 def add_contacts(input_color):
     """
-    Prompts the user if he wants to add new contacts
-    and adds them to the selected category
+    Prompts the user to add contacts and adds them to the selected
+    category
+
+    Args:
+        input_color (str): Color for input prompts
     """
+    # Dictionary to store the added contacts
     added_contact_info = {}
 
     while True:
@@ -441,7 +454,7 @@ def add_contacts(input_color):
             print("4. Favorites")
             print("5. Skip")
             print("6. Return to the main menu")
-
+            # Loop until valid input or choose to return
             while True:
                 category_choice = input("\nEnter the number of the category "
                                         "you want to add contacts to\n")
@@ -478,7 +491,7 @@ def add_contacts(input_color):
                 except ValueError:
                     print("Invalid input. Please enter a number between "
                           "1 and 3.")
-
+            # Loop for adding multiple contacts
             for _ in range(num_contacts):
                 contact_info = {}
                 while True:
@@ -572,7 +585,7 @@ def add_contacts(input_color):
                 sheet.append_row([name, number, email, birthday, notes])
                 print("\nContact added successfully.")
                 print(tabulate([contact], headers=headers, tablefmt="pretty"))
-
+                # Store added contact info in this dict
                 added_contact_info[name] = {
                     "Name": name,
                     "Phone Number": number,
@@ -601,6 +614,12 @@ def add_contacts(input_color):
 def search_contacts(input_color):
     """
     Searches for a contact by name, telephone number, email, or birthday
+
+    Args:
+        input_color (str): Color for input prompt
+
+    Returns:
+        (str): Empty string, contact details or exit function if input is 'esc'
     """
     counter = 0
     while True:
@@ -608,6 +627,7 @@ def search_contacts(input_color):
         search_choice = input().strip().lower()
 
         if search_choice in yes_words:
+            # Mapping search options to numbers / search terms
             search_query_map = {
                 '1': 'name',
                 '2': 'telephone number',
@@ -643,16 +663,20 @@ def search_contacts(input_color):
             elif search_term == 'birthday':
                 search_value = input("\nEnter the birthday of the contact you "
                                      "want to search for\n").strip().lower()
+            # Store search results
             search_results = []
+            # Iterate through each sheet and its contacts
             for sheet in [personal_sheet, professional_sheet, emergency_sheet,
                           favorites_sheet]:
                 contacts = sheet.get_all_records()
+                # Iterate through each contact in the sheet
                 for contact in contacts:
                     contact_name = str(contact["Name"]).lower()
                     contact_email = str(contact["Email address"]).lower()
                     contact_birthday = str(contact["Birthday"]).lower()
                     contact_phone = str(contact["Telephone Number"]).lower()
 
+                    # Check if search term matches any contact info
                     if search_term == 'name' and search_value in contact_name:
                         search_results.append((sheet.title, contact))
                     elif search_term == 'telephone number' and search_value \
@@ -682,6 +706,7 @@ def search_contacts(input_color):
             print(exit_program_with_countdown(input_color))
             return ""
         else:
+            # Provide feedback for invalid input up to 4 times
             counter += 1
             if counter >= 4:
                 print("\nToo many incorrect attempts. See ya")
@@ -693,6 +718,12 @@ def search_contacts(input_color):
 def edit_contacts(input_color):
     """
     Allows the user to edit an existing contact
+
+    Args:
+        input_color (str): Selected color input
+
+    Returns:
+        (str): Message showing each action
     """
     while True:
         edit_choice = input("\nDo you want to edit any of your contacts? "
@@ -703,6 +734,7 @@ def edit_contacts(input_color):
             all_categories = [personal_sheet, professional_sheet,
                               emergency_sheet, favorites_sheet]
             while True:
+                # Prompts the user to select a category to edit contacts from
                 print("\nSelect a category to edit contacts from")
                 for i, category in enumerate(["Personal", "Professional",
                                               "Emergency",
@@ -766,9 +798,11 @@ def edit_contacts(input_color):
                                 new_value = input(f"\nEnter the new value "
                                                   f"for the {category}\n"
                                                   ).strip()
+                                # Updates contact with the new value
                                 contact += [''] * (field_index - len(contact) +
                                                    1)
                                 contact[field_index] = new_value
+                                # Updates sheet with the updated contact
                                 sheet.update_row(contact_index, contact)
                                 print("Contact updated successfully.")
                                 print(tabulate([contact], headers=headers,
@@ -796,10 +830,12 @@ def edit_contacts(input_color):
 
 def delete_contacts(input_color):
     """
-    Allows the user to delete contacts from the specified category or from all
-    categories
-    If the user selects '5. All categories', a confirmation prompt is displayed
-    before deleting all contacts
+    Allows the user to delete contacts from the category chosen or from all of
+    them, if the user chooses '5' a confirmation prompt is displayed before
+    deleting all contacts
+
+    Args:
+        input_color (str): Selected input color
     """
     while True:
         delete_choice = input("\nDo you want to delete any of your contacts? "
@@ -833,9 +869,11 @@ def delete_contacts(input_color):
                     continue
                 sheet = all_categories[category_index]
                 sheet_data = sheet.get_all_values()
+                # Checks if there are any contacts in the category
                 if not sheet_data or len(sheet_data) <= 1:
                     print("No contacts found in this category.")
                     break
+                # Displays contacts in the selected category
                 print("Contacts in this category:")
                 headers = ["ID", "Name", "Telephone Number", "Email",
                            "Birthday"]
@@ -844,11 +882,13 @@ def delete_contacts(input_color):
                     contacts_table.append([index] + row)
                 print(tabulate(contacts_table, headers=headers,
                                tablefmt="pretty"))
+                # Prompts for confirmation before deletion
                 if category_choice == '5':
                     confirm_choice = input("\nAre you sure you want to delete "
                                            "all contacts in all categories? "
                                            "(yes/no)\n").strip().lower()
                     if confirm_choice in yes_words:
+                        # Clears all contacts in all categories
                         for sheet in all_categories:
                             sheet.clear()
                         print("All contacts in all categories deleted "
@@ -864,6 +904,7 @@ def delete_contacts(input_color):
                         print("All contacts in this category deleted "
                               "successfully.")
                     elif action_choice in no_words:
+                        # Prompts for individual contact deletion
                         name_choice = input("Enter the number of the contact "
                                             "you want to delete or 'cancel' "
                                             "to go back\n").strip().lower()
@@ -893,13 +934,19 @@ def delete_contacts(input_color):
 
 def print_sheet_data(sheet, input_color):
     """
-    Prints the contact details in a tabulate format
-    including the header row using the pretty format
+    Prints the contact details in a tabulate format including the header using
+    pretty formatter
+
+    Args:
+        sheet (Sheet): Google sheets object
+        input_color (str): Selected input color
     """
+    # Retrieves all data from the sheet
     sheet_data = sheet.get_all_values()
     if input_color:
         print(input_color, end="")
     print(f"\n{sheet.title} Contacts:")
+    # Checks if there is any data in the sheet / header row - sub rows
     if sheet_data:
         headers = sheet_data[0]
         data = sheet_data[1:]
@@ -909,6 +956,12 @@ def print_sheet_data(sheet, input_color):
 
 
 def select_section(input_color=None):
+    """
+    Selects the next action of the user from 1 to 6
+
+    Args:
+        input_color (str, optional): Current color / default
+    """
     while True:
         print("\nWhat would you like to do next?")
         print("1. View contacts")
@@ -938,7 +991,10 @@ def select_section(input_color=None):
 # Basically the function to replace the "Exiting the program"
 def exit_program_with_countdown(input_color=None):
     """
-    Exits the program with a countdown before exiting.
+    Exits the program with a countdown before exiting
+
+    Args:
+        input_color (str, optional): Current color / default
     """
     print(f"\nExiting the program in ...")
     countdown = 3
@@ -958,6 +1014,9 @@ def exit_program_with_countdown(input_color=None):
 
 # MARK: M A I N
 def main():
+    """
+    Main function to execute the program
+    """
     if not use_program():
         print(exit_program_with_countdown())
         return
@@ -983,6 +1042,8 @@ def main():
     edit_contacts(chosen_color)
     delete_contacts(chosen_color)
     select_section(chosen_color)
+
+# Makes sure the main function is called
 
 
 if __name__ == "__main__":
