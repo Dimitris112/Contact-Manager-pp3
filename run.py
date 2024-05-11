@@ -91,6 +91,9 @@ professional_data = []
 emergency_data = []
 favorites_data = []
 input_color = None
+headers = {0: "Name", 1: "Telephone Number", 2: "Email", 3: "Birthday",
+           4: "Notes"}
+
 
 # Tel phone regex accepts + - ( ) / . 0 to 9 empty_space and accepts a
 # range of 4 to 18 chars
@@ -582,9 +585,9 @@ def add_contacts(input_color):
                     else:
                         print(invalid_input_yes_no)
 
+                # Add the contact to the selected sheet
                 sheet.append_row([name, number, email, birthday, notes])
                 print("\nContact added successfully.")
-                print(tabulate([contact], headers=headers, tablefmt="pretty"))
                 # Store added contact info in this dict
                 added_contact_info[name] = {
                     "Name": name,
@@ -595,10 +598,11 @@ def add_contacts(input_color):
                 }
 
             print("\nAdded Contact Information:")
-            for name, contact_info in added_contact_info.items():
-                print(f"Name: {name}")
-                for key, value in contact_info.items():
-                    print(f"{key}: {value}")
+            headers = ["Name", "Phone Number", "Email", "Birthday", "Notes"]
+            contact_table = [info.values() for info in
+                             added_contact_info.values()]
+            print(tabulate(contact_table, headers=headers,
+                           tablefmt="pretty"))
             break
 
         elif add_contacts_input in no_words:
@@ -692,10 +696,14 @@ def search_contacts(input_color):
                 print("\nSearch Results:\n")
                 for category, contact in search_results:
                     print(f"Category: {category}")
-                    print("1. Name:", contact["Name"])
-                    print("2. Telephone Number:", contact["Telephone Number"])
-                    print("3. Email:", contact["Email address"])
-                    print("4. Birthday:", contact["Birthday"])
+                    headers = ["Field", "Value"]
+                    data = [
+                        ["Name", contact["Name"]],
+                        ["Telephone Number", contact["Telephone Number"]],
+                        ["Email", contact["Email address"]],
+                        ["Birthday", contact["Birthday"]]
+                    ]
+                    print(tabulate(data, headers=headers, tablefmt="pretty"))
             else:
                 print("\nNo matching contacts found.")
             break
@@ -761,8 +769,13 @@ def edit_contacts(input_color):
                     print("No contacts found in this category.")
                     break
                 print("Contacts in this category:")
+                headers = ["ID", "Name", "Telephone Number", "Email",
+                           "Birthday", "Notes"]
+                contacts_table = []
                 for index, row in enumerate(sheet_data[1:], start=1):
-                    print(f"{index}. {row[0]}")
+                    contacts_table.append([index] + row)
+                print(tabulate(contacts_table, headers=headers,
+                               tablefmt="pretty"))
                 action_choice = input("\nDo you want to edit a contact in "
                                       "this category? (yes/no)\n"
                                       ).strip().lower()
@@ -777,13 +790,8 @@ def edit_contacts(input_color):
                         contact_index = int(name_choice) + 1
                         contact = sheet.row_values(contact_index)
                         print("\nEditing contact:")
-                        print(f"1. Name: {contact[0]}")
-                        print(f"2. Telephone Number: {contact[1]}")
-                        print(f"3. Email: {contact[2]}")
-                        print(f"4. Birthday: {contact[3]}")
-                        print(f"5. Notes: {contact[4]}" if len(contact) >= 5
-                              else
-                              "No notes for this contact.")
+                        print(tabulate([contact], headers=headers,
+                                       tablefmt="pretty"))
                         while True:
                             field_choice = input("\nEnter the number of "
                                                  "the field you want to edit "
@@ -874,7 +882,6 @@ def delete_contacts(input_color):
                     print("No contacts found in this category.")
                     break
                 # Displays contacts in the selected category
-                print("Contacts in this category:")
                 headers = ["ID", "Name", "Telephone Number", "Email",
                            "Birthday"]
                 contacts_table = []
