@@ -876,65 +876,78 @@ def delete_contacts(input_color):
                     return
                 try:
                     category_index = int(category_choice) - 1
-                    if category_index not in range(len(all_categories)):
+                    if category_index not in range(len(all_categories)) and \
+                            category_choice != '5':
                         raise ValueError
                 except ValueError:
                     print("Hmm, trying to be tricky, are we? Enter a number "
                           "between 1 and 6.")
                     continue
-                sheet = all_categories[category_index]
-                sheet_data = sheet.get_all_values()
-                # Checks if there are any contacts in the category
-                if not sheet_data or len(sheet_data) <= 1:
-                    print("No contacts found in this category.")
-                    break
-                # Displays contacts in the selected category
-                headers = ["ID", "Name", "Telephone Number", "Email",
-                           "Birthday"]
-                contacts_table = []
-                for index, row in enumerate(sheet_data[1:], start=1):
-                    contacts_table.append([index] + row)
-                print(tabulate(contacts_table, headers=headers,
-                               tablefmt="pretty"))
-                # Prompts for confirmation before deletion
+
                 if category_choice == '5':
                     confirm_choice = input("\nAre you sure you want to delete "
                                            "all contacts in all categories? "
                                            "(yes/no)\n").strip().lower()
                     if confirm_choice in yes_words:
-                        # Clears all contacts in all categories
+                        # Clear all contacts in all categories
                         for sheet in all_categories:
                             sheet.clear()
                         print("All contacts in all categories deleted "
                               "successfully.")
                     else:
                         print("Deletion canceled.")
-                else:
-                    action_choice = input("\nDo you want to delete all "
-                                          "contacts in this category? "
-                                          "(yes/no)\n").strip().lower()
-                    if action_choice in yes_words:
-                        sheet.clear()
-                        print("All contacts in this category deleted "
-                              "successfully.")
-                    elif action_choice in no_words:
-                        # Prompts for individual contact deletion
-                        name_choice = input("Enter the number of the contact "
-                                            "you want to delete or 'cancel' "
-                                            "to go back\n").strip().lower()
+                    break  # Exit the inner loop after handling option 5
+
+                # If the user selects a specific category
+                sheet = all_categories[category_index]
+                sheet_data = sheet.get_all_values()
+                # Checks if there are any contacts in the category
+                if not sheet_data or len(sheet_data) <= 1:
+                    print("No contacts found in this category.")
+                    break
+
+                # Displays contacts in the selected category
+                print(f"\nContacts in {sheet.title} category:")
+                for index, row in enumerate(sheet_data[1:], start=1):
+                    print(f"{index}. Name: {row[0]}")
+                    print(f"   Telephone Number: {row[1]}")
+                    print(f"   Email: {row[2]}")
+                    print(f"   Birthday: {row[3]}" if len(row) >= 4
+                          else "   Birthday:")
+                    print(f"   Notes: {row[4]}" if len(row) >= 5
+                          else "   Notes:")
+                    # Empty line between contacts
+                    print()
+
+                # Prompts for confirmation before deletion
+                action_choice = input("\nDo you want to delete all "
+                                      "contacts in this category? "
+                                      "(yes/no)\n").strip().lower()
+                if action_choice in yes_words:
+                    sheet.clear()
+                    print(f"All contacts in {sheet.title} category "
+                          "deleted successfully.")
+                elif action_choice in no_words:
+                    # Prompts for individual contact deletion
+                    while True:
+                        name_choice = input("Enter the number of the "
+                                            "contact you want to delete "
+                                            "or 'cancel'to go back\n"
+                                            ).strip().lower()
                         if name_choice == 'cancel':
                             break
                         elif name_choice.isdigit() and \
-                                1 <= int(name_choice) <= len(sheet_data) - 1:
+                                1 <= int(name_choice) <= len(sheet_data) \
+                                - 1:
                             contact_index = int(name_choice) + 1
                             sheet.delete_rows(contact_index)
                             print("Contact removed successfully.")
+                            break
                         else:
                             print("Invalid input. Please enter the number "
-                                  "corresponding to the contact you want "
-                                  "to delete.")
-                    else:
-                        print(invalid_input_yes_no)
+                                  "to the contact you want to delete.")
+                else:
+                    print(invalid_input_yes_no)
                 break
         elif delete_choice in no_words:
             print("\nPlaying it safe, eh? No contacts deleted.")
