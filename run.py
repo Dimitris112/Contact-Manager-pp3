@@ -555,7 +555,7 @@ def add_contacts(input_color):
                                          "\n").strip()
                         if not re.match(birthday_pattern, birthday):
                             print("\nInvalid birthday format. Please enter "
-                                  "birthday in dd/mm format.")
+                                  "a valid birthday. dd/mm dd-mm\ndd_mm dd.mm")
                             continue
                         else:
                             print("Birthday added.")
