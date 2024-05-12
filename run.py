@@ -891,12 +891,15 @@ def delete_contacts(input_color):
                     if confirm_choice in yes_words:
                         # Clear all contacts in all categories
                         for sheet in all_categories:
-                            sheet.clear()
+                            sheet_data = sheet.get_all_values()
+                            # Deletes from 2nd row onwards
+                            if len(sheet_data) > 1:
+                                sheet.delete_rows(2, len(sheet_data))
                         print("All contacts in all categories deleted "
                               "successfully.")
                     else:
                         print("Deletion canceled.")
-                    break  # Exit the inner loop after handling option 5
+                    break
 
                 # If the user selects a specific category
                 sheet = all_categories[category_index]
@@ -924,7 +927,9 @@ def delete_contacts(input_color):
                                       "contacts in this category? "
                                       "(yes/no)\n").strip().lower()
                 if action_choice in yes_words:
-                    sheet.clear()
+                    sheet_data = sheet.get_all_values()
+                    if len(sheet_data) > 1:
+                        sheet.delete_rows(2, len(sheet_data))
                     print(f"All contacts in {sheet.title} category "
                           "deleted successfully.")
                 elif action_choice in no_words:
