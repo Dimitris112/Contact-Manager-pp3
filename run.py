@@ -434,8 +434,7 @@ def view_existing_contacts(input_color=None):
 
 def add_contacts(input_color):
     """
-    Prompts the user to add contacts and adds them to the selected
-    category
+    Prompts the user to add contacts and adds them to the selected category
 
     Args:
         input_color (str): Color for input prompts
@@ -524,11 +523,16 @@ def add_contacts(input_color):
                                          "(yes/no)\n").strip().lower()
                     if email_prompt in yes_words:
                         email = input("\nEnter the contact's email "
-                                      "address\n").strip()
-                        if '@' not in email or '.' not in email or \
-                           email.count('@') != 1:
+                                      "address (30 chars max)\n").strip()
+                        if len(email) > 30:
+                            print("\nEmail address exceeds 30 characters. "
+                                  "Please enter a valid email address with\n"
+                                  "30 characters or less.")
+                            continue
+                        elif '@' not in email or '.' not in email or \
+                                email.count('@') != 1:
                             print("\nInvalid email address. Please enter a "
-                                  "valid email address containing one '@' "
+                                  "valid email address containing one\n'@' "
                                   "and at least one '.'")
                             continue
                         else:
@@ -769,13 +773,8 @@ def edit_contacts(input_color):
                     print("No contacts found in this category.")
                     break
                 print("Contacts in this category:")
-                headers = ["ID", "Name", "Telephone Number", "Email",
-                           "Birthday", "Notes"]
-                contacts_table = []
                 for index, row in enumerate(sheet_data[1:], start=1):
-                    contacts_table.append([index] + row)
-                print(tabulate(contacts_table, headers=headers,
-                               tablefmt="pretty"))
+                    print(f"{index}. {row[0]}")
                 action_choice = input("\nDo you want to edit a contact in "
                                       "this category? (yes/no)\n"
                                       ).strip().lower()
@@ -790,8 +789,15 @@ def edit_contacts(input_color):
                         contact_index = int(name_choice) + 1
                         contact = sheet.row_values(contact_index)
                         print("\nEditing contact:")
-                        print(tabulate([contact], headers=headers,
-                                       tablefmt="pretty"))
+                        print(f"1. Name: {contact[0]}")
+                        print(f"2. Telephone Number: {contact[1]}")
+                        print(f"3. Email: {contact[2]}" if len(contact) >= 3
+                              else "3. Email:")
+                        print(f"4. Birthday: {contact[3]}" if len(contact) >= 4
+                              else "4. Birthday:")
+                        print(f"5. Notes: {contact[4]}" if len(contact) >= 5
+                              and contact[4] else "5. Notes:")
+
                         while True:
                             field_choice = input("\nEnter the number of "
                                                  "the field you want to edit "
@@ -806,14 +812,15 @@ def edit_contacts(input_color):
                                 new_value = input(f"\nEnter the new value "
                                                   f"for the {category}\n"
                                                   ).strip()
-                                # Updates contact with the new value
-                                contact += [''] * (field_index - len(contact) +
-                                                   1)
-                                contact[field_index] = new_value
-                                # Updates sheet with the updated contact
-                                sheet.update_row(contact_index, contact)
+                                # Update the value in the corresponding cell
+                                sheet.update_cell(contact_index, field_index +
+                                                  1, new_value)
                                 print("Contact updated successfully.")
-                                print(tabulate([contact], headers=headers,
+                                # Retrieve and display updated contact
+                                updated_contact = sheet.row_values(
+                                                                 contact_index)
+                                print(tabulate([updated_contact],
+                                               headers=headers,
                                                tablefmt="pretty"))
                                 break
                             else:
