@@ -200,6 +200,7 @@ ascii_art = r'''
 
 
 ## Testing
+
   ### Through **[PEP8](https://pep8ci.herokuapp.com/)**
 
 <details>
@@ -211,25 +212,52 @@ ascii_art = r'''
 </details>
 
 
-### Test cases
+## Test cases
 
-#### Start
+### Start
 - The **first thing** the users come to see when the land on the program, deciding whether to use the program or not with different outcomes.
 
    <details>
 
   <summary>Click to view the main shot and the yes or no outputs</summary>
-    image main show screenshot here
+
+  ## Main
+
+  ![Main shot of the program showing the ASCII Art](images/main_shot.png)
+    ### Upon launching the program, users are greeted with an eye-catching ASCII art, setting the tone for their interaction with the application.
+
+  ## Start Confirmation - 'Yes'
+
+  ![Enter 'yes' to start the program](images/validation/test_cases/start/start_yes.png)
+    ### Users can initiate the program by entering 'yes', signaling their intent to proceed with the contact management functionality.
+
+  ## Start Confirmation - 'No'
+
+  ![Enter 'no' to terminate the program](images/validation/test_cases/start/start_no.png)
+    ### If users decide not to proceed, they can enter 'no' to terminate the program.
+
+  ## Termination - 'Esc'
+  ![Enter 'esc' to terminate the program](images/validation/test_cases/start/start_esc.png)
+    ### Alternatively, users can terminate the program at any time by entering 'esc', providing a quick exit option.
 
    </details>
 
-#### color choose
-- After the user chooses to `use` essentially the program, they come across to the `choose color` functionality.
+#### Choose color prompt
+- After the user chooses to `use` essentially the program, they come across to the `choose color` functionality. Users can choose up to 6 colors which are *Red - Green - Yellow - Blue - Magenta - Cyan* as their input color, upon selecting one (1 - 6), then a `confirmation prompt` will appear to the users to hit `yes or no`, if the input is `yes` then the program continues with the selected color, else it loops back. The users can also turn the color back to default by entering `7`.
 
     <details>
 
     <summary>Click to view the choose color functionality options</summary>
-    images choose color screenshots
+
+    ![Prompt to choose yes / no and 1 - 7 for color choice](images/validation/test_cases/colors/choose_color_yes.png)
+    ![Input as 'no' in color choice](images/validation/test_cases/colors/choose_color_no.png)
+    ![Text color is red](images/validation/test_cases/colors/color_red.png)
+    ![Text color is green ](images/validation/test_cases/colors/color_green.png)
+    ![Text color is yellow](images/validation/test_cases/colors/color_yellow.png)
+    ![Text color is blue](images/validation/test_cases/colors/color_blue.png)
+    ![Text color is magenta](images/validation/test_cases/colors/color_magenta.png)
+    ![Text color is cyan](images/validation/test_cases/colors/color_cyan.png)
+    ![Text color is default](images/validation/test_cases/colors/color_default.png)
 
     </details>
 
@@ -239,7 +267,15 @@ ascii_art = r'''
     <details>
 
     <summary>Click to view </summary>
-    view existing contacts screenshots here
+
+    ![yes](images/validation/test_cases/view_contacts/view_contacts_yes.png)
+    ![personal](images/validation/test_cases/view_contacts/view_personal.gif)
+    ![prof](images/validation/test_cases/view_contacts/view_professional.png)
+    ![eme](images/validation/test_cases/view_contacts/view_emergency.png)
+    ![fav](images/validation/test_cases/view_contacts/view_favorites.gif)
+    ![all](images/validation/test_cases/view_contacts/view_all.gif)
+    ![dont](images/validation/test_cases/view_contacts/view_dont_want.png)
+    
     </details>
 
 #### Add contacts
@@ -253,7 +289,7 @@ ascii_art = r'''
   </details>
 
 #### Search contacts
-- The users can search for contacts by *Name - Telephone number - Email address - Birthday* having it non case sensitive to be able to access them with no obstacles. Or they can just skip this by entering `no` or if they wish to terminate the program, hit `esc` and terminate the program.
+- The users can search for contacts by *Name - Telephone number - Email address - Birthday* having it non case sensitive to be able to access them with no obstacles. Or they can just skip this by entering `no` or if they wish to terminate the program, hit `esc`.
 
   <details>
 
@@ -262,7 +298,7 @@ ascii_art = r'''
   </details>
 
 #### Edit contacts
-- asdasd
+- Users can edit existing contacts by modifying various field *Name - Telephone number - Email address - Birthday - Notes*. This provides flexibility in updating contact information across different categories. Users have the freedom to edit contacts as per their preferences and requirements.
 
   <details>
 
@@ -273,7 +309,7 @@ ascii_art = r'''
 
 
 #### Delete contacts
-- asd
+- 
 
     <details>
 
@@ -307,7 +343,7 @@ ascii_art = r'''
 
 
 ## credits
-- Used **[rxaviers](https://gist.github.com/rxaviers/7360908)** Complete list of github markdown emoji markup
+- Used ***[rxaviers](https://gist.github.com/rxaviers/7360908)*** Complete list of github markdown emoji markup
 
 -  **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼 𝓽𝓸 𝓼𝓸𝓶𝓮 𝓯𝓪𝓫𝓾𝓵𝓸𝓾𝓼 𝓹𝓮𝓸𝓹𝓵𝓮**
     - 🎓 **𝕽𝖔𝖍𝖎𝖙** - **Code Institute Mentor** [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/rohit0286)
