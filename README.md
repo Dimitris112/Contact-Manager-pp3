@@ -10,7 +10,7 @@
 The program may take longer to load due to poor read latency on the *Google Sheets API (GetSpreadsheet)*.
 
 <details>
-  <summary>Click here to view the graphs</summary>
+  <summary><strong>Click here to view the graphs</strong></summary>
   
   ![API & Services google sheets & google drive API graphs](images/validation/warning/warning_1.png)
   
@@ -21,27 +21,27 @@ The program may take longer to load due to poor read latency on the *Google Shee
 
 ## Navigate to the README Sections
 
-1. [User Stories](#user-stories)
-    - [First Timer](#first-timer)
-    - [Frequent User](#frequent-user)
-2. [Features](#features)
-    - [Select Different Input Colors](#select-different-input-colors)
-    - [View Contacts](#view-contacts)
-    - [Add Contacts](#add-contacts)
-    - [Search Contacts](#search-contacts)
-    - [Edit Contacts](#edit-contacts)
-    - [Delete Contacts](#delete-contacts)
-    - [Main Menu](#main-menu)
-3. [Flowchart](#flowchart)
-4. [Technology Stack](#technology-stack)
-5. [Testing](#testing)
+1. [User Stories](#user-stories-)
+    - [First Timer](#first-timer-)
+    - [Frequent User](#frequent-user-)
+2. [Features](#features-)
+    - [Select Different Input Colors](#select-different-input-colors-)
+    - [View Contacts](#view-contacts-)
+    - [Add Contacts](#add-contacts-)
+    - [Search Contacts](#search-contacts-)
+    - [Edit Contacts](#edit-contacts-)
+    - [Delete Contacts](#delete-contacts-)
+    - [Main Menu](#main-menu-)
+3. [Technology Stack](#technology-stack-)
+    - [Overview](#overview)
+    - [Libraries and Packages Used](#libraries-and-packages-used)
+    - [Flowchart](#flowchart-)
+4. [Testing](#testing)
     - [Python Validation](#python-validation)
     - [Test Cases](#test-cases)
     - [Fixed Bugs](#fixed-bugs)
-6. [Deployment](#deployment)
-7. [Credits](#credits)
-
-
+5. [Deployment](#deployment)
+6. [Credits](#credits)
 
 
 ##  User Stories 🌟
@@ -99,11 +99,11 @@ The program may take longer to load due to poor read latency on the *Google Shee
 
 ##  **Technology Stack** ⚙️ 
 
-#### **Overview**
+### **Overview**
 
 The project structure is built upon the [Code Institute P3 template](https://github.com/Code-Institute-Org/p3-template), including custom Python code, along with the integration of ANSI escape codes and ASCII art for visual appeal and user interface enhancement.
 
-#### Libraries and Packages Used
+### Libraries and Packages Used
 
 ```python
 import gspread
@@ -169,7 +169,7 @@ ascii_art = r'''
 
 
 <details>
-  <summary>Click to view libraries and packages details</summary>
+  <summary><strong>Click to view libraries and packages details</strong></summary>
 
 - **cachetools**: Provides caching utilities.
 - **google-auth**: Handles authentication for Google APIs.
@@ -192,62 +192,63 @@ ascii_art = r'''
 
 <details>
 
-  <summary>Click to view the flowchart</summary>
+<summary><strong>Click to view the flowchart</strong></summary>
 
-  ![Flowchart from Start to End of the program](images/validation/flowchart/flowchart.png)
+![Flowchart from Start to End of the program](images/validation/flowchart/flowchart.png)
 
 </details>
 
 
-## Testing
+## Testing 📝
 
-  ### Through **[PEP8](https://pep8ci.herokuapp.com/)**
+### Through **[PEP8](https://pep8ci.herokuapp.com/)**
 
 <details>
 
-  <summary>Click to view the python validation</summary>
+  <summary><strong>Click to view the python validation</strong></summary>
 
   ![PEP8 python validation gif](images/validation/pep8/pep8_valid.gif)
 
 </details>
 
 
-## Test cases
+### Test cases
 
-### Start
+#### Start
+
 - The **first thing** the users come to see when the land on the program, deciding whether to use the program or not with different outcomes.
 
-   <details>
+  <details>
 
-  <summary>Click to view the main shot and the yes or no outputs</summary>
+  <summary><strong>Click to view the main shot and the yes or no outputs</strong></summary>
 
-  ## Main
+  ### Main
 
   ![Main shot of the program showing the ASCII Art](images/main_shot.png)
     ### Upon launching the program, users are greeted with an eye-catching ASCII art, setting the tone for their interaction with the application.
 
-  ## Start Confirmation - 'Yes'
+  ### Start Confirmation - 'Yes'
 
   ![Enter 'yes' to start the program](images/validation/test_cases/start/start_yes.png)
     ### Users can initiate the program by entering 'yes', signaling their intent to proceed with the contact management functionality.
 
-  ## Start Confirmation - 'No'
+  ### Start Confirmation - 'No'
 
   ![Enter 'no' to terminate the program](images/validation/test_cases/start/start_no.png)
     ### If users decide not to proceed, they can enter 'no' to terminate the program.
 
-  ## Termination - 'Esc'
+  ### Termination - 'Esc'
   ![Enter 'esc' to terminate the program](images/validation/test_cases/start/start_esc.png)
     ### Alternatively, users can terminate the program at any time by entering 'esc', providing a quick exit option.
 
-   </details>
+  </details>
 
 #### Choose color prompt
 - After the user chooses to `use` essentially the program, they come across to the `choose color` functionality. Users can choose up to 6 colors which are *Red - Green - Yellow - Blue - Magenta - Cyan* as their input color, upon selecting one (1 - 6), then a `confirmation prompt` will appear to the users to hit `yes or no`, if the input is `yes` then the program continues with the selected color, else it loops back. The users can also turn the color back to default by entering `7`.
 
     <details>
 
-    <summary>Click to view the choose color functionality options</summary>
+    <summary><strong>Click to view the choose color functionality options</strong></summary>
 
     ![Prompt to choose yes / no and 1 - 7 for color choice](images/validation/test_cases/colors/choose_color_yes.png)
     ![Input as 'no' in color choice](images/validation/test_cases/colors/choose_color_no.png)
@@ -261,39 +262,62 @@ ascii_art = r'''
 
     </details>
 
- #### View existing contact
+#### View existing contact
 - Once the user chooses to change the input color (or not), the next thing they'll come to face are the prompt to `View existing contacts` on the program.
-
-    <details>
-
-    <summary>Click to view </summary>
-
-    ![yes](images/validation/test_cases/view_contacts/view_contacts_yes.png)
-    ![personal](images/validation/test_cases/view_contacts/view_personal.gif)
-    ![prof](images/validation/test_cases/view_contacts/view_professional.png)
-    ![eme](images/validation/test_cases/view_contacts/view_emergency.png)
-    ![fav](images/validation/test_cases/view_contacts/view_favorites.gif)
-    ![all](images/validation/test_cases/view_contacts/view_all.gif)
-    ![dont](images/validation/test_cases/view_contacts/view_dont_want.png)
-    
-    </details>
-
-#### Add contacts
-- When the users are done with `viewing existing contacts`, then they can **add new contacts** in any of the categories they wish to *Personal - Professional - Emergency - Favorites* and have different fields for each of them as *Name - Telephone number - Email address - Birthday - Notes* (name and telephone number are <ins>**mandatory**</ins>). Or they can just skip this action and move forward, or hit `esc` and terminate the program.
 
   <details>
 
-  <summary>Click to view add contacts</summary>
-  screenshots for add contacts
+  <summary><strong>Click to view the view contacts functionality</strong></summary>
+
+  ### Enter 'yes' to choose a category
+  ![Enter 'yes' to choose a category](images/validation/test_cases/view_contacts/view_contacts_yes.png)
+  ### Confirm your choice by entering 'yes' to view contacts
+
+  ### Show existing contacts in Personal
+  ![Show existing contacts in Personal](images/validation/test_cases/view_contacts/view_personal.gif)
+  ### See contacts categorized as 'Personal'
+
+  ### Show existing contacts in Professional
+  ![Show existing contacts in Professional](images/validation/test_cases/view_contacts/view_professional.png)
+  ### Display contacts labeled as 'Professional'
+
+  ### Show existing contacts in Emergency
+  ![Show existing contacts in Emergency](images/validation/test_cases/view_contacts/view_emergency.png)
+  ### View contacts listed under 'Emergency'
+
+  ### Show existing contacts in Favorites
+  ![Show existing contacts in Favorites](images/validation/test_cases/view_contacts/view_favorites.gif)
+  ### Display contacts marked as 'Favorites'
+
+  ### Show all existing contacts in all Categories
+  ![Show all existing contacts in all Categories](images/validation/test_cases/view_contacts/view_all.gif)
+  ### View all contacts across categories
+
+  ### Don't want to view existing contacts
+  ![Don't want to view existing contacts](images/validation/test_cases/view_contacts/view_dont_want.png)
+  ### Skip viewing contacts by selecting '6'
 
   </details>
 
-#### Search contacts
-- The users can search for contacts by *Name - Telephone number - Email address - Birthday* having it non case sensitive to be able to access them with no obstacles. Or they can just skip this by entering `no` or if they wish to terminate the program, hit `esc`.
+
+
+#### Add contacts
+- When the users are done with `viewing existing contacts`, they can **add new contacts** in any of the categories they wish to *Personal - Professional - Emergency - Favorites* and have different fields for each of them as *Name - Telephone number - Email address - Birthday - Notes* (name and telephone number are <ins>**mandatory**</ins>). Or they can just skip this action and move forward, or hit `esc` and terminate the program. Upon `invalid input` provided by the user, a new prompt will keep looping until `valid input` is provided.
 
   <details>
 
-  <summary>Click to view search contacts functionality</summary>
+  <summary><strong>Click to view add contacts</strong></summary>
+  
+  ![](images/validation/test_cases/add_contacts/add_contact.gif)
+
+  </details>
+
+### Search contacts
+- The users can search for contacts by *Name - Telephone number - Email address - Birthday* having it non case sensitive to be able to access them with no obstacles. Or they can just skip this by entering `no` or if they wish to terminate the program, enter `esc`.
+
+  <details>
+
+  <summary><strong>Click to view search contacts functionality</strong></summary>
   screenshots search contacts
   </details>
 
@@ -302,18 +326,18 @@ ascii_art = r'''
 
   <details>
 
-  <summary>Click to view edit contacts functionality</summary>
+  <summary><strong>Click to view edit contacts functionality</strong></summary>
   screenshots edit contacts
 
   </details>
 
 
 #### Delete contacts
-- 
+- asd
 
     <details>
 
-    <summary>Click to view delete contacts functionality</summary>
+    <summary><strong>Click to view delete contacts functionality</strong></summary>
     delete screenshots
     </details>
 
@@ -323,7 +347,7 @@ ascii_art = r'''
 
     <details>
 
-    <summary>Click to view main menu</summary>
+    <summary><strong>Click to view main menu</strong></summary>
     screenshot for main menu
 
     </details>
@@ -331,10 +355,10 @@ ascii_art = r'''
 
 
 
-### fixed bugs
+## Fixed bugs 🐛
 
 
-## Deployment
+## Deployment 🌐
 
 - via Heroku
   - asd
@@ -342,13 +366,13 @@ ascii_art = r'''
   - asd
 
 
-## credits
+## Credits 
 - Used ***[rxaviers](https://gist.github.com/rxaviers/7360908)*** Complete list of github markdown emoji markup
 - Used [ChatGPT 3.5](https://chatgpt.com/?oai-dm=1) and [Codeium](https://codeium.com/) for minor improvements and better explanation on my
-major requests for this project.
+requests for this project.
 
--  **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼 𝓽𝓸 𝓼𝓸𝓶𝓮 𝓯𝓪𝓫𝓾𝓵𝓸𝓾𝓼 𝓹𝓮𝓸𝓹𝓵𝓮**
-    - 🎓 **𝕽𝖔𝖍𝖎𝖙** - **Code Institute Mentor** [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/rohit0286)
-    - 🚀 **𝓓𝓪𝓲𝓼𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/daisy-mcgirr/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/Dee-McG)
-    - 🥇 **𝓙𝓾𝓪𝓷 𝓪𝓷𝓭 𝓞𝓷𝓵𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/juan-boccia/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/jbocciadev)
-    - ⭐️ **𝓥𝓮𝓻𝓷𝓮𝓵𝓵** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/vernellclark/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/VCGithubCode)
+### 🙏 **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼 𝓽𝓸 𝓼𝓸𝓶𝓮 𝓯𝓪𝓫𝓾𝓵𝓸𝓾𝓼 𝓹𝓮𝓸𝓹𝓵𝓮** 🙏
+  - 🎓 **𝕽𝖔𝖍𝖎𝖙** - **Code Institute Mentor** [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/rohit0286)
+  - 🚀 **𝓓𝓪𝓲𝓼𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/daisy-mcgirr/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/Dee-McG)
+  - 🥇 **𝓙𝓾𝓪𝓷 𝓪𝓷𝓭 𝓞𝓷𝓵𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/juan-boccia/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/jbocciadev)
+  - ⭐️ **𝓥𝓮𝓻𝓷𝓮𝓵𝓵** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/vernellclark/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/VCGithubCode)
