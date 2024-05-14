@@ -103,6 +103,16 @@ The program may take longer to load due to poor read latency on the *Google Shee
 
 The project structure is built upon the [Code Institute P3 template](https://github.com/Code-Institute-Org/p3-template), including custom Python code, along with the integration of ANSI escape codes and ASCII art for visual appeal and user interface enhancement.
 
+### Tools 🛠️
+- **Git** Used for version control eg. **`git`** `add - commit - push`
+- **Github** Used as the hosting platform for the repository.
+- **Gitpod** Used as the IDE for writing, editing and debugging code.
+- **Heroku** Used for deploying the application.
+
+### API 🔌
+- **Google Sheets** Used for managing data stored in Google Sheets.
+- **Google Drive** 
+
 ### Libraries and Packages Used
 
 ```python
@@ -244,6 +254,7 @@ ascii_art = r'''
   </details>
 
 #### Choose color prompt
+
 - After the user chooses to `use` essentially the program, they come across to the `choose color` functionality. Users can choose up to 6 colors which are *Red - Green - Yellow - Blue - Magenta - Cyan* as their input color, upon selecting one (1 - 6), then a `confirmation prompt` will appear to the users to hit `yes or no`, if the input is `yes` then the program continues with the selected color, else it loops back. The users can also turn the color back to default by entering `7`.
 
     <details>
@@ -263,6 +274,7 @@ ascii_art = r'''
     </details>
 
 #### View existing contact
+
 - Once the user chooses to change the input color (or not), the next thing they'll come to face are the prompt to `View existing contacts` on the program.
 
   <details>
@@ -302,47 +314,73 @@ ascii_art = r'''
 
 
 #### Add contacts
-- When the users are done with `viewing existing contacts`, they can **add new contacts** in any of the categories they wish to *Personal - Professional - Emergency - Favorites* and have different fields for each of them as *Name - Telephone number - Email address - Birthday - Notes* (name and telephone number are <ins>**mandatory**</ins>). Or they can just skip this action and move forward, or hit `esc` and terminate the program. Upon `invalid input` provided by the user, a new prompt will keep looping until `valid input` is provided.
+
+- When the users are done with `viewing existing contacts`, they can **add new contacts** in any of the categories they wish to *Personal - Professional - Emergency - Favorites* and have different fields for each of them as *Name - Telephone number - Email address - Birthday - Notes* (name and telephone number are <ins>**mandatory**</ins>). Or they can just skip this action and move forward, or enter `esc` and terminate the program. Upon `invalid input` provided by the user, a new prompt will keep looping until `valid input` is provided.
 
   <details>
 
   <summary><strong>Click to view add contacts</strong></summary>
   
-  ![](images/validation/test_cases/add_contacts/add_contact.gif)
+  ### All of the process of adding contacts
+  ![All of the process of adding contacts](images/validation/test_cases/add_contacts/add_contact.gif)
 
   </details>
 
 ### Search contacts
-- The users can search for contacts by *Name - Telephone number - Email address - Birthday* having it non case sensitive to be able to access them with no obstacles. Or they can just skip this by entering `no` or if they wish to terminate the program, enter `esc`.
+- Users can search for contacts by *Name - Telephone number - Email address - Birthday*. It's designed to be non-case sensitive, guaranteeing easy access without any obstacles. Additionally, users have the option to skip this process by entering `no` or `esc` to terminate the program.
 
   <details>
-
+  
   <summary><strong>Click to view search contacts functionality</strong></summary>
-  screenshots search contacts
+
+  ### Contacts are found
+  ![Contacts are found in the search section](images/validation/test_cases/search_contacts/search_found.gif)
+  ### Contacts found and displayed on tabulate format 
+
+  ### No contacts found
+  ![No contacts found in the search section](images/validation/test_cases/search_contacts/search_no_match.png)
+  ### No matching contacts were found in the search results
+
   </details>
 
 #### Edit contacts
-- Users can edit existing contacts by modifying various field *Name - Telephone number - Email address - Birthday - Notes*. This provides flexibility in updating contact information across different categories. Users have the freedom to edit contacts as per their preferences and requirements.
+
+- Users can **edit existing contacts** by choosing the `edit contacts` option. They start by selecting a category from which they want to edit contacts, such as **Personal** or **Professional**. Then, they choose the specific contact they wish to edit. Users can modify various fields like **Name**, **Telephone Number**, **Email**, **Birthday**, and **Notes**. After making the edits, they see a confirmation message and the updated contact details are displayed. Finally, users can continue editing contacts, move to the next functionality of the program,return to the `main menu` or `terminate` the program.
+
 
   <details>
 
   <summary><strong>Click to view edit contacts functionality</strong></summary>
-  screenshots edit contacts
+
+  ### Edit contacts
+  ![The whole process of editing contacts in gif](images/validation/test_cases/edit_contacts/edit_contact.gif)
+  ### Showcase step by step the process of editing a contact
 
   </details>
 
 
 #### Delete contacts
-- asd
 
-    <details>
+- Users can **delete contacts** 
 
-    <summary><strong>Click to view delete contacts functionality</strong></summary>
-    delete screenshots
-    </details>
+
+  <details>
+
+  <summary><strong>Click to view delete contacts functionality</strong></summary>
+
+  ### The process of deleting all contacts in a specific category
+  ![The process of deleting all contacts in a specific category](images/validation/test_cases/delete_contacts/delete_specific_all.gif)
+  ### Also in this case if the user decides to delete all contacts in all categories, there will be a new confirmation prompt
+
+  ### The process of deleting individual contacts
+  ![The process of deleting individual contacts](images/validation/test_cases/delete_contacts/delete_specific.gif)
+
+  </details>
+
 
 
 #### Main menu
+
 - asda
 
     <details>
@@ -370,8 +408,9 @@ ascii_art = r'''
 - Used ***[rxaviers](https://gist.github.com/rxaviers/7360908)*** Complete list of github markdown emoji markup
 - Used [ChatGPT 3.5](https://chatgpt.com/?oai-dm=1) and [Codeium](https://codeium.com/) for minor improvements and better explanation on my
 requests for this project.
+- The main idea for this project was obtained by the [Love Sandwiches]() walkthrough project of the [Code Institute course](https://codeinstitute.net/global/).
 
-### 🙏 **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼 𝓽𝓸 𝓼𝓸𝓶𝓮 𝓯𝓪𝓫𝓾𝓵𝓸𝓾𝓼 𝓹𝓮𝓸𝓹𝓵𝓮** 🙏
+  ### 🙏 **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼 𝓽𝓸 𝓼𝓸𝓶𝓮 𝓯𝓪𝓫𝓾𝓵𝓸𝓾𝓼 𝓹𝓮𝓸𝓹𝓵𝓮** 🙏
   - 🎓 **𝕽𝖔𝖍𝖎𝖙** - **Code Institute Mentor** [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/rohit0286)
   - 🚀 **𝓓𝓪𝓲𝓼𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/daisy-mcgirr/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/Dee-McG)
   - 🥇 **𝓙𝓾𝓪𝓷 𝓪𝓷𝓭 𝓞𝓷𝓵𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/juan-boccia/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/jbocciadev)
