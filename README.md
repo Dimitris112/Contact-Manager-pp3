@@ -12,30 +12,30 @@ The program may take longer to load due to poor read latency on the *Google Shee
 <details>
   <summary>Click here to view the graphs</summary>
   
-  ![Warning 1](images/validation/warning/warning_1.png "asd")
+  ![API & Services google sheets & google drive API graphs](images/validation/warning/warning_1.png)
   
-  ![Warning 2](images/validation/warning/warning_2.png "asd")
+  ![API & Services showing high Methods GetSpreadsheet latency and graphs](images/validation/warning/warning_2.png)
   
-  ![Warning 3](images/validation/warning/warning_3.png "asdsa")
+  ![IAM & Admin Authentication graphs](images/validation/warning/warning_3.png)
 </details>
 
 ## Navigate to the README Sections
 
-1. [User Stories](#🌟-user-stories-🌟)
-    - [First Timer](#🚀-first-timer)
-    - [Frequent User](#✨-frequent-user)
+1. [User Stories](#user-stories)
+    - [First Timer](#first-timer)
+    - [Frequent User](#frequent-user)
 2. [Features](#features)
-    - [Select Different Input Colors](#🎨-select-different-input-colors)
-    - [View Contacts](#👀-view-contacts)
-    - [Add Contacts](#➕-add-contacts)
-    - [Search Contacts](#🔍-search-contacts)
-    - [Edit Contacts](#🖋️-edit-contacts)
-    - [Delete Contacts](#🗑️-delete-contacts)
-    - [Main Menu](#🏠-main-menu)
+    - [Select Different Input Colors](#select-different-input-colors)
+    - [View Contacts](#view-contacts)
+    - [Add Contacts](#add-contacts)
+    - [Search Contacts](#search-contacts)
+    - [Edit Contacts](#edit-contacts)
+    - [Delete Contacts](#delete-contacts)
+    - [Main Menu](#main-menu)
 3. [Flowchart](#flowchart)
-4. [Technology Stack](#🚀-technology-stack)
+4. [Technology Stack](#technology-stack)
 5. [Testing](#testing)
-    - [Python Validation](#-through-pep8)
+    - [Python Validation](#python-validation)
     - [Test Cases](#test-cases)
     - [Fixed Bugs](#fixed-bugs)
 6. [Deployment](#deployment)
@@ -44,17 +44,17 @@ The program may take longer to load due to poor read latency on the *Google Shee
 
 
 
-## 🌟 User Stories 🌟
+##  User Stories 🌟
 
-### 🚀 First Timer
+###  First Timer 🚀
 🌿 **As a first timer, I'd like to:**
 - **Add:** Seamlessly add my friends, colleagues, and relatives to my contacts list.
 - **Organize:** Categorize contacts into Personal 🏠, Professional 💼, Emergency 🚨, and Favorites ⭐.
 - **Access:** Navigate my contacts with an intuitive and visually appealing interface.
-- **Manage:** Easily view, search, edit, and delete contacts with a keystrokes.
+- **Manage:** Easily view, search, edit, and delete contacts with a keystroke.
 - **Experience:** Enjoy a delightful and user-friendly program, even without any prior experience with terminal-based applications.
 
-### ✨ Frequent User
+###  Frequent User ✨
 🌟 **As a returning user, I want to:**
 - **Access:** Quickly retrieve previously added contacts for efficient communication.
 - **Search:** Effortlessly search for contacts by name, phone number, email, or birthday.
@@ -63,56 +63,45 @@ The program may take longer to load due to poor read latency on the *Google Shee
 - **Expect:** Rely on the program's reliability, responsiveness, and lightning-fast performance for all my contact management needs.
 
 
-## Features
+## Features 📋
 
-### 🎨 Select Different Input Colors
+###  Select Different Input Colors 🎨
 
 - **Customization:** Users can personalize their experience by selecting from a vibrant palette of 6 colors, including Red, Green, Yellow, Blue, Magenta, and Cyan.
 - **Reset:** With just a click, users can revert to the program's default color scheme to maintain consistency and clarity.
 
-### 👀 View Contacts
+###  View Contacts 👀
 
 - **Comprehensive Display:** Experience a detailed overview of all existing contacts, complete with every field meticulously organized for easy reference.
 
-### ➕ Add Contacts
+###  Add Contacts ➕
 
 - **Effortless Addition:** Seamlessly add new contacts across four distinct categories: Personal, Professional, Emergency, and Favorites.
 - **Flexible Fields:** Capture all essential contact details, including **Name**, **Telephone Number**, **Email Address**, **Birthday**, and **Notes**.
 
-### 🔍 Search Contacts
+###  Search Contacts 🔍
 
 - **Efficient Search:** Quickly locate specific contacts by **Name**, **Telephone Number**, **Email Address**, or **Birthday** using both letters and numbers.
 - **Case Insensitive:** Enjoy hassle-free searching as the program ignores case sensitivity, ensuring accurate results every time.
 
-### 🖋️ Edit Contacts
+###  Edit Contacts 🖋️
 
 - **Customization Options:** Modify contact details with ease, providing flexibility and control over every aspect of your contact list.
 
-### 🗑️ Delete Contacts
+###  Delete Contacts 🗑️
 
 - **Streamlined Deletion:** Effortlessly remove unwanted contacts, whether it's clearing an entire category or targeting specific individuals for deletion.
 
-### 🏠 Main Menu
+###  Main Menu 🏠
 
 - **Intuitive Navigation:** Seamlessly navigate between different program functionalities using simple numeric inputs, making it easy to find what you need.
 
 
-
-
-## Flowchart
-
-<details>
-  <summary>View the flowchart</summary>
-
-  ![Flowchart](images/validation/flowchart/flowchart.png)
-
-</details>
-
-## 🚀 **Technology Stack**
+##  **Technology Stack** ⚙️ 
 
 #### **Overview**
 
-The Contact Manager project uses Python as its core programming language, supported by a range of libraries and packages. Additionally, ANSI escape codes are utilized for color customization within the terminal environment, it includes ASCII art to enhance the user interface.
+The project structure is built upon the [Code Institute P3 template](https://github.com/Code-Institute-Org/p3-template), including custom Python code, along with the integration of ANSI escape codes and ASCII art for visual appeal and user interface enhancement.
 
 #### Libraries and Packages Used
 
@@ -177,8 +166,10 @@ ascii_art = r'''
 '''
 ```
 
+
+
 <details>
-  <summary>📚View libraries and packages details</summary>
+  <summary>Click to view libraries and packages details</summary>
 
 - **cachetools**: Provides caching utilities.
 - **google-auth**: Handles authentication for Google APIs.
@@ -195,35 +186,131 @@ ascii_art = r'''
 - **tabulate**: Formats tabular data for easy display.
 </details>
 
+## Flowchart 🗺️
 
-
-## Testing
-  ### Through [PEP8](https://pep8ci.herokuapp.com/)
+### Used **[Lucid Chart](https://www.lucidchart.com/pages/)** to draw it.
 
 <details>
 
-  <summary>View the python validation</summary>
+  <summary>Click to view the flowchart</summary>
 
-  ![pep8](images/validation/pep8/pep8_valid.gif)
+  ![Flowchart from Start to End of the program](images/validation/flowchart/flowchart.png)
+
+</details>
+
+
+## Testing
+  ### Through **[PEP8](https://pep8ci.herokuapp.com/)**
+
+<details>
+
+  <summary>Click to view the python validation</summary>
+
+  ![PEP8 python validation gif](images/validation/pep8/pep8_valid.gif)
 
 </details>
 
 
 ### Test cases
- 1. Hoping off 
- 2. b 
- 3. c
+
+#### Start
+- The **first thing** the users come to see when the land on the program, deciding whether to use the program or not with different outcomes.
+
+   <details>
+
+  <summary>Click to view the main shot and the yes or no outputs</summary>
+    image main show screenshot here
+
+   </details>
+
+#### color choose
+- After the user chooses to `use` essentially the program, they come across to the `choose color` functionality.
+
+    <details>
+
+    <summary>Click to view the choose color functionality options</summary>
+    images choose color screenshots
+
+    </details>
+
+ #### View existing contact
+- Once the user chooses to change the input color (or not), the next thing they'll come to face are the prompt to `View existing contacts` on the program.
+
+    <details>
+
+    <summary>Click to view </summary>
+    view existing contacts screenshots here
+    </details>
+
+#### Add contacts
+- When the users are done with `viewing existing contacts`, then they can **add new contacts** in any of the categories they wish to *Personal - Professional - Emergency - Favorites* and have different fields for each of them as *Name - Telephone number - Email address - Birthday - Notes* (name and telephone number are <ins>**mandatory**</ins>). Or they can just skip this action and move forward, or hit `esc` and terminate the program.
+
+  <details>
+
+  <summary>Click to view add contacts</summary>
+  screenshots for add contacts
+
+  </details>
+
+#### Search contacts
+- The users can search for contacts by *Name - Telephone number - Email address - Birthday* having it non case sensitive to be able to access them with no obstacles. Or they can just skip this by entering `no` or if they wish to terminate the program, hit `esc` and terminate the program.
+
+  <details>
+
+  <summary>Click to view search contacts functionality</summary>
+  screenshots search contacts
+  </details>
+
+#### Edit contacts
+- asdasd
+
+  <details>
+
+  <summary>Click to view edit contacts functionality</summary>
+  screenshots edit contacts
+
+  </details>
+
+
+#### Delete contacts
+- asd
+
+    <details>
+
+    <summary>Click to view delete contacts functionality</summary>
+    delete screenshots
+    </details>
+
+
+#### Main menu
+- asda
+
+    <details>
+
+    <summary>Click to view main menu</summary>
+    screenshot for main menu
+
+    </details>
+
+
 
 
 ### fixed bugs
 
 
 ## Deployment
+
 - via Heroku
+  - asd
+- via git clone
+  - asd
+
 
 ## credits
--  **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼** to some fabulous people:
-   - 🎓 **𝕽𝖔𝖍𝖎𝖙** - my Code Institute mentor [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/rohit0286)
-   - 🚀 **𝓓𝓪𝓲𝓼𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/daisy-mcgirr/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/Dee-McG)
-   - 🥇 **𝓙𝓾𝓪𝓷 𝓪𝓷𝓭 𝓞𝓷𝓵𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/juan-boccia/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/)
-   - ⭐️ **𝓥𝓮𝓻𝓷𝓮𝓵𝓵** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/vernellclark/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/VCGithubCode)
+- Used **[rxaviers](https://gist.github.com/rxaviers/7360908)** Complete list of github markdown emoji markup
+
+-  **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼 𝓽𝓸 𝓼𝓸𝓶𝓮 𝓯𝓪𝓫𝓾𝓵𝓸𝓾𝓼 𝓹𝓮𝓸𝓹𝓵𝓮**
+    - 🎓 **𝕽𝖔𝖍𝖎𝖙** - **Code Institute Mentor** [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/rohit0286)
+    - 🚀 **𝓓𝓪𝓲𝓼𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/daisy-mcgirr/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/Dee-McG)
+    - 🥇 **𝓙𝓾𝓪𝓷 𝓪𝓷𝓭 𝓞𝓷𝓵𝔂** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/juan-boccia/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/jbocciadev)
+    - ⭐️ **𝓥𝓮𝓻𝓷𝓮𝓵𝓵** [<img src="https://img.icons8.com/color/24/000000/linkedin.png"/>](https://www.linkedin.com/in/vernellclark/) [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/VCGithubCode)
