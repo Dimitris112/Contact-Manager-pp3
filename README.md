@@ -21,27 +21,28 @@ The program may take longer to load due to poor read latency on the *Google Shee
 
 ## Navigate to the README Sections
 
-1. [User Stories](#user-stories-)
-    - [First Timer](#first-timer-)
-    - [Frequent User](#frequent-user-)
-2. [Features](#features-)
-    - [Select Different Input Colors](#select-different-input-colors-)
-    - [View Contacts](#view-contacts-)
-    - [Add Contacts](#add-contacts-)
-    - [Search Contacts](#search-contacts-)
-    - [Edit Contacts](#edit-contacts-)
-    - [Delete Contacts](#delete-contacts-)
-    - [Main Menu](#main-menu-)
-3. [Technology Stack](#technology-stack-)
+1. [User Stories 🌟](#user-stories-)
+    - [First Timer 🚀](#first-timer-)
+    - [Frequent User ✨](#frequent-user-)
+2. [Features 📋](#features-)
+    - [Select Different Input Colors 🎨](#select-different-input-colors-)
+    - [View Contacts 👀](#view-contacts-)
+    - [Add Contacts ➕](#add-contacts-)
+    - [Search Contacts 🔍](#search-contacts-)
+    - [Edit Contacts 🖋️](#edit-contacts-)
+    - [Delete Contacts 🗑️](#delete-contacts-)
+    - [Main Menu 🏠](#main-menu-)
+3. [Technology Stack ⚙️](#technology-stack-)
     - [Overview](#overview)
-    - [Libraries and Packages Used](#libraries-and-packages-used)
-    - [Flowchart](#flowchart-)
-4. [Testing](#testing)
-    - [Python Validation](#python-validation)
-    - [Test Cases](#test-cases)
-    - [Fixed Bugs](#fixed-bugs)
-5. [Deployment](#deployment)
-6. [Credits](#credits)
+    - [Libraries and Packages Used](#libraries-and-packages-used-)
+    - [ANSI Escape codes and ASCII Art](#ansi-escape-codes-and-ascii-art-)
+    - [Flowchart 🗺️](#flowchart-)
+4. [Testing 📝](#testing-)
+    - [Python Validation](#python-validation-)
+    - [Test Cases](#test-cases-)
+    - [Fixed Bugs 🐛](#fixed-bugs-)
+5. [Deployment 🌐](#deployment-)
+6. [Credits 🙏](#credits-)
 
 
 ##  User Stories 🌟
@@ -139,7 +140,9 @@ requests-oauthlib==2.0.0
 rsa==4.9
 StrEnum==0.4.15
 tabulate==0.9.0
-
+```
+### ANSI Escape codes and ASCII Art
+```python
 # ANSI Escape codes
 COLORS = {
     'red': '\033[91m',
