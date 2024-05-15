@@ -29,20 +29,20 @@ The program may take longer to load due to poor read latency on the *Google Shee
     - [View Contacts 👀](#view-contacts-)
     - [Add Contacts ➕](#add-contacts-)
     - [Search Contacts 🔍](#search-contacts-)
-    - [Edit Contacts 🖋️](#edit-contacts-)
-    - [Delete Contacts 🗑️](#delete-contacts-)
+    - [Edit Contacts 🖋️](#edit-contacts)
+    - [Delete Contacts 🗑️](#delete-contacts)
     - [Main Menu 🏠](#main-menu-)
-3. [Technology Stack ⚙️](#technology-stack-)
+3. [Technology Stack ⚙️](#technology-stack)
     - [Overview](#overview)
-    - [Libraries and Packages Used](#libraries-and-packages-used-)
-    - [ANSI Escape codes and ASCII Art](#ansi-escape-codes-and-ascii-art-)
-    - [Flowchart 🗺️](#flowchart-)
+    - [Libraries and Packages Used](#libraries-and-packages-used)
+    - [ANSI Escape codes and ASCII Art](#ansi-escape-codes-and-ascii-art)
+    - [Flowchart 🗺️](#flowchart)
 4. [Testing 📝](#testing-)
-    - [Python Validation](#python-validation-)
-    - [Test Cases](#test-cases-)
+    - [Python Validation](#python-validation)
+    - [Test Cases](#test-cases)
     - [Fixed Bugs 🐛](#fixed-bugs-)
 5. [Deployment 🌐](#deployment-)
-6. [Credits 🙏](#credits-)
+6. [Credits 🙏](#credits)
 
 
 ##  User Stories 🌟
@@ -98,7 +98,7 @@ The program may take longer to load due to poor read latency on the *Google Shee
 - **Intuitive Navigation:** Seamlessly navigate between different program functionalities using simple numeric inputs, making it easy to find what you need.
 
 
-##  **Technology Stack** ⚙️ 
+##  **Technology Stack ⚙️** 
 
 ### **Overview**
 
@@ -178,11 +178,21 @@ ascii_art = r'''
 
 '''
 ```
+### Users can enter a variety of inputs such as 'yes' and 'no'
+```python
+yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative",
+             "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay",
+             "okey", "alright", "ya", "ofc")
 
+no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
+            "ne", "nop")
+```
+### This adds a human element to the user experience
 
+### Here lie the details for each of the libraries and package used in this project
 
 <details>
-  <summary><strong>Click to view libraries and packages details</strong></summary>
+  <summary><strong>Click to view libraries and package details</strong></summary>
 
 - **cachetools**: Provides caching utilities.
 - **google-auth**: Handles authentication for Google APIs.
@@ -197,7 +207,9 @@ ascii_art = r'''
 - **rsa**: Implements RSA encryption and decryption.
 - **StrEnum**: Implements string enumerations.
 - **tabulate**: Formats tabular data for easy display.
+
 </details>
+
 
 ## Flowchart 🗺️
 
@@ -407,7 +419,7 @@ ascii_art = r'''
   - asd
 
 
-## Credits 
+## Credits 🙏
 - Used ***[rxaviers](https://gist.github.com/rxaviers/7360908)*** Complete list of github markdown emoji markup
 - Used [ChatGPT 3.5](https://chatgpt.com/?oai-dm=1) and [Codeium](https://codeium.com/) for minor improvements and better explanation on my
 requests for this project.
