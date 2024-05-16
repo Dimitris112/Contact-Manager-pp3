@@ -113,13 +113,13 @@ The project structure is built upon the [Code Institute P3 template](https://git
 - **Gitpod** Used as the IDE for writing, editing and debugging code.
 - **Heroku** Used for deploying the application.
 - **Python:** Used as the programming language for creating the application.
-- **Gspread:** Used for interacting with Google Sheets.
-- **Tabulate:** Used to format data into tables for easy reading.
-- **Numpy:** Used for handling large amounts of data efficiently.
-- **OpenCV:** Used for advanced image processing tasks.
-- **Requests-OAuthlib:** Used to connect to Google services.
-- **StrEnum:** Used to manage string constants.
-- **ANSI Escape Codes:** Used to add color to terminal text.
+- **Gspread** Used for interacting with Google Sheets.
+- **Tabulate** Used to format data into tables for easy reading.
+- **Numpy** Used for handling large amounts of data efficiently.
+- **OpenCV** Used for advanced image processing tasks.
+- **Requests-OAuthlib** Used to connect to Google services.
+- **StrEnum** Used to manage string constants.
+- **ANSI Escape Codes** Used to add color to terminal text.
 
 
 ### API 🔌
@@ -357,7 +357,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 - Users can search for contacts by *Name - Telephone number - Email address - Birthday*. It's designed to be non-case sensitive, guaranteeing easy access without any obstacles. Additionally, users have the option to skip this process by entering `no` or `esc` to terminate the program.
 
   <details>
-  
+
   <summary><strong>Click to view search contacts functionality</strong></summary>
 
   ### Contacts are found
@@ -424,6 +424,30 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 
 ## Deployment 🌐
+### **<ins>BEFORE</ins> you move onto the *Heroku* part, you need to set your own Credentials**.
+
+  <details>
+
+  <summary><strong>Click to view the instructions</strong></summary>
+
+  1. Go to [Google Cloud Platform](https://console.cloud.google.com/welcome/new?pli=1).
+  2. On the upper left corner click `Select a project` dropdown. Hit **New Project**.
+  3. On the project name, enter your own. Then click *Create*, you don't have to change the *Location*.
+  4. Once you're inside your project **dashboard**, on the left side click on the &nbsp;<svg width="20" height="20" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" ><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg>&nbsp; and select **APIs & Services** and then **Library**.
+  5. In the searchbox, type **Google Drive API**, select it and click *Enable*.
+  6. Now since you're inside the Google Drive API dashboard, on your `right` you should see **Create Credentials**. Click on that and now the magic begins.
+  7. On the *Credential Type* menu leave it as **Google Drive API** and on the data radio boxes, select **Application data** and hit `Next`.
+  8. Enter your *Service account name* - e.g this project is **ContactManager** - then click *Create and Continue*.
+  9. On the role dropdown menu enter `Editor` and continue.
+  10. You can skip this step - leave empty and click **Done**.
+  11. Navigate to the **Credentials** menu on the left side of your screen, click on *Service Accounts* on what's been created.
+  12. Click on **KEYS** and click on **ADD KEY** dropdown and **Create new key**. Select *JSON* and *Create*.
+  13. Now your credentials are created and downloaded on the path of your choosing.
+  14. They will have a "random" name, so the best thing to do now is to rename them into **creds.json**.
+
+
+
+  </details>
 
 ### Via Heroku
 
