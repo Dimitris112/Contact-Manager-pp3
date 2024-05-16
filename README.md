@@ -435,7 +435,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
   1. Go to [Google Cloud Platform](https://console.cloud.google.com/welcome/new?pli=1).
   2. On the upper left corner click `Select a project` dropdown. Hit **New Project**.
   3. On the project name, enter your own. Then click *Create*, you don't have to change the *Location*.
-  4. Once you're inside your project **dashboard**, on the left side click on the &nbsp;<svg width="20" height="20" viewBox="0 0 24 24" fit="" preserveAspectRatio="xMidYMid meet" ><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg>&nbsp; and select **APIs & Services** and then **Library**.
+  4. Once you're inside your project **dashboard**, on the left side click on the `☰` and select **APIs & Services** and then **Library**.
   5. In the searchbox, type **Google Drive API**, select it and click *Enable*.
   6. Now since you're inside the Google Drive API dashboard, on your `right` you should see **Create Credentials**. Click on that and now the magic begins.
   7. On the *Credential Type* menu leave it as **Google Drive API** and on the data radio boxes, select **Application data** and hit `Next`.
