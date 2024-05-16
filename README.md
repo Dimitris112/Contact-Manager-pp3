@@ -437,6 +437,9 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
    - Since the Contact Manager includes both Python and Node.js components, you need to specify the correct buildpacks for deployment. 
    - Under the *Settings* tab of your Heroku app, navigate to the **Buildpacks** section and add the appropriate buildpacks for Python and Node.js.
    - <ins>***It's important to add the Python buildpack first***</ins>
+   - Also, add the following environment variables
+      - **CREDENTIALS.JSON** (or if you've named yours as *CREDS*) type on the "Key" box **CREDS** and on its right "Value" enter your own Creds info.
+      - **PORT** set to **8000** to specify the port on which your app will run.
 
 6. **Deploy Branch**
    - After configuring the deployment options, manually deploy your application by clicking the **Deploy Branch** button.
