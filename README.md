@@ -417,23 +417,26 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 ### Via Heroku
 
+  <details>
 
-1. **Sign Up/Login to Heroku**
+  <summary><strong>Click to view Heroku's deployment instructions</strong></summary>
+
+  1. **Sign Up/Login to Heroku**
    - If you haven't already, sign up for a Heroku account at [Heroku's website](https://www.heroku.com/) or log in if you already have an account.
 
-2. **Create a New App on Heroku**
+  2. **Create a New App on Heroku**
    - Once logged in, navigate to your Heroku dashboard and click on the **New** button, then select **Create new app**.
    - Choose a unique name for your app and select the region closest to your location.
 
-3. **Connect GitHub Repository**
+  3. **Connect GitHub Repository**
    - After creating your app, go to the **Deploy** tab within your app's dashboard.
    - Under the **Deployment method** section, select **GitHub** as the deployment method.
    - Search for your GitHub repository in the **Connect to GitHub** section and click **Connect**.
 
-4. **Configure Deployment Options**
+  4. **Configure Deployment Options**
    - Once connected, choose the branch you want to deploy (e.g. *main*) and optionally enable automatic deploys for future commits.
 
-5. **Select Framework**
+  5. **Select Framework**
    - Since the Contact Manager includes both Python and Node.js components, you need to specify the correct buildpacks for deployment. 
    - Under the *Settings* tab of your Heroku app, navigate to the **Buildpacks** section and add the appropriate buildpacks for Python and Node.js.
    - <ins>***It's important to add the Python buildpack first***</ins>
@@ -441,18 +444,23 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
       - **CREDENTIALS.JSON** (or if you've named yours as *CREDS*) type on the "Key" box **CREDS** and on its right "Value" enter your own Creds info.
       - **PORT** set to **8000** to specify the port on which your app will run.
 
-6. **Deploy Branch**
+  6. **Deploy Branch**
    - After configuring the deployment options, manually deploy your application by clicking the **Deploy Branch** button.
 
-7. **Monitor Deployment Progress**
+  7. **Monitor Deployment Progress**
    - Heroku will start deploying your application from the selected GitHub branch. You can monitor the deployment progress from the activity log on the same page.
 
-8. **View Application**
+  8. **View Application**
    - Once the deployment is complete, Heroku will provide you with a URL to access your deployed application. Click on **View** button to open your application in a new tab.
 
+  </details>
 
 
 ### Via git clone
+
+<details>
+
+<summary><strong>Click to view how to clone this repository</strong></summary>
 
   1. **Clone the repository**
       ```
@@ -461,7 +469,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
   2. **Navigate to the Repository**
       ```
-      cd Contact-Manager-ppp3
+      cd Contact-Manager-pp3
       ```
 
   3. *Setup your environment - make sure you have **[Python](https://www.python.org/downloads/) and [Node JS](https://nodejs.org/en)** installed on your machine.*
@@ -485,6 +493,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
       git push origin main
       ```
 
+</details>
 
 ## Credits 🙏
 - Used ***[rxaviers](https://gist.github.com/rxaviers/7360908)*** Complete list of github markdown emoji markup
