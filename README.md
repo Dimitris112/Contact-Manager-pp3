@@ -29,20 +29,22 @@ The program may take longer to load due to poor read latency on the *Google Shee
     - [View Contacts 👀](#view-contacts-)
     - [Add Contacts ➕](#add-contacts-)
     - [Search Contacts 🔍](#search-contacts-)
-    - [Edit Contacts 🖋️](#edit-contacts)
-    - [Delete Contacts 🗑️](#delete-contacts)
+    - [Edit Contacts 🖋️](#edit-contacts-)
+    - [Delete Contacts 🗑️](#delete-contacts-)
     - [Main Menu 🏠](#main-menu-)
-3. [Technology Stack ⚙️](#technology-stack)
+3. [Technology Stack ⚙️](#technology-stack-)
     - [Overview](#overview)
+    - [Tools 🛠️](#tools-️)
+    - [API 🔌](#api-)
     - [Libraries and Packages Used](#libraries-and-packages-used)
     - [ANSI Escape codes and ASCII Art](#ansi-escape-codes-and-ascii-art)
-    - [Flowchart 🗺️](#flowchart)
+    - [Flowchart 🗺️](#flowchart-)
 4. [Testing 📝](#testing-)
     - [Python Validation](#python-validation)
     - [Test Cases](#test-cases)
     - [Fixed Bugs 🐛](#fixed-bugs-)
 5. [Deployment 🌐](#deployment-)
-6. [Credits 🙏](#credits)
+6. [Credits 🙏](#credits-)
 
 
 ##  User Stories 🌟
@@ -378,7 +380,6 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 - Users can **delete contacts** 
 
-
   <details>
 
   <summary><strong>Click to view delete contacts functionality</strong></summary>
@@ -396,16 +397,17 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 #### Main menu
 
-- asda
+- The main menu provides users with a convenient way to **navigate** back to each function of the program or **exit** manually.
 
-    <details>
+  <details>
 
-    <summary><strong>Click to view main menu</strong></summary>
-    screenshot for main menu
+  <summary><strong>Click to view main menu</strong></summary>
 
-    </details>
+  ### Inputs from 1 to 5 bring the user back to each function
+  ![Main menu options for navigating back to each function](images/validation/test_cases/select_section/menu_exit.png)
+  ### If the input is 6, exit the program
 
-
+  </details>
 
 
 ## Fixed bugs 🐛
@@ -413,10 +415,72 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 ## Deployment 🌐
 
-- via Heroku
-  - asd
-- via git clone
-  - asd
+### Via Heroku
+
+
+1. **Sign Up/Login to Heroku**
+   - If you haven't already, sign up for a Heroku account at [Heroku's website](https://www.heroku.com/) or log in if you already have an account.
+
+2. **Create a New App on Heroku**
+   - Once logged in, navigate to your Heroku dashboard and click on the **New** button, then select **Create new app**.
+   - Choose a unique name for your app and select the region closest to your location.
+
+3. **Connect GitHub Repository**
+   - After creating your app, go to the **Deploy** tab within your app's dashboard.
+   - Under the **Deployment method** section, select **GitHub** as the deployment method.
+   - Search for your GitHub repository in the **Connect to GitHub** section and click **Connect**.
+
+4. **Configure Deployment Options**
+   - Once connected, choose the branch you want to deploy (e.g. *main*) and optionally enable automatic deploys for future commits.
+
+5. **Select Framework**
+   - Since the Contact Manager includes both Python and Node.js components, you need to specify the correct buildpacks for deployment. 
+   - Under the *Settings* tab of your Heroku app, navigate to the **Buildpacks** section and add the appropriate buildpacks for Python and Node.js.
+   - <ins>***It's important to add the Python buildpack first***</ins>
+
+6. **Deploy Branch**
+   - After configuring the deployment options, manually deploy your application by clicking the **Deploy Branch** button.
+
+7. **Monitor Deployment Progress**
+   - Heroku will start deploying your application from the selected GitHub branch. You can monitor the deployment progress from the activity log on the same page.
+
+8. **View Application**
+   - Once the deployment is complete, Heroku will provide you with a URL to access your deployed application. Click on **View** button to open your application in a new tab.
+
+
+
+### Via git clone
+
+  1. **Clone the repository**
+      ```
+      git clone https://github.com/Dimitris112/Contact-Manager-pp3.git
+       ```
+
+  2. **Navigate to the Repository**
+      ```
+      cd Contact-Manager-ppp3
+      ```
+
+  3. *Setup your environment - make sure you have **[Python](https://www.python.org/downloads/) and [Node JS](https://nodejs.org/en)** installed on your machine.*
+
+  4. **Run the app**
+      - Navigate to the project directory and run this python script.
+         ```
+        python run.py 
+         ```
+        `run.py` of course if you've named your own as this. <ins>Optional</ins> you can use `python3 run.py`, depending on your version.
+
+ 5. **Commit changes**
+      - After making changes, commit them to your repository
+        ```
+        git add .
+        git commit -m "Your message"
+        ```
+
+6. **Push changes to GitHub**
+      ```
+      git push origin main
+      ```
 
 
 ## Credits 🙏
