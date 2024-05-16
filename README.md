@@ -445,6 +445,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
   13. Now your credentials are created and downloaded on the path of your choosing.
   14. They will have a "random" name, so the best thing to do now is to rename them into **creds.json**.
 
+  *15. In order to activate the **Google Sheets API** it's quite similar and simpler. Simply go to the *Library* and search **Google Sheets API**, select it and click *Enable*. Done.
 
 
   </details>
