@@ -184,10 +184,10 @@ ascii_art = r'''
 ```python
 yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative",
              "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay",
-             "okey", "alright", "ya", "ofc")
+             "okey", "alright", "ya", "ofc", "yep", "definitely", "exactly", "for sure", "fo sho")
 
 no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
-            "ne", "nop")
+            "ne", "nop", "na")
 ```
 ### This adds a human element to the user experience
 

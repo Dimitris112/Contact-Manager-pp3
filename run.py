@@ -71,13 +71,17 @@ favorites_sheet = SHEET.worksheet("Favorites")
 
 yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative",
              "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay",
-             "okey", "alright", "ya", "ofc")
+             "okey", "alright", "ya", "ofc", "yep", "definitely",
+             "exactly", "for sure", "fo sho")
+
 no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
-            "ne", "nop")
+            "ne", "nop", "na")
+
 invalid_phone_message = ("\nInvalid phone number format. Please enter "
                          "a valid phone number. +1234567890,\n(123) "
                          "456-7890, 123-456-7890, 123.456.7890, "
                          "123/456.7890, 1234567890")
+
 failed_times = (
     "\nI can do this all day. You've failed to give a correct"
     " answer {} times.\n"
