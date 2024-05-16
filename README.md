@@ -107,14 +107,24 @@ The program may take longer to load due to poor read latency on the *Google Shee
 The project structure is built upon the [Code Institute P3 template](https://github.com/Code-Institute-Org/p3-template), including custom Python code, along with the integration of ANSI escape codes and ASCII art for visual appeal and user interface enhancement.
 
 ### Tools 🛠️
+
 - **Git** Used for version control eg. **`git`** `add - commit - push`
 - **Github** Used as the hosting platform for the repository.
 - **Gitpod** Used as the IDE for writing, editing and debugging code.
 - **Heroku** Used for deploying the application.
+- **Python:** Used as the programming language for creating the application.
+- **Gspread:** Used for interacting with Google Sheets.
+- **Tabulate:** Used to format data into tables for easy reading.
+- **Numpy:** Used for handling large amounts of data efficiently.
+- **OpenCV:** Used for advanced image processing tasks.
+- **Requests-OAuthlib:** Used to connect to Google services.
+- **StrEnum:** Used to manage string constants.
+- **ANSI Escape Codes:** Used to add color to terminal text.
+
 
 ### API 🔌
 - **Google Sheets** Used for managing data stored in Google Sheets.
-- **Google Drive** 
+- **Google Drive** Used to manage file permissions and sharing the stored data.
 
 ### Libraries and Packages Used
 
