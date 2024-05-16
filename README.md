@@ -44,6 +44,8 @@ The program may take longer to load due to poor read latency on the *Google Shee
     - [Test Cases](#test-cases)
     - [Fixed Bugs 🐛](#fixed-bugs-)
 5. [Deployment 🌐](#deployment-)
+    - [Via Heroku](#via-heroku)
+    - [Via Git clone](#via-git-clone)
 6. [Credits 🙏](#credits-)
 
 
