@@ -43,6 +43,7 @@ The program may take longer to load due to poor read latency on the *Google Shee
     - [Python Validation](#python-validation)
     - [Test Cases](#test-cases)
     - [Fixed Bugs 🐛](#fixed-bugs-)
+    - [Unfixed issues](#unfixed-issues)
 5. [Deployment 🌐](#deployment-)
     - [Via Heroku](#via-heroku)
     - [Via Git clone](#via-git-clone)
@@ -191,12 +192,15 @@ ascii_art = r'''
                                             \______/
 
 '''
+# Font Name: Big Money-ne / Contact Manager
+# https://patorjk.com/software/taag/#p=display&f=Big%20Money-ne&t=Contact%0AManager
 ```
 ### Users can enter a variety of inputs such as 'yes' and 'no'
 ```python
 yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative",
              "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay",
-             "okey", "alright", "ya", "ofc", "yep", "definitely", "exactly", "for sure", "fo sho")
+             "okey", "alright", "ya", "ofc", "yep", "definitely",
+             "exactly", "for sure", "fo sho")
 
 no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
             "ne", "nop", "na")
@@ -424,6 +428,268 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 ## Fixed bugs 🐛
 
+  ### Section 1
+
+  <details>
+
+  <summary><strong>Click to view first bug fixed</strong></summary>
+
+  ### In this update, I focused on cleaning up the code, removing redundancy, and improving readability without affecting the core functionality.
+
+1. **Removed Duplicate Print Statements**
+   - Deleted a duplicate print statement that printed the existing data.
+   - Removed redundant print statements within functions to avoid unnecessary output.
+
+2. **Simplified Conditional Blocks**
+   - Refactored the code to simplify the conditional blocks for better clarity and maintenance.
+
+3. **Improved Function Logic**
+   - Streamlined the `add_contacts` function by removing duplicate success messages.
+   - Enhanced the `print_sheet_data` function to avoid redundant data prints.
+
+4. **Indented Comments for Clarity**
+   - Adjusted comment indentation to align with related code blocks, improving code readability.
+
+5. **Removed Unnecessary Calls**
+   - Eliminated the call to `main()` within the `if __name__ == "__main__":` block to simplify script execution logic.
+
+ </details>
+
+
+  ### Section 2
+
+  <details>
+
+  <summary><strong>Click to view second bug fixed</strong></summary>
+
+  ### These changes help to maintain a cleaner codebase, reduce redundancy, and make the script more efficient and easier to read.
+  
+  - **Function:** `want_to_view_existing_contacts`
+    - Improved return logic for better readability and efficiency.
+    - **Before**
+      ```python
+      return view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]
+      ```
+    - **After**
+      ```python
+      if view_contacts in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]:
+          return True
+      else:
+          return False
+      ```
+
+  - **Function:** `want_to_add_contacts`
+    - Added a new function to check if the user wants to add new contacts.
+      ```python
+      def want_to_add_contacts():
+          """
+          Asks the users if they want to add new contacts
+          Returns True if they do, False otherwise
+          """
+          add_contacts_input = input("\nDo you want to add new contacts? (Yes/No): ").strip().lower()
+          return add_contacts_input in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap"]
+      ```
+
+  - **Function:** `main`
+    - Updated the main function to use `want_to_view_existing_contacts` and `want_to_add_contacts`.
+    - **Before**
+      ```python
+      if want_to_view_existing_contacts():
+          view_existing_contacts()
+      add_contacts()
+      ```
+    - **After**
+      ```python
+      if want_to_view_existing_contacts():
+          view_existing_contacts()
+      if want_to_add_contacts():
+          add_contacts()
+      ```
+
+  </details>
+
+
+  ### Section 3
+  
+  <details>
+
+  ### These updates standardize user input handling across the application, enhance the user experience.
+
+  <summary><strong>Click to view third bug fixed</strong></summary>
+
+  
+  - **Global Variables**
+    - Added comprehensive lists of affirmative and negative words to handle various user inputs more efficiently.
+    - **Before**
+      ```python
+      yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap")
+      no_words = ("no", "n", "nah", "nope", "negative")
+      ```
+    - After
+      ```python
+      yes_words = ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly", "ye", "ok", "okay", "okey", "alright")
+      no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never")
+      ```
+
+  - **Function:** `use_program`
+    - Updated to handle 'esc' input for terminating the program and improved word matching for 'yes' and 'no'.
+    - Before
+      ```python
+      user_input = input("Do you want to use the contact manager? (yes/no):\n").strip().lower()
+      if user_input in ("yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"):
+      ```
+    - **After**
+      ```python
+      user_input = input("Do you want to use the contact manager? (yes/no). You can enter 'esc' to terminate the program anytime.\n").strip().lower()
+      if user_input in yes_words:
+      ```
+
+  - **Function:** `choose_color`
+    - Refactored to use the comprehensive list of affirmative words.
+    - **Before**
+      ```python
+      if choice in ["yes", "y", "yeah", "yeap", "yup", "yea", "yap", "affirmative", "absolutely", "sure", "aye", "certainly","ye", "ok", "okay", "okey"]:
+      ```
+    - **After**
+      ```python
+      if choice in yes_words:
+      ```
+
+  - **Other Functions**
+    - Refactored similar input handling logic for consistency and better readability
+      - `view_existing_contacts`
+      - `add_contacts`
+      - `export_contacts`
+      - `search_contacts`
+
+  - **Function:** `exit_program_with_countdown`
+    - Fixed a missing `sys.exit()` call to properly terminate the program.
+    - Added `sys.exit()` at the end of the function.
+
+  </details>
+
+### Section 4
+
+<details>
+
+<summary><strong>Click to view fourth bug fixed</strong></summary>
+
+### These changes ensure that the deletion of contacts is handled more accurately, preventing potential data inconsistencies and enhancing user experience.
+
+  - **Function:** `delete_contacts`
+    - Ensured the proper deletion of rows in sheets.
+    - **Before**
+      ```python
+      if confirm_choice in yes_words:
+          # Clear all contacts in all categories
+          for sheet in all_categories:
+              sheet.clear()
+              sheet_data = sheet.get_all_values()
+              # Deletes from 2nd row onwards
+              if len(sheet_data) > 1:
+                  sheet.delete_rows(2, len(sheet_data))
+          print("All contacts in all categories deleted successfully.")
+      else:
+          print("Deletion canceled.")
+      break
+      ```
+    - **After**
+      ```python
+      if confirm_choice in yes_words:
+          # Clear all contacts in all categories
+          for sheet in all_categories:
+              sheet.clear()
+              sheet_data = sheet.get_all_values()
+              # Deletes from 2nd row onwards
+              if len(sheet_data) > 1:
+                  sheet.delete_rows(2, len(sheet_data))
+          print("All contacts in all categories deleted successfully.")
+      else:
+          print("Deletion canceled.")
+      break
+
+      # If the user selects a specific category
+      sheet = all_categories[category_index]
+      ```
+    - Improved handling of deletion in a specific category.
+    - **Before**
+      ```python
+      if action_choice in yes_words:
+          sheet.clear()
+          sheet_data = sheet.get_all_values()
+          if len(sheet_data) > 1:
+              sheet.delete_rows(2, len(sheet_data))
+          print(f"All contacts in {sheet.title} category deleted successfully.")
+      ```
+    - **After**
+      ```python
+      if action_choice in yes_words:
+          sheet.clear()
+          sheet_data = sheet.get_all_values()
+          if len(sheet_data) > 1:
+              sheet.delete_rows(2, len(sheet_data))
+          print(f"All contacts in {sheet.title} category deleted successfully.")
+      elif action_choice in no_words:
+          print("Deletion canceled.")
+      ```
+
+</details>
+
+### Section 5
+
+<details>
+
+<summary><strong>Click to view fifth bug fixed</strong></summary>
+
+### These updates enhance the functionality of adding and editing contacts, ensuring proper validation and consistent updates to the contact information.
+
+  - **Function:** `add_contacts`
+    - Improved email validation logic to check for length and proper format.
+    - **Before**
+      ```python
+      if email_prompt in yes_words:
+          email = input("\nEnter the contact's email address\n").strip()
+          if '@' not in email or '.' not in email or email.count('@') != 1:
+      ```
+    - **After**
+      ```python
+      if email_prompt in yes_words:
+          email = input("\nEnter the contact's email address (30 chars max)\n").strip()
+          if len(email) > 30:
+              print("\nEmail address exceeds 30 characters. Please enter a valid email address with 30 characters or less.")
+              continue
+          elif '@' not in email or '.' not in email or email.count('@') != 1:
+              print("\nInvalid email address. Please enter a valid email address containing one '@' and at least one '.'")
+              continue
+      ```
+
+- **Function:** `edit_contacts`
+  - Improved logic to handle editing of specific fields and ensure proper sheet updates.
+  - **Before**
+    ```python
+    contact += [''] * (field_index - len(contact) + 1)
+    contact[field_index] = new_value
+    sheet.update_row(contact_index, contact)
+    sheet.update_cell(contact_index, field_index + 1, new_value)
+    print("Contact updated successfully.")
+    print(tabulate([contact], headers=headers, tablefmt="pretty"))
+    ```
+  - **After**
+    ```python
+    contact += [''] * (field_index - len(contact) + 1)
+    contact[field_index] = new_value
+    sheet.update_cell(contact_index, field_index + 1, new_value)
+    print("Contact updated successfully.")
+    updated_contact = sheet.row_values(contact_index)
+    print(tabulate([updated_contact], headers=headers, tablefmt="pretty"))
+    ```
+
+</details>
+
+
+## Unfixed issues
+  Can't fix at this moment the read latency issue which sometimes lead to error 500 (timeout) due to high latency.
+  For more info refer to [Warning](#️-warning-️)
 
 ## Deployment 🌐
 ### **<ins>BEFORE</ins> you move onto the *Heroku* part, you need to set your own Credentials**.
@@ -448,7 +714,6 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
   14. They will have a "random" name, so the best thing to do now is to rename them into **creds.json**.
 
   *15. In order to activate the **Google Sheets API** it's quite similar and simpler. Simply go to the *Library* and search **Google Sheets API**, select it and click *Enable*. Done.
-
 
   </details>
 
