@@ -801,7 +801,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 - Used ***[rxaviers](https://gist.github.com/rxaviers/7360908)*** Complete list of github markdown emoji markup
 - Used [ChatGPT 3.5](https://chatgpt.com/?oai-dm=1) and [Codeium](https://codeium.com/) for minor improvements and better explanation on my
 requests for this project.
-- The main idea for this project was obtained by the [Love Sandwiches]() walkthrough project of the [Code Institute course](https://codeinstitute.net/global/).
+- The main idea for this project was obtained by the [Love Sandwiches](https://www.youtube.com/watch?v=Tns6HiDkVUI) walkthrough project of the [Code Institute course](https://codeinstitute.net/global/).
 
   ### 🙏 **𝓢𝓹𝓮𝓬𝓲𝓪𝓵 𝓣𝓱𝓪𝓷𝓴𝓼 𝓽𝓸 𝓼𝓸𝓶𝓮 𝓯𝓪𝓫𝓾𝓵𝓸𝓾𝓼 𝓹𝓮𝓸𝓹𝓵𝓮** 🙏
   - 🎓 **𝕽𝖔𝖍𝖎𝖙** - **Code Institute Mentor** [<img src="https://img.icons8.com/color/24/ffffff/github.png"/>](https://github.com/rohit0286)
