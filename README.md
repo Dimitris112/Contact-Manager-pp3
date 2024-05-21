@@ -115,7 +115,7 @@ The project structure is built upon the [Code Institute P3 template](https://git
 - **Github** Used as the hosting platform for the repository.
 - **Gitpod** Used as the IDE for writing, editing and debugging code.
 - **Heroku** Used for deploying the application.
-- **Python:** Used as the programming language for creating the application.
+- **Python** Used as the programming language for creating the application.
 - **Gspread** Used for interacting with Google Sheets.
 - **Tabulate** Used to format data into tables for easy reading.
 - **Numpy** Used for handling large amounts of data efficiently.
@@ -799,7 +799,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 ## Credits 🙏
 - Used ***[rxaviers](https://gist.github.com/rxaviers/7360908)*** Complete list of github markdown emoji markup
-- Used [ChatGPT 3.5](https://chatgpt.com/?oai-dm=1) and [Codeium](https://codeium.com/) for minor improvements and better explanation on my
+- Used [ChatGPT 3.5](https://chatgpt.com/?oai-dm=1) / [Codeium](https://codeium.com/) / [Stack Overflow](https://stackoverflow.com/) for minor improvements and better explanation on my
 requests for this project.
 - The main idea for this project was obtained by the [Love Sandwiches](https://www.youtube.com/watch?v=Tns6HiDkVUI) walkthrough project of the [Code Institute course](https://codeinstitute.net/global/).
 
