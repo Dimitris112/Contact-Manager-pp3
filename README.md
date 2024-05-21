@@ -288,7 +288,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 #### Choose color prompt
 
-- After the user chooses to `use` essentially the program, they come across to the `choose color` functionality. Users can choose up to 6 colors which are *Red - Green - Yellow - Blue - Magenta - Cyan* as their input color, upon selecting one (1 - 6), then a `confirmation prompt` will appear to the users to hit `yes or no`, if the input is `yes` then the program continues with the selected color, else it loops back. The users can also turn the color back to default by entering `7`.
+- After the users choose to `use` essentially the program, they come across to the `choose color` functionality. Users can choose up to 6 colors which are *Red - Green - Yellow - Blue - Magenta - Cyan* as their input color, upon selecting one (1 - 6), then a `confirmation prompt` will appear to the users to hit `yes or no`, if the input is `yes` then the program continues with the selected color, else it loops back. The users can also turn the color back to default by entering `7`.
 
     <details>
 
@@ -308,7 +308,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 #### View existing contact
 
-- Once the user chooses to change the input color (or not), the next thing they'll come to face are the prompt to `View existing contacts` on the program.
+- Once the users choose to change the input color (or not), the next thing they'll come to face are the prompt to `View existing contacts` on the program.
 
   <details>
 
@@ -348,7 +348,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 #### Add contacts
 
-- When the users are done with `viewing existing contacts`, they can **add new contacts** in any of the categories they wish to *Personal - Professional - Emergency - Favorites* and have different fields for each of them as *Name - Telephone number - Email address - Birthday - Notes* (name and telephone number are <ins>**mandatory**</ins>). Or they can just skip this action and move forward, or enter `esc` and terminate the program. Upon `invalid input` provided by the user, a new prompt will keep looping until `valid input` is provided.
+- When the users are done with `viewing existing contacts`, they can **add new contacts** in any of the categories they wish to *Personal - Professional - Emergency - Favorites* and have different fields for each of them such as *Name - Telephone number - Email address - Birthday - Notes* (name and telephone number are <ins>**mandatory**</ins>). Or they can just skip this action and move forward, or enter `esc` and terminate the program. Upon `invalid input` provided by the user, a new prompt will keep looping until `valid input` is provided.
 
   <details>
 
@@ -378,16 +378,16 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 #### Edit contacts
 
-- Users can **edit existing contacts** by choosing the `edit contacts` option. They start by selecting a category from which they want to edit contacts, such as **Personal** or **Professional**. Then, they choose the specific contact they wish to edit. Users can modify various fields like **Name**, **Telephone Number**, **Email**, **Birthday**, and **Notes**. After making the edits, they see a confirmation message and the updated contact details are displayed. Finally, users can continue editing contacts, move to the next functionality of the program,return to the `main menu` or `terminate` the program.
+- Users can **edit existing contacts** by choosing the `edit contacts` option. They start by selecting a category from which they want to edit contacts, such as **Personal** or **Professional**. Then, they choose the specific contact they wish to edit. Users can modify various fields like **Name**, **Telephone Number**, **Email**, **Birthday** and **Notes**. After making the edits, they see a confirmation message and the updated contact details are displayed. Finally, users can continue editing contacts, move to the next functionality of the program,return to the `main menu` or `terminate` the program.
 
 
   <details>
 
   <summary><strong>Click to view edit contacts functionality</strong></summary>
 
-  ### Edit contacts
+  ### All of the process of editing contacts
   ![The whole process of editing contacts in gif](images/validation/test_cases/edit_contacts/edit_contact.gif)
-  ### Showcase step by step the process of editing a contact
+  ### Users choose the category of the contact to edit, the field of it and see the updated data. Also they can go back by 'cancel'.
 
   </details>
 
@@ -406,7 +406,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
   ### The process of deleting individual contacts
   ![The process of deleting individual contacts](images/validation/test_cases/delete_contacts/delete_specific.gif)
-
+  ### Once the contact is deleted, a message will appear telling the users that it's removed successfully.
   </details>
 
 
@@ -696,7 +696,7 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
   <details>
 
-  <summary><strong>Click to view the instructions</strong></summary>
+  <summary><strong>Click to view how to set your own Credentials</strong></summary>
 
   1. Go to [Google Cloud Platform](https://console.cloud.google.com/welcome/new?pli=1).
   2. On the upper left corner click `Select a project` dropdown. Hit **New Project**.
@@ -724,36 +724,36 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
   <summary><strong>Click to view Heroku's deployment instructions</strong></summary>
 
   1. **Sign Up/Login to Heroku**
-   - If you haven't already, sign up for a Heroku account at [Heroku's website](https://www.heroku.com/) or log in if you already have an account.
+      - If you haven't already, sign up for a Heroku account at [Heroku's website](https://www.heroku.com/) or log in if you already have an account.
 
   2. **Create a New App on Heroku**
-   - Once logged in, navigate to your Heroku dashboard and click on the **New** button, then select **Create new app**.
-   - Choose a unique name for your app and select the region closest to your location.
+       - Once logged in, navigate to your Heroku dashboard and click on the **New** button, then select **Create new app**.
+       - Choose a unique name for your app and select the region closest to your location.
 
   3. **Connect GitHub Repository**
-   - After creating your app, go to the **Deploy** tab within your app's dashboard.
-   - Under the **Deployment method** section, select **GitHub** as the deployment method.
-   - Search for your GitHub repository in the **Connect to GitHub** section and click **Connect**.
+       - After creating your app, go to the **Deploy** tab within your app's dashboard.
+       - Under the **Deployment method** section, select **GitHub** as the deployment method.
+       - Search for your GitHub repository in the **Connect to GitHub** section and click **Connect**.
 
   4. **Configure Deployment Options**
-   - Once connected, choose the branch you want to deploy (e.g. *main*) and optionally enable automatic deploys for future commits.
+       - Once connected, choose the branch you want to deploy (e.g. *main*) and optionally enable automatic deploys for future commits.
 
   5. **Select Framework**
-   - Since the Contact Manager includes both Python and Node.js components, you need to specify the correct buildpacks for deployment. 
-   - Under the *Settings* tab of your Heroku app, navigate to the **Buildpacks** section and add the appropriate buildpacks for Python and Node.js.
-   - <ins>***It's important to add the Python buildpack first***</ins>
-   - Also, add the following environment variables
-      - **CREDENTIALS.JSON** (or if you've named yours as *CREDS*) type on the "Key" box **CREDS** and on its right "Value" enter your own Creds info.
-      - **PORT** set to **8000** to specify the port on which your app will run.
+      - Since the Contact Manager includes both Python and Node.js components, you need to specify the correct buildpacks for deployment. 
+       - Under the *Settings* tab of your Heroku app, navigate to the **Buildpacks** section and add the appropriate buildpacks for Python and Node.js.
+       - <ins>***It's important to add the Python buildpack first***</ins>
+       - Also, add the following environment variables
+       - **CREDENTIALS.JSON** (or if you've named yours as *CREDS*) type on the "Key" box **CREDS** and on its right "Value" enter your own Creds info.
+        - **PORT** set to **8000** to specify the port on which your app will run.
 
   6. **Deploy Branch**
-   - After configuring the deployment options, manually deploy your application by clicking the **Deploy Branch** button.
+       - After configuring the deployment options, manually deploy your application by clicking the **Deploy Branch** button.
 
   7. **Monitor Deployment Progress**
-   - Heroku will start deploying your application from the selected GitHub branch. You can monitor the deployment progress from the activity log on the same page.
+       - Heroku will start deploying your application from the selected GitHub branch. You can monitor the deployment progress from the activity log on the same page.
 
   8. **View Application**
-   - Once the deployment is complete, Heroku will provide you with a URL to access your deployed application. Click on **View** button to open your application in a new tab.
+      - Once the deployment is complete, Heroku will provide you with a URL to access your deployed application. Click on **View** button to open your application in a new tab.
 
   </details>
 
