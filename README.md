@@ -428,13 +428,13 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 ## Fixed bugs 🐛
 
-  ### Section 1
+  ### Version 1.0.1
 
   <details>
 
   <summary><strong>Click to view first bug fixed</strong></summary>
 
-  ### In this update, I focused on cleaning up the code, removing redundancy, and improving readability without affecting the core functionality.
+  ### Code Cleanup and Redundancy Removal
 
 1. **Removed Duplicate Print Statements**
    - Deleted a duplicate print statement that printed the existing data.
@@ -456,13 +456,13 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
  </details>
 
 
-  ### Section 2
+  ### Version 1.0.2
 
   <details>
 
   <summary><strong>Click to view second bug fixed</strong></summary>
 
-  ### These changes help to maintain a cleaner codebase, reduce redundancy, and make the script more efficient and easier to read.
+  ### Improved User Input Handling and Efficiency
   
   - **Function:** `want_to_view_existing_contacts`
     - Improved return logic for better readability and efficiency.
@@ -509,11 +509,11 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
   </details>
 
 
-  ### Section 3
+  ### Version 1.0.3
   
   <details>
 
-  ### These updates standardize user input handling across the application, enhance the user experience.
+  ### Standardized User Input Handling
 
   <summary><strong>Click to view third bug fixed</strong></summary>
 
@@ -568,13 +568,13 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
   </details>
 
-### Section 4
+### Version 1.0.4
 
 <details>
 
 <summary><strong>Click to view fourth bug fixed</strong></summary>
 
-### These changes ensure that the deletion of contacts is handled more accurately, preventing potential data inconsistencies and enhancing user experience.
+### Improved Contact Deletion Logic
 
   - **Function:** `delete_contacts`
     - Ensured the proper deletion of rows in sheets.
@@ -635,13 +635,13 @@ no_words = ("no", "n", "nah", "nope", "negative", "not", "nay", "never",
 
 </details>
 
-### Section 5
+### Version 1.0.5
 
 <details>
 
 <summary><strong>Click to view fifth bug fixed</strong></summary>
 
-### These updates enhance the functionality of adding and editing contacts, ensuring proper validation and consistent updates to the contact information.
+### Enhanced Adding and Editing Contacts
 
   - **Function:** `add_contacts`
     - Improved email validation logic to check for length and proper format.
